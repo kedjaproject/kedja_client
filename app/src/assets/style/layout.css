@@ -1,0 +1,12 @@
+body{
+  padding: 5px;
+  margin: 0;
+  max-width: 100%;
+}
+
+#app{
+  width: 100%;
+}
+
+#router{
+}
