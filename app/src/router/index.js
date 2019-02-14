@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Canvas from '@/components/Canvas'
+import Landing from '@/components/Landing'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: "history",
   routes: [
     {
       path: '/',
-      name: 'Canvas',
-      component: Canvas
+      name: 'Landing',
+      component: Landing
     }
   ]
 })

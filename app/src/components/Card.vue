@@ -1,15 +1,18 @@
 <template>
-  <div class="Post">
-    My post
+  <div class="Card">
+    {{card.name}}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Post',
+  name: 'Card',
   data () {
     return {
     }
+  },
+  props: {
+    card: ""
   }
 }
 </script>
@@ -17,7 +20,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.Post{
+.Card{
 
 }
 

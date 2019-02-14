@@ -1,0 +1,53 @@
+{
+  "walls": [
+    {
+      "name": "Min vägg",
+      "collections": [
+        {
+          "name": "Resurser",
+          "cards": [
+            {
+              "name": "Min resurs 1"
+            },
+            {
+              "name": "Min resurs 2"
+            }
+          ]
+        },
+        {
+          "name": "Aktiviteter",
+          "cards": [
+            {
+              "name": "Min aktivitet 1"
+            },
+            {
+              "name": "Min aktivitet 2"
+            }
+          ]
+        },
+        {
+          "name": "Resultat",
+          "cards": [
+            {
+              "name": "Mitt resultat 1"
+            },
+            {
+              "name": "Mitt resultat 2"
+            }
+          ]
+        },
+        {
+          "name": "Effekter",
+          "cards": [
+            {
+              "name": "Min effekt 1"
+            },
+            {
+              "name": "Min effekt 2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

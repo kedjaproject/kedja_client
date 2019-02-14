@@ -2,13 +2,21 @@
 <script>
 
   export default {
-    Level: function (project) {
+    Wall: function () {
       return {
+        name: "My wall",
+        collections: []
+      }
+    },
+    Collection: function () {
+      return {
+        name: "My collection",
         posts: []
       }
     },
-    Post: function (name,key) {
+    Card: function () {
       return {
+        name: "My card"
       }
     },
   }
