@@ -8,7 +8,8 @@ import { walls } from '@/assets/walls.json';
 
 export const store = new Vuex.Store({
   state: {
-    walls: ""
+    walls: [],
+    activeWallId: 0
   },
   mutations: {
 
@@ -16,8 +17,18 @@ export const store = new Vuex.Store({
     },
 
     init: (state, {}) => {
-      console.log(walls)
       state.walls = walls;
+    },
+
+    setCardsStatus: (state, {cardIds, status}) => {
+      cardIds.forEach((cardId, iCardId) => {
+        let card = store.getters.getCardById(cardId)
+        store.commit('setCardStatus',{card: card, status: status});
+      })
+    },
+
+    setCardStatus: (state, {card, status}) => {
+      Vue.set(card, 'status', status)
     },
 
   },
@@ -25,6 +36,23 @@ export const store = new Vuex.Store({
 
     myGetter: state => (param) => {
       return true
+    },
+
+    getCardById: state => (id) => {
+      let cardFound = undefined;
+      let wall = state.walls[state.activeWallId];
+      wall.collections.forEach((collection, iCollection) => {
+        let card = collection.cards.find(c => c.id == id);
+        if(card){
+          cardFound = card;
+        }
+      })
+      return cardFound
+    },
+
+    getConnectionsByCardId: state => (id) => {
+      let wall = state.walls[state.activeWallId];
+      return wall.connections.filter(c => c.members.indexOf(id) != -1)
     },
 
   },

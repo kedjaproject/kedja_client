@@ -2,21 +2,20 @@
 <script>
 
   export default {
-    Wall: function () {
+    Wall: function (data) {
       return {
-        name: "My wall",
-        collections: []
+        data: data
       }
     },
-    Collection: function () {
+    Collection: function (data) {
       return {
-        name: "My collection",
-        posts: []
+        data: data
       }
     },
-    Card: function () {
+    Card: function (data) {
       return {
-        name: "My card"
+        data: data,
+        status: true
       }
     },
   }

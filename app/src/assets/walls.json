@@ -7,10 +7,12 @@
           "name": "Resurser",
           "cards": [
             {
-              "name": "Min resurs 1"
+              "name": "Min resurs 1",
+              "id": "2345"
             },
             {
-              "name": "Min resurs 2"
+              "name": "Min resurs 2",
+              "id": "4635"
             }
           ]
         },
@@ -18,10 +20,12 @@
           "name": "Aktiviteter",
           "cards": [
             {
-              "name": "Min aktivitet 1"
+              "name": "Min aktivitet 1",
+              "id": "3433"
             },
             {
-              "name": "Min aktivitet 2"
+              "name": "Min aktivitet 2",
+              "id": "4652"
             }
           ]
         },
@@ -29,10 +33,12 @@
           "name": "Resultat",
           "cards": [
             {
-              "name": "Mitt resultat 1"
+              "name": "Mitt resultat 1",
+              "id": "8975"
             },
             {
-              "name": "Mitt resultat 2"
+              "name": "Mitt resultat 2",
+              "id": "2757"
             }
           ]
         },
@@ -40,11 +46,22 @@
           "name": "Effekter",
           "cards": [
             {
-              "name": "Min effekt 1"
+              "name": "Min effekt 1",
+              "id": "5368"
             },
             {
-              "name": "Min effekt 2"
+              "name": "Min effekt 2",
+              "id": "3456"
             }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "id": "3242",
+          "members": [
+            "2345",
+            "4652"
           ]
         }
       ]

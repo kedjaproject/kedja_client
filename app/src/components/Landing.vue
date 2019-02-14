@@ -1,7 +1,7 @@
 <template>
   <div class="Landing">
 
-    <wall :wall="walls[0]"></wall>
+    <wall :wall="walls[activeWallId]"></wall>
 
   </div>
 </template>
@@ -26,6 +26,9 @@ export default {
   computed: {
     walls: function () {
       return store.state.walls
+    },
+    activeWallId: function () {
+      return store.state.activeWallId
     }
   },
   methods: {
