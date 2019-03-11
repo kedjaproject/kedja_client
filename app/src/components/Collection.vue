@@ -7,10 +7,10 @@
 
     <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
 
-    <button @click="createCard">Lägg till nytt kort</button>
+    <button class="fullWidth" @click="createCard">Lägg till nytt kort</button>
 
     <button class="remove" v-if="hovering" @click="removeCollection">
-      Ta bort samling
+      x
     </button>
 
   </div>
@@ -69,9 +69,6 @@ export default {
 .card{
   margin: 5px 0 5px 0;
 }
-
-button{
-width: 100%;}
 
 .remove{
   position: absolute;

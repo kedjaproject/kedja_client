@@ -10,3 +10,7 @@ body{
 
 #router{
 }
+
+.fullWidth{
+  width: 100%;
+}
