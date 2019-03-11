@@ -1,8 +1,13 @@
 <template>
-  <div class="Card" :class="{'connected': card.status}" @mouseover="setStatus(true)" @mouseout="setStatus(false)">
-    Kort: {{card.name}}
-    <br />
-    Kopplingar: {{connections}}
+  <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
+    <h3>
+      {{card.name}}
+    </h3>
+
+    <button class="remove" v-if="hovering" @click="removeCard">
+      Ta bort kort
+    </button>
+
   </div>
 </template>
 
@@ -14,6 +19,7 @@ export default {
   name: 'Card',
   data () {
     return {
+      hovering: false
     }
   },
   props: {
@@ -37,8 +43,12 @@ export default {
     }
   },
   methods: {
-    setStatus: function (status){
+    setHovering: function (status){
+      this.hovering = status;
       store.commit('setCardsStatus',{cardIds: this.connectedCardIds, status: status});
+    },
+    removeCard: function () {
+      this.$emit('removeCard',this.card)
     }
   }
 }
@@ -52,10 +62,17 @@ export default {
   background: #FFFFFF;
   padding: 5px;
   cursor: pointer;
+  position: relative;
 }
 
 .Card:hover{
   background: #E5E5E5;
+}
+
+.remove{
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .connected{

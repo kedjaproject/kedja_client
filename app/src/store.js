@@ -13,8 +13,8 @@ export const store = new Vuex.Store({
   },
   mutations: {
 
-    myMutation: (state, {param}) => {
-    },
+    /*myMutation: (state, {param}) => {
+    },*/
 
     init: (state, {}) => {
       state.walls = walls;
@@ -31,20 +31,38 @@ export const store = new Vuex.Store({
       Vue.set(card, 'status', status)
     },
 
-    createCardInCollection: (state, {collection}) => {
-      collection.cards.push(Factory.Card())
-    },
+    //Create data
 
     createCollectionInWall: (state, {wall}) => {
       wall.collections.push(Factory.Collection())
     },
 
+    createCardInCollection: (state, {collection}) => {
+      collection.cards.push(Factory.Card())
+    },
+
+    //Remove data
+
+    removeCollectionFromWall: (state, {wall, collection}) => {
+      let index = wall.collections.indexOf(collection)
+      if(index != -1){
+        wall.collections.splice(index,1)
+      }
+    },
+
+    removeCardFromCollection: (state, {collection,card}) => {
+      let index = collection.cards.indexOf(card)
+      if(index != -1){
+        collection.cards.splice(index,1)
+      }
+    },
+
   },
   getters: {
 
-    myGetter: state => (param) => {
+    /*myGetter: state => (param) => {
       return true
-    },
+    },*/
 
     getCardById: state => (id) => {
       let cardFound = undefined;

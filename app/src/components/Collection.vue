@@ -1,13 +1,17 @@
 <template>
-  <div class="Collection">
+  <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <h2>
       {{collection.name}}
     </h2>
 
-    <card v-for="card in collection.cards" :card="card" class="card"></card>
+    <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
 
     <button @click="createCard">Lägg till nytt kort</button>
+
+    <button class="remove" v-if="hovering" @click="removeCollection">
+      Ta bort samling
+    </button>
 
   </div>
 </template>
@@ -24,14 +28,24 @@ export default {
   },
   data () {
     return {
+      hovering: false
     }
   },
   props: {
     collection: ""
   },
   methods: {
+    setHovering: function (status){
+      this.hovering = status;
+    },
+    removeCollection: function () {
+      this.$emit('removeCollection',this.collection)
+    },
     createCard: function () {
       store.commit('createCardInCollection',{collection: this.collection});
+    },
+    removeCard: function (card) {
+      store.commit('removeCardFromCollection',{collection: this.collection, card: card});
     }
   }
 }
@@ -45,6 +59,7 @@ export default {
   padding: 20px;
   background: #CADBDA;
   cursor: pointer;
+  position: relative;
 }
 
 .Collection:hover{
@@ -58,4 +73,9 @@ export default {
 button{
 width: 100%;}
 
+.remove{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
 </style>

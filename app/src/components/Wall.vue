@@ -6,7 +6,7 @@
     </h1>
 
     <div id="collections">
-      <collection v-for="collection in wall.collections" :collection="collection" class="collection"></collection>
+      <collection v-for="collection in wall.collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
       <button @click="createCollection">Lägg till ny samling</button>
     </div>
 
@@ -33,6 +33,9 @@ export default {
   methods: {
     createCollection: function () {
       store.commit('createCollectionInWall',{wall: this.wall});
+    },
+    removeCollection: function (collection) {
+      store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
     }
   }
 }
