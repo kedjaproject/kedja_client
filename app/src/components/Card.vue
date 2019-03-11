@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" :class="{'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
+  <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected()">
 
     <textarea v-model="card.name" class="hiddenField h3" ref="input-name">
     </textarea>
@@ -25,6 +25,9 @@ export default {
     card: ""
   },
   computed: {
+    selected: function () {
+      return this.card.states.selected == true;
+    },
     connections: function () {
       return store.getters.getConnectionsByCardId(this.card.id)
     },
@@ -50,7 +53,16 @@ export default {
       else{
         store.commit('resetCardsState',{stateName: "connected"});
       }
-      //store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "hovering", stateFlag: flag});
+    },
+    setSelected: function (){
+      if(!this.selected){
+        store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
+        store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
+      }
+      else{
+        store.commit('resetCardsState',{stateName: "selected"});
+        store.commit('resetCardsState',{stateName: "selectedConnected"});
+      }
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
@@ -87,6 +99,16 @@ export default {
   position: absolute;
   top: 5px;
   right: 5px;
+}
+
+.selected{
+  background: white !important;
+  border: 3px solid #FFEF29;
+
+}
+
+.selectedConnectedOther:not(.selected){
+  /*display: none;*/
 }
 
 .connected:not(:hover){
