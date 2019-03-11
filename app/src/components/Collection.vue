@@ -5,7 +5,7 @@
       {{collection.name}}
     </h2>
 
-    <card v-for="card in collection.cards" :card="card"></card>
+    <card v-for="card in collection.cards" :card="card" class="card"></card>
 
   </div>
 </template>
@@ -33,7 +33,12 @@ export default {
 <style scoped>
 
 .Collection{
+  border: 1px solid gray;
+  padding: 5px;
+}
 
+.card{
+  margin: 5px 0 5px 0;
 }
 
 </style>

@@ -5,7 +5,9 @@
       {{wall.name}}
     </h1>
 
-    <collection v-for="collection in wall.collections" :collection="collection"></collection>
+    <div id="collections">
+      <collection v-for="collection in wall.collections" :collection="collection" class="collection"></collection>
+    </div>
 
   </div>
 </template>
@@ -34,6 +36,17 @@ export default {
 
 .Wall{
 
+}
+
+#collections{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.collection{
+  flex: 1;
+  margin: 5px;
 }
 
 </style>
