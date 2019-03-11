@@ -72,6 +72,10 @@ export default {
   margin: 5px 0 5px 0;
 }
 
+.fullWidth{
+  margin: 5px 0 5px 0;
+}
+
 .remove{
   position: absolute;
   top: 5px;

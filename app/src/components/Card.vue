@@ -70,6 +70,7 @@ export default {
 
 .Card:hover{
   background: #E5E5E5;
+  cursor: pointer;
 }
 
 .remove{

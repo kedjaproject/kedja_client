@@ -7,17 +7,18 @@ button:hover{
   border: 1px solid #CADBDA;
   background: #FFFFFF;
   filter:opacity(1);
+  cursor: pointer;
 }
 
 input{
-  border: 2px solid gray;
-  box-sizing: border-box;
+  border: 0px solid gray;
+  background-color: #FFFFFFaa;
 }
 
 /* Hidden input fields - visible on focus (click) */
 
 .hiddenField:hover{
-  color: gray;
+  color: #FFFFFF;
 }
 
 .hiddenField:not(:focus){
