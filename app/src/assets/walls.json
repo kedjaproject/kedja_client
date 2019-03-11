@@ -7,20 +7,36 @@
           "name": "Resurser",
           "cards": [
             {
-              "name": "Min resurs 1",
+              "name": "BFL-grupp Kreativ Lärmiljö",
               "id": "0_0"
             },
             {
-              "name": "Min resurs 2",
+              "name": "Ekonomiska resurser",
               "id": "0_1"
             },
             {
-              "name": "Min resurs 3",
+              "name": "Avsnitt tid",
               "id": "0_2"
             },
             {
-              "name": "Min resurs 4",
+              "name": "Elever",
               "id": "0_3"
+            },
+            {
+              "name": "Pedagoger",
+              "id": "0_4"
+            },
+            {
+              "name": "Skolledning",
+              "id": "0_5"
+            },
+            {
+              "name": "Skolhus",
+              "id": "0_6"
+            },
+            {
+              "name": "Vaktmästare/lokalansvarig",
+              "id": "0_7"
             }
           ]
         },
@@ -28,20 +44,24 @@
           "name": "Aktiviteter",
           "cards": [
             {
-              "name": "Min aktivitet 1",
+              "name": "Samarbete",
               "id": "1_0"
             },
             {
-              "name": "Min aktivitet 2",
+              "name": "Inspiration",
               "id": "1_1"
             },
             {
-              "name": "Min aktivitet 3",
+              "name": "Elevgrupp",
               "id": "1_2"
             },
             {
-              "name": "Min aktivitet 4",
+              "name": "Utformning av klassrumsmiljöer",
               "id": "1_3"
+            },
+            {
+              "name": "Utformning av öppna miljöer",
+              "id": "1_4"
             }
           ]
         },
@@ -49,19 +69,19 @@
           "name": "Resultat",
           "cards": [
             {
-              "name": "Mitt resultat 1",
+              "name": "Personal",
               "id": "2_0"
             },
             {
-              "name": "Mitt resultat 2",
+              "name": "Elever",
               "id": "2_1"
             },
             {
-              "name": "Mitt resultat 3",
+              "name": "Pedagogik",
               "id": "2_2"
             },
             {
-              "name": "Mitt resultat 4",
+              "name": "Organisation",
               "id": "2_3"
             }
           ]
@@ -70,25 +90,49 @@
           "name": "Effekter",
           "cards": [
             {
-              "name": "Min effekt 1",
+              "name": "Kreativ medvetenhet",
               "id": "3_0"
             },
             {
-              "name": "Min effekt 2",
+              "name": "Kreativa miljöer",
               "id": "3_1"
             },
             {
-              "name": "Min effekt 3",
+              "name": "Kreativ pedagogik",
               "id": "3_2"
-            },
-            {
-              "name": "Min effekt 4",
-              "id": "3_3"
             }
           ]
         }
       ],
       "connections": [
+        {
+          "id": "0",
+          "members": [
+            "0_0",
+            "1_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_0",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_0",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_1",
+            "1_1"
+          ]
+        },
         {
           "id": "0",
           "members": [
@@ -101,6 +145,20 @@
           "members": [
             "0_1",
             "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_1",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_2",
+            "1_0"
           ]
         },
         {
@@ -120,22 +178,304 @@
         {
           "id": "0",
           "members": [
+            "0_2",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_3",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_3",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_3",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_4",
+            "1_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_4",
+            "1_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_4",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_4",
+            "1_3"
+          ]
+        }
+        ,
+        {
+          "id": "0",
+          "members": [
+            "0_4",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_5",
+            "1_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_5",
+            "1_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_5",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_5",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_5",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_6",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_6",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_7",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_7",
+            "1_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_0",
+            "2_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_0",
+            "2_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_0",
+            "2_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
             "1_1",
-            "2_3"
+            "2_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_1",
+            "2_2"
           ]
         },
         {
           "id": "0",
           "members": [
             "1_2",
-            "2_3"
+            "2_1"
           ]
         },
         {
           "id": "0",
           "members": [
             "1_2",
-            "2_4"
+            "2_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_3",
+            "2_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_3",
+            "2_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_3",
+            "2_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_3",
+            "2_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_4",
+            "2_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_4",
+            "2_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_4",
+            "2_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_4",
+            "2_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_0",
+            "3_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_0",
+            "3_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_0",
+            "3_2"
+          ]
+        }
+        ,
+        {
+          "id": "0",
+          "members": [
+            "2_1",
+            "3_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_1",
+            "3_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_1",
+            "3_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_2",
+            "3_0"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_2",
+            "3_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_2",
+            "3_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_3",
+            "3_0"
           ]
         },
         {
@@ -149,7 +489,7 @@
           "id": "0",
           "members": [
             "2_3",
-            "3_3"
+            "3_2"
           ]
         }
 
