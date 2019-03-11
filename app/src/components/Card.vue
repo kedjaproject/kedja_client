@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
+  <div class="Card" :class="{'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <textarea v-model="card.name" class="hiddenField h3" ref="input-name">
     </textarea>
@@ -42,9 +42,15 @@ export default {
     }
   },
   methods: {
-    setHovering: function (status){
+    setHovering: function (flag){
       this.hovering = status;
-      store.commit('setCardsStatus',{cardIds: this.connectedCardIds, status: status});
+      if(flag){
+        store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
+      }
+      else{
+        store.commit('resetCardsState',{stateName: "connected"});
+      }
+      //store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "hovering", stateFlag: flag});
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
@@ -66,11 +72,15 @@ export default {
   padding: 5px;
   cursor: pointer;
   position: relative;
+  transition: all 0.25s;
 }
 
 .Card:hover{
-  background: #E5E5E5;
-  cursor: pointer;
+}
+
+.Card
+{
+  border: 0px solid #FFEF29;
 }
 
 .remove{
@@ -79,13 +89,18 @@ export default {
   right: 5px;
 }
 
-.connected{
-  background: #E5E5E5;
+.connected:not(:hover){
+  background: #FFFFFF;
+}
+
+.connectedOther:not(:hover){
+  filter: opacity(0.25);
 }
 
 textarea{
   width: 100%;
   box-sizing: border-box;
 }
+
 
 </style>

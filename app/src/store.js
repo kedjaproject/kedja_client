@@ -18,17 +18,48 @@ export const store = new Vuex.Store({
 
     init: (state, {}) => {
       state.walls = walls;
+      store.commit('prepareData',{});
     },
 
-    setCardsStatus: (state, {cardIds, status}) => {
-      cardIds.forEach((cardId, iCardId) => {
-        let card = store.getters.getCardById(cardId)
-        store.commit('setCardStatus',{card: card, status: status});
+    prepareData: (state, {}) => {
+      state.walls.forEach((wall, iWall) => {
+        wall.collections.forEach((collection, iCollection) => {
+          collection.cards.forEach((card, iCard) => {
+            Vue.set(card, 'states', {})
+          })
+        })
       })
     },
 
-    setCardStatus: (state, {card, status}) => {
-      Vue.set(card, 'status', status)
+    setCardsState: (state, {cardIds, stateName}) => {
+
+      let wall = store.getters.getActiveWall();
+
+      wall.collections.forEach((collection, iCollection) => {
+        collection.cards.forEach((card, iCard) => {
+          let flag = cardIds.indexOf(card.id) != -1;
+          store.commit('setCardState',{card: card, stateName: stateName, stateFlag: flag});
+        })
+      })
+
+    },
+
+    resetCardsState: (state, {cardIds, stateName}) => {
+
+      let wall = store.getters.getActiveWall();
+
+      wall.collections.forEach((collection, iCollection) => {
+        collection.cards.forEach((card, iCard) => {
+          store.commit('setCardState',{card: card, stateName: stateName, stateFlag: undefined});
+        })
+      })
+
+    },
+
+
+
+    setCardState: (state, {card, stateName, stateFlag}) => {
+      Vue.set(card.states, stateName, stateFlag)
     },
 
     //Create data
@@ -63,6 +94,10 @@ export const store = new Vuex.Store({
     /*myGetter: state => (param) => {
       return true
     },*/
+
+    getActiveWall: state => (id) => {
+      return state.walls[state.activeWallId];
+    },
 
     getCardById: state => (id) => {
       let cardFound = undefined;
