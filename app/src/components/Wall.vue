@@ -7,6 +7,7 @@
 
     <div id="collections">
       <collection v-for="collection in wall.collections" :collection="collection" class="collection"></collection>
+      <button @click="createCollection">Lägg till ny samling</button>
     </div>
 
   </div>
@@ -14,6 +15,7 @@
 
 <script>
 
+import { store } from '@/store';
 import Collection from '@/components/Collection'
 
 export default {
@@ -27,6 +29,11 @@ export default {
   },
   props: {
     wall: ""
+  },
+  methods: {
+    createCollection: function () {
+      store.commit('createCollectionInWall',{wall: this.wall});
+    }
   }
 }
 </script>

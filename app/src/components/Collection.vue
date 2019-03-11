@@ -7,11 +7,14 @@
 
     <card v-for="card in collection.cards" :card="card" class="card"></card>
 
+    <button @click="createCard">Lägg till nytt kort</button>
+
   </div>
 </template>
 
 <script>
 
+import { store } from '@/store';
 import Card from '@/components/Card'
 
 export default {
@@ -25,6 +28,11 @@ export default {
   },
   props: {
     collection: ""
+  },
+  methods: {
+    createCard: function () {
+      store.commit('createCardInCollection',{collection: this.collection});
+    }
   }
 }
 </script>
