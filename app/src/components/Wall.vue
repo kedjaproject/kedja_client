@@ -42,6 +42,7 @@ export default {
 <style scoped>
 
 .Wall{
+  background: #EAEAEA;
 
 }
 
@@ -53,7 +54,7 @@ export default {
 
 .collection{
   flex: 1;
-  margin: 5px;
+  margin: 1px;
 }
 
 </style>

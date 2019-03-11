@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:100,300,400,500,600');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,500,600');
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,500,600');
 
-body{
-  font-family: "Open Sans";
+body, button{
+  font-family: "Lato";
+  color: #3E3E3E;
 }
 
 a{
   text-decoration: none;
-  font-weight: 600;
-  color: rgb(140,30,90);
+  font-weight: 500;
+  color: #707070;
 }
 
 a:hover{
@@ -16,12 +18,11 @@ a:hover{
 }
 
 h1{
-  font-family: "Roboto Condensed";
+  font-family: "Lato";
 }
 
 h2{
-  font-family: "Roboto Condensed";
-  background: rgb(235,205,225);
+  font-family: "Lato";
   padding: 5px;
   display: inline-block;
   font-weight: 500;
@@ -29,6 +30,6 @@ h2{
 }
 
 h3{
-  font-family: "Roboto Condensed";
+  font-family: "Lato";
   margin-bottom: 0.1em;
 }

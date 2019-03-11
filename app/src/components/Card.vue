@@ -51,16 +51,15 @@ export default {
   border: 1px solid #CADBDA;
   background: #FFFFFF;
   padding: 5px;
+  cursor: pointer;
 }
 
 .Card:hover{
-  background: #F2F2F2;
+  background: #E5E5E5;
 }
 
 .connected{
-  background: #F2F2F2;
+  background: #E5E5E5;
 }
-
-.Card:
 
 </style>

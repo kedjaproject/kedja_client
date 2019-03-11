@@ -20,4 +20,6 @@ export default {
 <style>
 @import './assets/style/layout.css';
 @import './assets/style/text.css';
+@import './assets/style/form.css';
+
 </style>

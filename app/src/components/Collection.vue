@@ -41,13 +41,21 @@ export default {
 <style scoped>
 
 .Collection{
-  border: 1px solid white;
-  padding: 5px;
+  border: 1px solid #EAEAEA;
+  padding: 20px;
   background: #CADBDA;
+  cursor: pointer;
+}
+
+.Collection:hover{
+  background: #ACCECC;
 }
 
 .card{
   margin: 5px 0 5px 0;
 }
+
+button{
+width: 100%;}
 
 </style>
