@@ -1,8 +1,8 @@
 <template>
   <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <input v-model="card.name" class="hiddenField h3" ref="input-name"/>
-
+    <textarea v-model="card.name" class="hiddenField h3" ref="input-name">
+    </textarea>
     <button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort
     </button>
@@ -81,6 +81,11 @@ export default {
 
 .connected{
   background: #E5E5E5;
+}
+
+textarea{
+  width: 100%;
+  box-sizing: border-box;
 }
 
 </style>

@@ -5,7 +5,7 @@
 
     <div id="collections">
       <collection v-for="collection in wall.collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
-      <button @click="createCollection">Lägg till ny samling</button>
+      <button @click="createCollection" title="Lägg till ny samling">+</button>
     </div>
 
   </div>

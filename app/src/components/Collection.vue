@@ -3,11 +3,11 @@
 
     <input v-model="collection.name" class="hiddenField h2" ref="input-name"/>
 
-    <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
+    <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard" title="Ta bort kort"></card>
 
-    <button class="fullWidth" @click="createCard">Lägg till nytt kort</button>
+    <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>
 
-    <button class="remove" v-if="hovering" @click="removeCollection">
+    <button class="remove" v-if="hovering" @click="removeCollection" title="Ta bort samling">
       x
     </button>
 
