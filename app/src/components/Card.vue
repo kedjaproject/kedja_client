@@ -49,10 +49,11 @@ export default {
 
 .Card{
   border: 1px solid lightgray;
+  background: #468895;
 }
 
 .Card:hover{
-  background: green;
+  background: #596607;
 }
 
 .connected{
