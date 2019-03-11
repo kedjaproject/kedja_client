@@ -8,3 +8,19 @@ button:hover{
   background: #FFFFFF;
   filter:opacity(1);
 }
+
+input{
+  border: 2px solid gray;
+  box-sizing: border-box;
+}
+
+/* Hidden input fields - visible on focus (click) */
+
+.hiddenField:hover{
+  color: gray;
+}
+
+.hiddenField:not(:focus){
+  background: transparent;
+  border: 0px;
+}
