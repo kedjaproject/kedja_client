@@ -8,11 +8,19 @@
           "cards": [
             {
               "name": "Min resurs 1",
-              "id": "2345"
+              "id": "0_0"
             },
             {
               "name": "Min resurs 2",
-              "id": "4635"
+              "id": "0_1"
+            },
+            {
+              "name": "Min resurs 3",
+              "id": "0_2"
+            },
+            {
+              "name": "Min resurs 4",
+              "id": "0_3"
             }
           ]
         },
@@ -21,11 +29,19 @@
           "cards": [
             {
               "name": "Min aktivitet 1",
-              "id": "3433"
+              "id": "1_0"
             },
             {
               "name": "Min aktivitet 2",
-              "id": "4652"
+              "id": "1_1"
+            },
+            {
+              "name": "Min aktivitet 3",
+              "id": "1_2"
+            },
+            {
+              "name": "Min aktivitet 4",
+              "id": "1_3"
             }
           ]
         },
@@ -34,11 +50,19 @@
           "cards": [
             {
               "name": "Mitt resultat 1",
-              "id": "8975"
+              "id": "2_0"
             },
             {
               "name": "Mitt resultat 2",
-              "id": "2757"
+              "id": "2_1"
+            },
+            {
+              "name": "Mitt resultat 3",
+              "id": "2_2"
+            },
+            {
+              "name": "Mitt resultat 4",
+              "id": "2_3"
             }
           ]
         },
@@ -47,23 +71,88 @@
           "cards": [
             {
               "name": "Min effekt 1",
-              "id": "5368"
+              "id": "3_0"
             },
             {
               "name": "Min effekt 2",
-              "id": "3456"
+              "id": "3_1"
+            },
+            {
+              "name": "Min effekt 3",
+              "id": "3_2"
+            },
+            {
+              "name": "Min effekt 4",
+              "id": "3_3"
             }
           ]
         }
       ],
       "connections": [
         {
-          "id": "3242",
+          "id": "0",
           "members": [
-            "2345",
-            "4652"
+            "0_1",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_1",
+            "1_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_2",
+            "1_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "0_2",
+            "1_2"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_1",
+            "2_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_2",
+            "2_3"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "1_2",
+            "2_4"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_3",
+            "3_1"
+          ]
+        },
+        {
+          "id": "0",
+          "members": [
+            "2_3",
+            "3_3"
           ]
         }
+
       ]
     }
   ]
