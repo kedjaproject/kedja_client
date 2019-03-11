@@ -1,6 +1,6 @@
 <template>
   <div class="Card" :class="{'connected': card.status}" @mouseover="setStatus(true)" @mouseout="setStatus(false)">
-    Kort: {{card}}
+    Kort: {{card.name}}
     <br />
     Kopplingar: {{connections}}
   </div>
@@ -48,17 +48,19 @@ export default {
 <style scoped>
 
 .Card{
-  border: 1px solid lightgray;
-  background: #468895;
+  border: 1px solid #CADBDA;
+  background: #FFFFFF;
   padding: 5px;
 }
 
 .Card:hover{
-  background: #596607;
+  background: #F2F2F2;
 }
 
 .connected{
-  background: palegreen;
+  background: #F2F2F2;
 }
+
+.Card:
 
 </style>

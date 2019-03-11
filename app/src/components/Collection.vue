@@ -33,8 +33,9 @@ export default {
 <style scoped>
 
 .Collection{
-  border: 1px solid gray;
+  border: 1px solid white;
   padding: 5px;
+  background: #CADBDA;
 }
 
 .card{
