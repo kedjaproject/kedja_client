@@ -1,8 +1,7 @@
 <template>
   <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
-    <h3>
-      {{card.name}}
-    </h3>
+
+    <input v-model="card.name" class="hiddenField h3" />
 
     <button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort

@@ -1,9 +1,7 @@
 <template>
   <div class="Wall">
 
-    <h1>
-      {{wall.name}}
-    </h1>
+    <input v-model="wall.name" class="hiddenField h1" />
 
     <div id="collections">
       <collection v-for="collection in wall.collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>

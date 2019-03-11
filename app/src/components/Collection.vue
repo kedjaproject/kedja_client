@@ -1,9 +1,7 @@
 <template>
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <h2>
-      {{collection.name}}
-    </h2>
+    <input v-model="collection.name" class="hiddenField h2" />
 
     <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
 
