@@ -3,7 +3,9 @@
 
     <input v-model="collection.name" class="hiddenField h2" ref="input-name"/>
 
-    <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
+    <transition-group name="fade">
+      <card v-for="card in cardsFiltered" :card="card" class="card" @removeCard="removeCard" :key="card.id"></card>
+    </transition-group>
 
     <button class="fullWidth" @click="createCard">Lägg till nytt kort</button>
 
@@ -27,6 +29,11 @@ export default {
   data () {
     return {
       hovering: false
+    }
+  },
+  computed: {
+    cardsFiltered: function () {
+      return this.collection.cards.filter(card => card.states.selected != false || card.states.selectedConnected != false)
     }
   },
   props: {
