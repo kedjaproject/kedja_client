@@ -1,7 +1,7 @@
 <template>
   <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <input v-model="card.name" class="hiddenField h3" />
+    <input v-model="card.name" class="hiddenField h3" ref="input-name"/>
 
     <button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort
@@ -49,6 +49,10 @@ export default {
     removeCard: function () {
       this.$emit('removeCard',this.card)
     }
+  },
+  mounted: function () {
+    this.$refs["input-name"].focus();
+    this.$refs["input-name"].select();
   }
 }
 </script>

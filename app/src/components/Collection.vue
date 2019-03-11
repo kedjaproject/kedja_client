@@ -1,7 +1,7 @@
 <template>
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <input v-model="collection.name" class="hiddenField h2" />
+    <input v-model="collection.name" class="hiddenField h2" ref="input-name"/>
 
     <card v-for="card in collection.cards" :card="card" class="card" @removeCard="removeCard"></card>
 
@@ -45,6 +45,10 @@ export default {
     removeCard: function (card) {
       store.commit('removeCardFromCollection',{collection: this.collection, card: card});
     }
+  },
+  mounted: function () {
+    this.$refs["input-name"].focus();
+    this.$refs["input-name"].select();
   }
 }
 </script>

@@ -13,6 +13,9 @@ export default {
   name: 'App',
   created: function () {
     store.commit('init',{});
+  },
+  mounted: function () {
+    document.activeElement.blur()
   }
 }
 </script>
