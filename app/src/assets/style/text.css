@@ -5,12 +5,16 @@
 body, button{
   font-family: "Lato";
   color: #3E3E3E;
+  font-weight: 500;
+  font-size: 12;
+  padding: 10px;
+
 }
 
 a{
   text-decoration: none;
   font-weight: 500;
-  color: #707070;
+  color: #3E3E3E;
 }
 
 a:hover{
@@ -24,12 +28,13 @@ h1{
 h2{
   font-family: "Lato";
   padding: 5px;
-  display: inline-block;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 0.1em;
 }
 
 h3{
   font-family: "Lato";
-  margin-bottom: 0.1em;
+  padding: 5px;
+  font-weight: 300;
+  margin-bottom: 0.8em;
 }
