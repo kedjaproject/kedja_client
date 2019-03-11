@@ -4,18 +4,20 @@
   export default {
     Wall: function (data) {
       return {
-        data: data
+        name: "Ny vägg",
+        collections: []
       }
     },
     Collection: function (data) {
       return {
-        data: data
+        name: "Ny samling",
+        cards: []
       }
     },
     Card: function (data) {
       return {
-        data: data,
-        status: true
+        name: "Nytt kort",
+        id: ""
       }
     },
   }

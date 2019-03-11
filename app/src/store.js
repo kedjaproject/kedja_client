@@ -31,6 +31,14 @@ export const store = new Vuex.Store({
       Vue.set(card, 'status', status)
     },
 
+    createCardInCollection: (state, {collection}) => {
+      collection.cards.push(Factory.Card())
+    },
+
+    createCollectionInWall: (state, {wall}) => {
+      wall.collections.push(Factory.Collection())
+    },
+
   },
   getters: {
 
