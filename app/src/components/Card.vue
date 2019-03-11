@@ -50,6 +50,7 @@ export default {
 .Card{
   border: 1px solid lightgray;
   background: #468895;
+  padding: 5px;
 }
 
 .Card:hover{
