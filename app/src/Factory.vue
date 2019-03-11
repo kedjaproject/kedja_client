@@ -17,7 +17,8 @@
     Card: function (data) {
       return {
         name: "Nytt kort",
-        id: ""
+        id: "",
+        states: {}
       }
     },
   }

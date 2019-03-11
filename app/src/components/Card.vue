@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" :class="{'connected': card.status}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
+  <div class="Card" :class="{'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <input v-model="card.name" class="hiddenField h3" ref="input-name"/>
 
@@ -42,9 +42,15 @@ export default {
     }
   },
   methods: {
-    setHovering: function (status){
+    setHovering: function (flag){
       this.hovering = status;
-      store.commit('setCardsStatus',{cardIds: this.connectedCardIds, status: status});
+      if(flag){
+        store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
+      }
+      else{
+        store.commit('resetCardsState',{stateName: "connected"});
+      }
+      //store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "hovering", stateFlag: flag});
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
@@ -78,8 +84,12 @@ export default {
   right: 5px;
 }
 
-.connected{
+.connected:not(:hover){
   background: #E5E5E5;
+}
+
+.connectedOther:not(:hover){
+  filter: opacity(0.25);
 }
 
 </style>
