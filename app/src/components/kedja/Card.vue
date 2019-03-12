@@ -67,7 +67,7 @@ export default {
       this.$emit('removeCard',this.card)
     }
   },
-  mounted: function () {
+  created: function () {
     this.$refs["input-name"].focus();
     this.$refs["input-name"].select();
   }
@@ -78,7 +78,7 @@ export default {
 <style scoped>
 
 .Card{
-  border: 1px solid #CADBDA;
+  border: 0px solid #FFEF29;
   background: #FFFFFF;
   padding: 5px;
   cursor: pointer;
@@ -87,11 +87,6 @@ export default {
 }
 
 .Card:hover{
-}
-
-.Card
-{
-  border: 0px solid #FFEF29;
 }
 
 .remove{
