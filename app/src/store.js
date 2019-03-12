@@ -4,12 +4,14 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 import Factory from '@/Factory';
+import './functions.js';
 import { walls } from '@/assets/walls.json';
 
 export const store = new Vuex.Store({
   state: {
     walls: [],
-    activeWallId: 0
+    activeWallId: 0,
+    connections: []
   },
   mutations: {
 
@@ -88,6 +90,14 @@ export const store = new Vuex.Store({
       }
     },
 
+    setDeepConnectionsByCardId: (state, {id}) => {
+      state.connections = store.getters.getDeepConnectionsByCardId(id);
+    },
+
+    resetConnections: (state) => {
+      state.connections = [];
+    }
+
   },
   getters: {
 
@@ -121,6 +131,7 @@ export const store = new Vuex.Store({
       let allConnections = wall.connections;
       let connections = store.getters.getRecursiveConnectionsByCardId(allConnections,id,true)
       connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,id,false))
+      connections = [...new Set(connections)] //remove duplicates
       return connections;
     },
 

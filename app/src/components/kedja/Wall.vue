@@ -8,6 +8,11 @@
       <button @click="createCollection" title="Lägg till ny samling">+</button>
     </div>
 
+    <!--div v-if="connections.length">
+      <connection :from="connections[0].members[0]" :to="connections[0].members[1]"></connection>
+    </div-->
+    <connection :from="connection.members[0]" :to="connection.members[1]" v-for="connection in connections"></connection>
+
   </div>
 </template>
 
@@ -15,6 +20,7 @@
 
 import { store } from '@/store';
 import Collection from './Collection'
+import Connection from './Connection'
 import EditableInput from '@/components/general/EditableInput'
 
 
@@ -22,6 +28,7 @@ export default {
   name: 'Wall',
   components: {
     Collection,
+    Connection,
     EditableInput
   },
   data () {
@@ -30,6 +37,11 @@ export default {
   },
   props: {
     wall: ""
+  },
+  computed: {
+    connections: function () {
+      return store.state.connections;
+    }
   },
   methods: {
     createCollection: function () {
@@ -47,7 +59,6 @@ export default {
 
 .Wall{
   background: #EAEAEA;
-
 }
 
 #collections{

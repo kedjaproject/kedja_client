@@ -4,7 +4,7 @@
     <EditableInput v-model="collection.name" tag="h2"></EditableInput>
 
     <transition-group name="fade" mode="out-in" class="cards">
-      <card v-for="card in cardsFiltered" :card="card" @removeCard="removeCard" :key="card.id"></card>
+      <card v-for="card in cardsFiltered" :card="card" @removeCard="removeCard" :key="card.id" :id="card.id"></card>
     </transition-group>
 
     <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>

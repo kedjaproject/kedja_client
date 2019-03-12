@@ -57,9 +57,11 @@ export default {
       this.hovering = flag;
       if(flag){
         store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
+        store.commit('setDeepConnectionsByCardId',{id: this.card.id});
       }
       else{
         store.commit('resetCardsState',{stateName: "connected"});
+        store.commit('resetConnections');
       }
     },
     setSelected: function (e){
