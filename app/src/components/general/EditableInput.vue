@@ -101,6 +101,11 @@ export default {
     font-weight: bold;
   }
 
+  .textSpan:hover{
+    font-weight: bold;
+    color: #ACCECC
+  }
+
   input, textarea{
     font-size: inherit;
     font-weight: inherit;
