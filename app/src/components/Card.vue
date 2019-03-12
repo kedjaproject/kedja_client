@@ -116,6 +116,8 @@ export default {
 
 textarea{
   width: 100%;
+  text-align: left;
+  vertical-align: middle;
   box-sizing: border-box;
 }
 
