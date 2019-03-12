@@ -4,7 +4,7 @@
     <EditableInput v-model="collection.name" tag="h2"></EditableInput>
 
     <transition-group name="fade" mode="out-in" class="cards">
-      <card v-for="card in cardsFiltered" :card="card" class="card" @removeCard="removeCard" :key="card.id"></card>
+      <card v-for="card in cardsFiltered" :card="card" @removeCard="removeCard" :key="card.id"></card>
     </transition-group>
 
     <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>
@@ -68,9 +68,7 @@ export default {
   border: 1px solid #EAEAEA;
   padding: 20px;
   background: #CADBDA;
-  cursor: pointer;
   position: relative;
-
 }
 
 .Collection:hover{
@@ -80,12 +78,7 @@ export default {
 .cards{
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   position: relative;
-}
-
-.card{
-  margin: 5px 0 5px 0;
 }
 
 .fullWidth{

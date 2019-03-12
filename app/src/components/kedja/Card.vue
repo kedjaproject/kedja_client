@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     setHovering: function (flag){
-      this.hovering = status;
+      this.hovering = flag;
       if(flag){
         store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
       }
@@ -83,12 +83,15 @@ export default {
 <style scoped>
 
 .Card{
-  border: 0px solid #FFEF29;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
   background: #FFFFFF;
   padding: 15px;
   cursor: pointer;
-  transition: all 0.25s ease-in;
+  transition: all 0.15s;
   display: inline-block;
+  position: relative;
+  background-clip: padding-box !important;
 }
 
 .cardName{
@@ -104,7 +107,6 @@ export default {
 .selected{
   background: white;
   border: 3px solid #FFEF29;
-
 }
 
 .selectedConnectedOther:not(.selected){
