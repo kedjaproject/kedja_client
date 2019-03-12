@@ -10,7 +10,7 @@
 
 import { store } from '@/store';
 
-import Wall from '@/components/Wall'
+import Wall from '@/components/kedja/Wall'
 
 export default {
   name: 'Landing',

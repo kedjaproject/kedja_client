@@ -14,7 +14,7 @@
 <script>
 
 import { store } from '@/store';
-import Collection from '@/components/Collection'
+import Collection from './Collection'
 
 export default {
   name: 'Wall',

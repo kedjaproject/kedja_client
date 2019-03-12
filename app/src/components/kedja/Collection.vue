@@ -19,7 +19,7 @@
 <script>
 
 import { store } from '@/store';
-import Card from '@/components/Card'
+import Card from './Card'
 
 export default {
   name: 'Collection',
