@@ -3,7 +3,7 @@
 
     <EditableInput v-model="collection.name" tag="h2"></EditableInput>
 
-    <transition-group name="fade">
+    <transition-group name="fade" mode="out-in" class="cards">
       <card v-for="card in cardsFiltered" :card="card" class="card" @removeCard="removeCard" :key="card.id"></card>
     </transition-group>
 
@@ -70,10 +70,18 @@ export default {
   background: #CADBDA;
   cursor: pointer;
   position: relative;
+
 }
 
 .Collection:hover{
   background: #ACCECC;
+}
+
+.cards{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
 }
 
 .card{

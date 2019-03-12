@@ -87,11 +87,8 @@ export default {
   background: #FFFFFF;
   padding: 15px;
   cursor: pointer;
-  position: relative;
-  transition: all 0.25s;
-}
-
-.Card:hover{
+  transition: all 0.25s ease-in;
+  display: inline-block;
 }
 
 .cardName{
@@ -111,7 +108,6 @@ export default {
 }
 
 .selectedConnectedOther:not(.selected){
-  /*display: none;*/
 }
 
 .connected:not(:hover){

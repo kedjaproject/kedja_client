@@ -1,7 +1,15 @@
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s ease;
+  /*transition: all 1s ease;*/
 }
+
 .fade-enter, .fade-leave-to
 /* .component-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+  transform: translateY(0px);
+}
+
+.fade-leave-active {
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
 }
