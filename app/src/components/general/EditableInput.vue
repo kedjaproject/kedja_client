@@ -1,5 +1,5 @@
 <template>
-  <div class="EditableInput">
+  <div class="EditableInput" :class="{'fullWidth': inputVisible}">
 
     <wrapper-component :tag="tag" id="eiTemp" class="text">
 
@@ -94,7 +94,7 @@ export default {
 
   .EditableInput{
     cursor: text;
-    width: 100%;
+    display: inline-block;
   }
 
   .textSpan{
