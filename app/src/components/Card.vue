@@ -1,11 +1,10 @@
 <template>
   <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected()">
 
+    <button class="remove" v-if="hovering" @click="removeCard" title="Ta bort samling" >Ta bort kort</button>
     <textarea v-model="card.name" class="hiddenField h3" ref="input-name">
     </textarea>
-    <button class="remove" v-if="hovering" @click="removeCard">
-      Ta bort kort
-    </button>
+
 
   </div>
 </template>
@@ -102,7 +101,7 @@ export default {
 }
 
 .selected{
-  background: white !important;
+  background: white;
   border: 3px solid #FFEF29;
 
 }
@@ -121,8 +120,6 @@ export default {
 
 textarea{
   width: 100%;
-  text-align: left;
-  vertical-align: middle;
   box-sizing: border-box;
 }
 

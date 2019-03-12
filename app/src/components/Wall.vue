@@ -16,10 +16,11 @@
 import { store } from '@/store';
 import Collection from '@/components/Collection'
 
+
 export default {
   name: 'Wall',
   components: {
-    Collection
+    Collection,
   },
   data () {
     return {
