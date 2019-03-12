@@ -17,6 +17,7 @@ import { store } from '@/store';
 import Collection from './Collection'
 import EditableInput from '@/components/general/EditableInput'
 
+
 export default {
   name: 'Wall',
   components: {

@@ -105,7 +105,7 @@ export default {
 }
 
 .selected{
-  background: white !important;
+  background: white;
   border: 3px solid #FFEF29;
 
 }
@@ -124,8 +124,6 @@ export default {
 
 textarea{
   width: 100%;
-  text-align: left;
-  vertical-align: middle;
   box-sizing: border-box;
 }
 
