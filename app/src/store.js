@@ -111,9 +111,28 @@ export const store = new Vuex.Store({
       return cardFound
     },
 
-    getConnectionsByCardId: state => (id) => {
-      let wall = state.walls[state.activeWallId];
+    getDirectConnectionsByCardId: state => (id) => {
+      let wall = store.getters.getActiveWall();
       return wall.connections.filter(c => c.members.indexOf(id) != -1)
+    },
+
+    getDeepConnectionsByCardId: state => (id) => {
+      let wall = store.getters.getActiveWall();
+      let allConnections = wall.connections;
+      let connections = store.getters.getRecursiveConnectionsByCardId(allConnections,id,true)
+      connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,id,false))
+      return connections;
+    },
+
+    //Not optimized: might go down the same connections multiple times and create duplicates
+    getRecursiveConnectionsByCardId: state => (allConnections,id,forward) => {
+      let connections = allConnections.filter(c => c.members[+!forward] == id)
+      let cc = [];
+      connections.forEach((connection, iConnection) => {
+        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,connection.members[+forward],forward));
+      })
+      connections = connections.concat(cc);
+      return connections;
     },
 
   },

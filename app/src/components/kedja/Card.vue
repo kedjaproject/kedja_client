@@ -33,16 +33,20 @@ export default {
       return this.card.states.selected == true;
     },
     connections: function () {
-      return store.getters.getConnectionsByCardId(this.card.id)
+      return store.getters.getDeepConnectionsByCardId(this.card.id)
     },
     connectedCardIds: function () {
       let arr = []
       this.connections.forEach((conn, iConn) => {
         if(conn.members[0] != this.card.id){
-          arr.push(conn.members[0])
+          if(arr.indexOf(conn.members[0]) == -1){
+            arr.push(conn.members[0])
+          }
         }
         if(conn.members[1] != this.card.id){
-          arr.push(conn.members[1])
+          if(arr.indexOf(conn.members[1]) == -1){
+            arr.push(conn.members[1])
+          }
         }
       })
       return arr
@@ -88,7 +92,7 @@ export default {
   background: #FFFFFF;
   padding: 15px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.1s;
   display: inline-block;
   position: relative;
   background-clip: padding-box !important;
