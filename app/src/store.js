@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 import Factory from '@/Factory';
-import './functions.js';
 import { walls } from '@/assets/walls.json';
 
 export const store = new Vuex.Store({
