@@ -58,6 +58,8 @@ export default {
       if(!this.selected){
         store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
         store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
+
+        this.focusAndSelect();
       }
       else{
         store.commit('resetCardsState',{stateName: "selected"});
@@ -66,11 +68,13 @@ export default {
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
+    },
+    focusAndSelect: function () {
+      this.$refs["input-name"].focus();
+      this.$refs["input-name"].select();
     }
   },
-  created: function () {
-    this.$refs["input-name"].focus();
-    this.$refs["input-name"].select();
+  mounted: function () {
   }
 }
 </script>
