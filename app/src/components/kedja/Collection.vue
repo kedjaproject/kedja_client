@@ -1,7 +1,7 @@
 <template>
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <input v-model="collection.name" class="hiddenField h2" ref="input-name"/>
+    <EditableInput v-model="collection.name" tag="h2"></EditableInput>
 
     <transition-group name="fade">
       <card v-for="card in cardsFiltered" :card="card" class="card" @removeCard="removeCard" :key="card.id"></card>
@@ -20,11 +20,13 @@
 
 import { store } from '@/store';
 import Card from './Card'
+import EditableInput from '@/components/general/EditableInput'
 
 export default {
   name: 'Collection',
   components: {
-    Card
+    Card,
+    EditableInput
   },
   data () {
     return {
@@ -54,8 +56,7 @@ export default {
     }
   },
   mounted: function () {
-    this.$refs["input-name"].focus();
-    this.$refs["input-name"].select();
+
   }
 }
 </script>

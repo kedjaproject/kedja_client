@@ -1,8 +1,8 @@
 <template>
   <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected()">
 
-    <textarea v-model="card.name" class="hiddenField h3" ref="input-name">
-    </textarea>
+    <EditableInput v-model="card.name" tag="h3" ref="input-name"></EditableInput>
+
     <button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort
     </button>
@@ -13,9 +13,13 @@
 <script>
 
 import { store } from '@/store';
+import EditableInput from '@/components/general/EditableInput'
 
 export default {
   name: 'Card',
+  components: {
+    EditableInput
+  },
   data () {
     return {
       hovering: false
@@ -70,8 +74,8 @@ export default {
       this.$emit('removeCard',this.card)
     },
     focusAndSelect: function () {
-      this.$refs["input-name"].focus();
-      this.$refs["input-name"].select();
+      this.$refs["input-name"].$refs.input.focus();
+      this.$refs["input-name"].$refs.input.select();
     }
   },
   mounted: function () {

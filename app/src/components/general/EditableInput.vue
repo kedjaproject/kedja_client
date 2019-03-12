@@ -1,22 +1,19 @@
 <template>
-  <div class="editableInput">
+  <div class="EditableInput">
 
     <wrapper-component :tag="tag" id="eiTemp" class="text">
 
-      <div v-if="!inputVisible" class="textContainer">
+      <div v-if="!inputVisible" class="textContainer" @click="openEdit();">
         <span class="textSpan">
           {{value}}
         </span>
-        <a class="edit" @click="openEdit();">
-          Redigera
-        </a>
       </div>
 
       <div v-if="inputVisible">
 
-        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @keyup.enter="finishEdit(true)" @blur="finishEdit(true)" :placeholder="placeholder" />
+        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="finishEdit(false)" @keyup.enter="finishEdit(true)" @blur="finishEdit(true)" :placeholder="placeholder" />
 
-        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" ></textarea>
+        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" @change="calcWidth"></textarea>
 
       </div>
 
@@ -39,7 +36,7 @@ export default {
   props:{
     value: String,
     tag: "",
-    placeholder: {default: "Enter text"},
+    placeholder: {default: "Ange text"},
     type: {default: "input"}
   },
   data () {
@@ -95,41 +92,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-  .textContainer{
-    position: relative;
+  .EditableInput{
+    cursor: text;
+    width: 100%;
   }
 
-  .textContainer:hover > .textSpan{
-    filter: opacity(0.5);
-  }
-
-  .textContainer:hover > .edit{
-    display: inline;
-  }
-
-  .textSpan:hover{
-
-  }
-
-  .edit{
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    font-size: 10pt;
-    font-weight: normal;
-    cursor: pointer;
-    background: rgb(240,240,240);
-    color: black;
-    padding: 4px;
-    z-index: 1;
-    display: none;
-    border: 1px solid lightgray;
-    box-shadow: 2px 2px 2px black;
-    border-radius: 5px;
-  }
-
-  .edit:hover{
-    text-decoration: underline;
+  .textSpan{
+    font-weight: bold;
   }
 
   input, textarea{
@@ -138,11 +107,7 @@ export default {
     font-family: inherit;
     padding: 0;
     border: 0px solid black;
-  }
-
-  button {
-    display: inline-block;
-    height: 20px;
+    width: 100%;
   }
 
 </style>

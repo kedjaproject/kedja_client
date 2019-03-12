@@ -1,7 +1,7 @@
 <template>
   <div class="Wall">
 
-    <input v-model="wall.name" class="hiddenField h1" />
+    <EditableInput v-model="wall.name" tag="h1"></EditableInput>
 
     <div id="collections">
       <collection v-for="collection in wall.collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
@@ -15,11 +15,13 @@
 
 import { store } from '@/store';
 import Collection from './Collection'
+import EditableInput from '@/components/general/EditableInput'
 
 export default {
   name: 'Wall',
   components: {
-    Collection
+    Collection,
+    EditableInput
   },
   data () {
     return {
