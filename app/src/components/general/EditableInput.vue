@@ -63,6 +63,7 @@ export default {
       //Next tick: needs to be performed after re-rendering, due to hidden input field
       this.$nextTick(function (input) {
         this.$refs.input.focus();
+        this.$refs.input.select();
       })
 
     },

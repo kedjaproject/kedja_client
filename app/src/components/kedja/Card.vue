@@ -1,7 +1,7 @@
 <template>
-  <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected()">
+  <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected($event)">
 
-    <EditableInput v-model="card.name" tag="h3" ref="input-name"></EditableInput>
+    <EditableInput v-model="card.name" tag="span" ref="input-name" class="cardName" @click="focusAndSelect()"></EditableInput>
 
     <button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort
@@ -58,25 +58,21 @@ export default {
         store.commit('resetCardsState',{stateName: "connected"});
       }
     },
-    setSelected: function (){
-      if(!this.selected){
-        store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
-        store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
-
-        this.focusAndSelect();
-      }
-      else{
-        store.commit('resetCardsState',{stateName: "selected"});
-        store.commit('resetCardsState',{stateName: "selectedConnected"});
+    setSelected: function (e){
+      if(e.srcElement == this.$el){
+        if(!this.selected){
+          store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
+          store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
+        }
+        else{
+          store.commit('resetCardsState',{stateName: "selected"});
+          store.commit('resetCardsState',{stateName: "selectedConnected"});
+        }
       }
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
     },
-    focusAndSelect: function () {
-      this.$refs["input-name"].$refs.input.focus();
-      this.$refs["input-name"].$refs.input.select();
-    }
   },
   mounted: function () {
   }
@@ -89,13 +85,17 @@ export default {
 .Card{
   border: 0px solid #FFEF29;
   background: #FFFFFF;
-  padding: 5px;
+  padding: 15px;
   cursor: pointer;
   position: relative;
   transition: all 0.25s;
 }
 
 .Card:hover{
+}
+
+.cardName{
+  font-size: 1.2em;
 }
 
 .remove{
