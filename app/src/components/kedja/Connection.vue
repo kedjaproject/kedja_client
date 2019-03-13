@@ -1,6 +1,6 @@
 <template>
-  <div class="Connection" :style="{'top': top+'px', 'left': left+'px'}">
-    <canvas class="canvasConnection" :width="width" :height="Math.max(5,height)" />
+  <div class="Connection" :style="{'top': top-5+'px', 'left': left+'px'}">
+    <canvas class="canvasConnection" :width="width" :height="height+10" />
   </div>
 </template>
 
@@ -68,13 +68,26 @@ export default {
       var ctx = c.getContext("2d");
       ctx.lineWidth = 1;
       ctx.strokeStyle = "#666666";
+
+      //Curve
       ctx.beginPath();
-      var y0 = this.y0 > this.y1 ? this.height : 0;
-      var y1 = this.y0 > this.y1 ? 0 : this.height;
+      var y0 = this.y0 > this.y1 ? this.height + 5 : 5;
+      var y1 = this.y0 > this.y1 ? 5 : this.height + 5;
       ctx.moveTo(0, y0);
       //ctx.lineTo(this.width, y1);
       ctx.bezierCurveTo(this.width / 2, y0, this.width / 2, y1, this.width, y1);
       ctx.stroke();
+
+      //Start circle
+      ctx.beginPath();
+      ctx.arc(0, y0, 5, 0, 2 * Math.PI);
+      ctx.fill();
+
+      //End circle
+      ctx.beginPath();
+      ctx.arc(this.width, y1, 5, 0, 2 * Math.PI);
+      ctx.fill();
+
     }
   },
   mounted: function () {
