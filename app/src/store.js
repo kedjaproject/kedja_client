@@ -11,7 +11,8 @@ export const store = new Vuex.Store({
   state: {
     walls: [],
     activeWallId: 0,
-    connections: []
+    connections: [],
+    tabIndexCounter: 0
     //schema: Schema
   },
   mutations: {
