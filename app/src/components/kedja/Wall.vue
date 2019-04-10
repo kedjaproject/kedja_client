@@ -23,7 +23,6 @@ import Collection from './Collection'
 import Connection from './Connection'
 import EditableInput from '@/components/general/EditableInput'
 
-
 export default {
   name: 'Wall',
   components: {

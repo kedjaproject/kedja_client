@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export const store = new Vuex.Store({
     walls: [],
     activeWallId: 0,
     connections: []
+    //schema: Schema
   },
   mutations: {
 
@@ -20,6 +22,7 @@ export const store = new Vuex.Store({
     init: (state, {}) => {
       state.walls = walls;
       store.commit('prepareData',{});
+      store.commit('apiCallTest',{});
     },
 
     prepareData: (state, {}) => {
@@ -95,6 +98,57 @@ export const store = new Vuex.Store({
 
     resetConnections: (state) => {
       state.connections = [];
+    },
+
+    //API
+
+    apiCallTest: (state) => {
+
+      let data = {
+      }
+
+      let params = {
+        //url: "http://static.radkompaniet.se/schema.json",
+        url: "",
+        data: data,
+        successCallback: (data) => {
+          console.log(data);
+        },
+      }
+
+      store.commit('makeAPICall',params);
+
+    },
+
+    makeAPICall: (state, params) => {
+
+      //let headers = {"Authorization": 'Basic ' + btoa(user+':'+key)}
+
+      let d = {
+        //headers: headers,
+        mode: 'cors',
+        contentType: 'text/html;charset=utf-8',
+        dataType: 'text',
+        crossDomain: true,
+        data: params.data
+      }
+
+      axios.get(params.url,{},d)
+      .then(
+        params.successCallback,
+        this.errorCallback
+      )
+      .catch(error => {
+        console.log(error);
+      })
+
+      console.log("API call: " + params.url)
+      console.log(d)
+    },
+
+    errorCallback: (state, data) => {
+      console.log("Error")
+      console.log(data)
     }
 
   },
@@ -144,6 +198,8 @@ export const store = new Vuex.Store({
       connections = connections.concat(cc);
       return connections;
     },
+
+    //API
 
   },
 });
