@@ -67,17 +67,30 @@ export default {
       var c = this.$el.getElementsByTagName("canvas")[0];
       var ctx = c.getContext("2d");
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "#666666";
+      ctx.strokeStyle = "#000000";
 
       //Curve
       ctx.beginPath();
       var y0 = this.y0 > this.y1 ? this.height + 5 : 5;
       var y1 = this.y0 > this.y1 ? 5 : this.height + 5;
+
+      /*
       ctx.moveTo(0, y0);
       //ctx.lineTo(this.width, y1);
       ctx.bezierCurveTo(this.width / 2, y0, this.width / 2, y1, this.width, y1);
       ctx.stroke();
+      */
 
+
+      //Pipe 90deg angles
+      ctx.moveTo(0, y0);
+      ctx.lineTo(this.width / 2, y0);
+      ctx.lineTo(this.width / 2, y1);
+      ctx.lineTo(this.width, y1);
+      ctx.stroke();
+
+
+      ctx.lineWidth = 3;
       //Start circle
       ctx.beginPath();
       ctx.arc(0, y0, 5, 0, 2 * Math.PI);
@@ -103,7 +116,7 @@ export default {
 
 .Connection{
   position: fixed;
-  background: #ff000022;
+  background: #ff000000;
   height: 0px auto;
   padding: 0;
 }

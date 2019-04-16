@@ -1,11 +1,28 @@
 <template>
-  <div class="Card" :class="{'selected': card.states.selected, 'selectedConnectedOther': card.states.selectedConnected == false, 'connected': card.states.connected, 'connectedOther': card.states.connected == false}" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)" @click="setSelected($event)">
+  <div class="Card" :class="{
+    'selected': card.states.selected,
+    'selectedConnectedOther': card.states.selectedConnected == false,
+    'connected': connectedCousin,
+    'connectedOther': card.states.connected == false,
+    'connecting': card.states.connecting,
+    'connectable': connectable
+    }" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <EditableInput v-model="card.name" tag="span" ref="input-name" class="cardName" @click="focusAndSelect()"></EditableInput>
+    <div class="main" @click="setSelected($event)">
+      <h4>{{card.name}}</h4>
+    </div>
 
-    <button class="remove" v-if="hovering" @click="removeCard">
+    <!--EditableInput v-model="card.name" tag="span" ref="input-name" class="cardName" @click="focusAndSelect()"></EditableInput-->
+
+    <!--button class="remove" v-if="hovering" @click="removeCard">
       Ta bort kort
-    </button>
+    </button-->
+
+    <div v-if="card.states.selected" class="selectedButtons">
+      <card-button></card-button>
+      <card-button></card-button>
+      <card-button @click.native="toggleConnecting($event)" :active="card.states.connecting"></card-button>
+    </div>
 
   </div>
 </template>
@@ -14,11 +31,13 @@
 
 import { store } from '@/store';
 import EditableInput from '@/components/general/EditableInput'
+import CardButton from './CardButton'
 
 export default {
   name: 'Card',
   components: {
-    EditableInput
+    EditableInput,
+    CardButton
   },
   data () {
     return {
@@ -50,11 +69,20 @@ export default {
         }
       })
       return arr
+    },
+    connecting: function () {
+      return this.card.states.connecting == true;
+    },
+    connectedCousin: function () {
+      return this.card.states.cousin && this.card.states.connected;
+    },
+    connectable: function () {
+      return this.card.states.cousin && !this.card.states.connected
     }
   },
   methods: {
     setHovering: function (flag){
-      this.hovering = flag;
+      /*this.hovering = flag;
       if(flag){
         store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
         store.commit('setDeepConnectionsByCardId',{id: this.card.id});
@@ -62,19 +90,44 @@ export default {
       else{
         store.commit('resetCardsState',{stateName: "connected"});
         store.commit('resetConnections');
-      }
+      }*/
     },
     setSelected: function (e){
-      if(e.srcElement == this.$el){
+      //if(e.srcElement == this.$el){
         if(!this.selected){
+
+          //connection
+          store.commit('setDeepConnectionsByCardId',{id: this.card.id});
+
+          //selection
           store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
           store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
         }
         else{
+          //connection
+
+          store.commit('resetConnections');
+
+          //selection
           store.commit('resetCardsState',{stateName: "selected"});
           store.commit('resetCardsState',{stateName: "selectedConnected"});
         }
-      }
+      //}
+    },
+    toggleConnecting: function (e){
+      //if(e.srcElement == this.$el){
+      console.log("connecting " + this.connecting)
+        if(!this.connecting){
+          store.commit('setCardsState',{cardIds: [this.card.id], stateName: "connecting"});
+          store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
+          store.commit('setCousinsByCardId',{id: this.card.id});
+        }
+        else{
+          store.commit('resetCardsState',{stateName: "connecting"});
+          store.commit('resetCardsState',{stateName: "connected"});
+          store.commit('resetCardsState',{stateName: "cousin"});
+        }
+      //}
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
@@ -89,15 +142,31 @@ export default {
 <style scoped>
 
 .Card{
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
+  /*border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;*/
   background: #FFFFFF;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.25s;
   display: inline-block;
   position: relative;
   background-clip: padding-box !important;
+  margin-bottom: 10px;
+}
+
+.main{
+  padding: 15px;
+  cursor: pointer;
+}
+
+.selectedButtons{
+  padding: 5px;
+  background: rgb(245,245,245);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.selectedButtons * {
+  margin: 1px;
 }
 
 .cardName{
@@ -112,7 +181,7 @@ export default {
 
 .selected{
   background: white;
-  border: 3px solid #FFEF29;
+  /*border: 3px solid #FFEF29;*/
 }
 
 .selectedConnectedOther:not(.selected){
@@ -123,13 +192,23 @@ export default {
 }
 
 .connectedOther:not(:hover){
-  filter: opacity(0.25);
+  /*filter: opacity(0.25);*/
+}
+
+.connecting, .connected{
+  border: 5px solid yellow;
+}
+
+.connectable{
+  box-shadow: 5px 5px 2px black;
 }
 
 textarea{
   width: 100%;
   box-sizing: border-box;
 }
+
+
 
 
 </style>

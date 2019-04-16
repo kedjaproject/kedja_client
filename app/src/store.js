@@ -21,9 +21,26 @@ export const store = new Vuex.Store({
     },*/
 
     init: (state, {}) => {
-      state.walls = walls;
+      state.walls = walls.slice();
+      //store.commit('initWallsFromAPI',{});
       store.commit('prepareData',{});
-      store.commit('apiCallTest',{});
+      /*store.commit('apiCallTest',{});
+      store.commit('resetConnections',{});*/
+    },
+
+    initWallsFromAPI: (state, {}) => {
+
+      let params = {
+        //url: "http://static.radkompaniet.se/schema.json",
+        endpoint: "list/Wall/1",
+        successCallback: (data) => {
+          console.log(data)
+          state.walls = data.data;
+        },
+      }
+
+      store.commit('makeAPICall',params);
+
     },
 
     prepareData: (state, {}) => {
@@ -70,7 +87,32 @@ export const store = new Vuex.Store({
     //Create data
 
     createCollectionInWall: (state, {wall}) => {
-      wall.collections.push(Factory.Collection())
+
+      let rid = wall.rid;
+
+      let params = {
+        //url: "http://static.radkompaniet.se/schema.json",
+        endpoint: "create/Collection/" + rid,
+        data: {title: 'hej'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+        },
+      }
+
+      console.log(params.data)
+
+      axios.post('http://kedja.archeproject.org/api/' + params.endpoint,{},params.data).then(
+        params.successCallback,
+        this.errorCallback
+      )
+      .catch(error => {
+        console.log(error);
+      })
+
+      store.commit('makeAPICall',params);
+
+      //wall.collections.push(Factory.Collection())
     },
 
     createCardInCollection: (state, {collection}) => {
@@ -94,11 +136,33 @@ export const store = new Vuex.Store({
     },
 
     setDeepConnectionsByCardId: (state, {id}) => {
+      console.log("Set deep connections")
+      //state.connections = []
       state.connections = store.getters.getDeepConnectionsByCardId(id);
     },
 
     resetConnections: (state) => {
+      console.log("Reset connections")
       state.connections = [];
+
+      //state.connections = store.getters.getActiveWall().connections.slice();
+      console.log(state.connections.length)
+    },
+
+    setCousinsByCardId: (state, {id}) => {
+      let collection = store.getters.getCollectionByCardId(id);
+      let wall = store.getters.getActiveWall();
+      let siblings = store.getters.getClosestArraySiblings(wall.collections,collection)
+      console.log(siblings)
+
+      siblings.forEach((sibling,iSibling) => {
+        if(sibling){
+          sibling.cards.forEach((card,iCard) => {
+            store.commit('setCardState',{card: card, stateName: 'cousin', stateFlag: true});
+          })
+        }
+      })
+
     },
 
     //API
@@ -110,8 +174,7 @@ export const store = new Vuex.Store({
 
       let params = {
         //url: "http://static.radkompaniet.se/schema.json",
-        url: "",
-        data: data,
+        endpoint: "create/Wall/1",
         successCallback: (data) => {
           console.log(data);
         },
@@ -123,18 +186,19 @@ export const store = new Vuex.Store({
 
     makeAPICall: (state, params) => {
 
-      //let headers = {"Authorization": 'Basic ' + btoa(user+':'+key)}
+      console.log(params.endpoint)
 
-      let d = {
-        //headers: headers,
-        mode: 'cors',
-        contentType: 'text/html;charset=utf-8',
-        dataType: 'text',
-        crossDomain: true,
-        data: params.data
-      }
+      let method = params.method ? params.method : "get";
 
-      axios.get(params.url,{},d)
+      console.log(method)
+
+      //axios.get('http://kedja.archeproject.org/api/' + params.endpoint)
+      axios({
+        method: method,
+        url:'http://kedja.archeproject.org/api/' + params.endpoint,
+        data: params.data,
+        config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
+      })
       .then(
         params.successCallback,
         this.errorCallback
@@ -143,8 +207,9 @@ export const store = new Vuex.Store({
         console.log(error);
       })
 
-      console.log("API call: " + params.url)
-      console.log(d)
+      /*console.log("API call: " + params.url)
+      console.log(d)*/
+
     },
 
     errorCallback: (state, data) => {
@@ -165,7 +230,7 @@ export const store = new Vuex.Store({
 
     getCardById: state => (id) => {
       let cardFound = undefined;
-      let wall = state.walls[state.activeWallId];
+      let wall = store.getters.getActiveWall()
       wall.collections.forEach((collection, iCollection) => {
         let card = collection.cards.find(c => c.id == id);
         if(card){
@@ -175,14 +240,25 @@ export const store = new Vuex.Store({
       return cardFound
     },
 
+    getCollectionByCardId: state => (id) => {
+      let collectionFound = undefined;
+      let wall = store.getters.getActiveWall()
+      wall.collections.forEach((collection, iCollection) => {
+        let card = collection.cards.find(c => c.id == id);
+        if(card){
+          collectionFound = collection;
+        }
+      })
+      return collectionFound
+    },
+
     getDirectConnectionsByCardId: state => (id) => {
       let wall = store.getters.getActiveWall();
       return wall.connections.filter(c => c.members.indexOf(id) != -1)
     },
 
     getDeepConnectionsByCardId: state => (id) => {
-      let wall = store.getters.getActiveWall();
-      let allConnections = wall.connections;
+      let allConnections = store.getters.getActiveWall().connections;
       let connections = store.getters.getRecursiveConnectionsByCardId(allConnections,id,true)
       connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,id,false))
       connections = [...new Set(connections)] //remove duplicates
@@ -199,6 +275,18 @@ export const store = new Vuex.Store({
       connections = connections.concat(cc);
       return connections;
     },
+
+    getClosestArraySiblings: state => (array,item) => {
+      let siblings = [undefined,undefined];
+      let i = array.indexOf(item);
+      if(i > 0){
+        siblings[0] = array[i-1]
+      }
+      if(i < array.length-2){
+        siblings[1] = array[i+1]
+      }
+      return siblings
+    }
 
     //API
 

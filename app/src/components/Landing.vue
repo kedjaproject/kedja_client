@@ -1,7 +1,11 @@
 <template>
   <div class="Landing">
 
-    <wall :wall="walls[activeWallId]"></wall>
+    <wall :wall="walls[activeWallId]" v-if="walls[activeWallId]"></wall>
+
+    <pre>
+      {{walls[activeWallId]}}
+    </pre>
 
   </div>
 </template>
