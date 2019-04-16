@@ -1,10 +1,10 @@
 <template>
   <div class="Wall">
 
-    <EditableInput v-model="wall.name" tag="h1"></EditableInput>
+    <EditableInput v-model="wall.rid" tag="h1"></EditableInput>
 
     <div id="collections">
-      <collection v-for="collection in wall.collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
+      <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
       <button @click="createCollection" title="Lägg till ny samling">+</button>
     </div>
 
@@ -32,23 +32,41 @@ export default {
   },
   data () {
     return {
+      wall: ""
     }
   },
   props: {
-    wall: ""
   },
   computed: {
+    collections: function () {
+      return this.wall.contained;
+    },
     connections: function () {
       return store.state.connections;
     }
   },
   methods: {
+    getWallFromParam: function () {
+      let wallId = this.$route.params['wallId'];
+      if(wallId){
+        let params = {
+          endpoint: "recursive_read/" + wallId,
+          successCallback: (data) => {
+            this.wall = data.data;
+          },
+        }
+        store.commit('makeAPICall', params);
+      }
+    },
     createCollection: function () {
       store.commit('createCollectionInWall',{wall: this.wall});
     },
     removeCollection: function (collection) {
-      store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+      //store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
     }
+  },
+  mounted: function () {
+    this.getWallFromParam();
   }
 }
 </script>

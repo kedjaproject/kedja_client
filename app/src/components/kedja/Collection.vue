@@ -1,11 +1,11 @@
 <template>
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <EditableInput v-model="collection.name" tag="h2"></EditableInput>
+    <EditableInput v-model="collection.rid" tag="h2"></EditableInput>
 
     <transition-group name="fade" mode="out-in" class="cards">
       <!--card v-for="(card,index) in cardsFiltered" :card="card" @removeCard="removeCard" :key="card.id" :id="card.id" tabindex="0"></card-->
-      <card v-for="(card,index) in collection.cards" :card="card" @removeCard="removeCard" :key="card.id" :id="card.id" tabindex="0"></card>
+      <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid" tabindex="0"></card>
 
     </transition-group>
 
@@ -36,8 +36,11 @@ export default {
     }
   },
   computed: {
+    cards: function () {
+      return this.collection.contained
+    },
     cardsFiltered: function () {
-      return this.collection.cards.filter(card => card.states.selected != false || card.states.selectedConnected != false)
+      return this.cards//.filter(card => card.states.selected != false || card.states.selectedConnected != false)
     }
   },
   props: {

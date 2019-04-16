@@ -23,7 +23,7 @@ export const store = new Vuex.Store({
     init: (state, {}) => {
       state.walls = walls.slice();
       //store.commit('initWallsFromAPI',{});
-      store.commit('prepareData',{});
+      //store.commit('prepareData',{});
       /*store.commit('apiCallTest',{});
       store.commit('resetConnections',{});*/
     },
@@ -41,6 +41,10 @@ export const store = new Vuex.Store({
 
       store.commit('makeAPICall',params);
 
+    },
+
+    initCard: (state, card) => {
+      Vue.set(card, 'states', {})
     },
 
     prepareData: (state, {}) => {
@@ -78,8 +82,6 @@ export const store = new Vuex.Store({
 
     },
 
-
-
     setCardState: (state, {card, stateName, stateFlag}) => {
       Vue.set(card.states, stateName, stateFlag)
     },
@@ -91,32 +93,34 @@ export const store = new Vuex.Store({
       let rid = wall.rid;
 
       let params = {
-        //url: "http://static.radkompaniet.se/schema.json",
         endpoint: "create/Collection/" + rid,
-        data: {title: 'hej'},
+        data: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
           console.log(data)
         },
       }
 
-      console.log(params.data)
-
-      axios.post('http://kedja.archeproject.org/api/' + params.endpoint,{},params.data).then(
-        params.successCallback,
-        this.errorCallback
-      )
-      .catch(error => {
-        console.log(error);
-      })
-
       store.commit('makeAPICall',params);
 
-      //wall.collections.push(Factory.Collection())
     },
 
     createCardInCollection: (state, {collection}) => {
-      collection.cards.push(Factory.Card())
+
+      let rid = collection.rid;
+
+      let params = {
+        endpoint: "create/Card/" + rid,
+        data: {title: 'Nytt kort'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
+
+      //collection.cards.push(Factory.Card())
     },
 
     //Remove data

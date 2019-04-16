@@ -1,9 +1,15 @@
 <template>
   <div class="WallList">
 
-    <pre>
+    <!--pre>
       {{walls}}
-    </pre>
+    </pre-->
+
+    <div v-for="wall in walls.data">
+      <router-link :to="{ name: 'Wall', params: {wallId: wall.rid} }">
+        {{wall.rid}}
+      </router-link>
+    </div>
 
   </div>
 </template>

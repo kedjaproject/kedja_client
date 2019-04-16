@@ -9,7 +9,7 @@
     }" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <div class="main" @click="setSelected($event)">
-      <h4>{{card.name}}</h4>
+      <h4>{{card.rid}}</h4>
     </div>
 
     <!--EditableInput v-model="card.name" tag="span" ref="input-name" class="cardName" @click="focusAndSelect()"></EditableInput-->
@@ -132,6 +132,9 @@ export default {
     removeCard: function () {
       this.$emit('removeCard',this.card)
     },
+  },
+  created: function () {
+    store.commit('initCard',this.card);
   },
   mounted: function () {
   }
