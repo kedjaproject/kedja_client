@@ -97,7 +97,7 @@ export const store = new Vuex.Store({
         data: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
-          console.log(data)
+          wall.contained.push(data.data)
         },
       }
 
@@ -114,6 +114,7 @@ export const store = new Vuex.Store({
         data: {title: 'Nytt kort'},
         method: "post",
         successCallback: (data) => {
+          collection.contained.push(data.data)
           console.log(data)
         },
       }
