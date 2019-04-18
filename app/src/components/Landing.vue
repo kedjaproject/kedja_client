@@ -3,9 +3,9 @@
 
     <wall :wall="walls[activeWallId]" v-if="walls[activeWallId]"></wall>
 
-    <pre>
+    <!--pre>
       {{walls[activeWallId]}}
-    </pre>
+    </pre-->
 
   </div>
 </template>

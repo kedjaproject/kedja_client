@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    Kedja
-    <router-view/>
+    <div id="header">
+      Kedja header
+    </div>
+    <router-view id="router"/>
+    <div id="footer">
+      Kedja footer
+    </div>
   </div>
 </template>
 

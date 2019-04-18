@@ -1,14 +1,26 @@
+html{
+}
+
 body{
-  padding: 5px;
+  /* LAYOUT */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
   margin: 0;
-  max-width: 100%;
+
 }
 
 #app{
-  width: 100%;
+  /* LAYOUT */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 #router{
+  flex: 1;
 }
 
 .fullWidth{

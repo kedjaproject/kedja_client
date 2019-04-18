@@ -24,8 +24,6 @@ export const store = new Vuex.Store({
       state.walls = walls.slice();
       //store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
-      /*store.commit('apiCallTest',{});
-      store.commit('resetConnections',{});*/
     },
 
     initWallsFromAPI: (state, {}) => {
@@ -172,32 +170,10 @@ export const store = new Vuex.Store({
 
     //API
 
-    apiCallTest: (state) => {
-
-      let data = {
-      }
-
-      let params = {
-        //url: "http://static.radkompaniet.se/schema.json",
-        endpoint: "create/Wall/1",
-        successCallback: (data) => {
-          console.log(data);
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-    },
-
     makeAPICall: (state, params) => {
-
-      console.log(params.endpoint)
 
       let method = params.method ? params.method : "get";
 
-      console.log(method)
-
-      //axios.get('http://kedja.archeproject.org/api/' + params.endpoint)
       axios({
         method: method,
         url:'http://kedja.archeproject.org/api/' + params.endpoint,
@@ -211,9 +187,6 @@ export const store = new Vuex.Store({
       .catch(error => {
         console.log(error);
       })
-
-      /*console.log("API call: " + params.url)
-      console.log(d)*/
 
     },
 

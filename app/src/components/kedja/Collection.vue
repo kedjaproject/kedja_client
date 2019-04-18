@@ -1,19 +1,26 @@
 <template>
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <EditableInput v-model="collection.rid" tag="h2"></EditableInput>
+    <div class="collectionHeader">
+      <EditableInput v-model="collection.rid" tag="h3"></EditableInput>
 
-    <transition-group name="fade" mode="out-in" class="cards">
-      <!--card v-for="(card,index) in cardsFiltered" :card="card" @removeCard="removeCard" :key="card.id" :id="card.id" tabindex="0"></card-->
-      <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid" tabindex="0"></card>
+      <!--button class="remove" v-if="hovering" @click="removeCollection" title="Ta bort samling">
+        x
+      </button-->
 
-    </transition-group>
+    </div>
 
-    <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>
+    <div class="collectionContent">
+      <transition-group name="fade" mode="out-in" class="cards">
+        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid" tabindex="0"></card>
+      </transition-group>
 
-    <button class="remove" v-if="hovering" @click="removeCollection" title="Ta bort samling">
-      x
-    </button>
+    </div>
+
+    <div class="collectionFooter">
+      <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>
+    </div>
+
 
   </div>
 </template>
@@ -70,14 +77,24 @@ export default {
 <style scoped>
 
 .Collection{
+
+  /* LAYOUT */
+  display: flex;
+  flex-direction: column;
+
   border: 1px solid #EAEAEA;
   padding: 20px;
   background: #CADBDA;
-  position: relative;
+  /*position: relative;*/
 }
 
 .Collection:hover{
   background: #ACCECC;
+}
+
+.collectionContent{
+  flex: 1;
+  overflow-y: scroll;
 }
 
 .cards{
