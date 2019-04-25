@@ -21,18 +21,16 @@ export const store = new Vuex.Store({
     },*/
 
     init: (state, {}) => {
-      state.walls = walls.slice();
-      //store.commit('initWallsFromAPI',{});
+      //state.walls = walls.slice();
+      store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
     },
 
     initWallsFromAPI: (state, {}) => {
 
       let params = {
-        //url: "http://static.radkompaniet.se/schema.json",
         endpoint: "list/Wall/1",
         successCallback: (data) => {
-          console.log(data)
           state.walls = data.data;
         },
       }
@@ -86,13 +84,26 @@ export const store = new Vuex.Store({
 
     //Create data
 
+    createWall: (state, {}) => {
+      let params = {
+        endpoint: "create/Wall/1",
+        params: {title: 'Ny vägg'},
+        method: "post",
+        successCallback: (data) => {
+          state.walls.push(data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
+    },
+
     createCollectionInWall: (state, {wall}) => {
 
       let rid = wall.rid;
 
       let params = {
         endpoint: "create/Collection/" + rid,
-        data: {title: 'Ny samling'},
+        params: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
           wall.contained.push(data.data)
@@ -109,7 +120,7 @@ export const store = new Vuex.Store({
 
       let params = {
         endpoint: "create/Card/" + rid,
-        data: {title: 'Nytt kort'},
+        params: {title: 'Nytt kort'},
         method: "post",
         successCallback: (data) => {
           collection.contained.push(data.data)
@@ -177,7 +188,7 @@ export const store = new Vuex.Store({
       axios({
         method: method,
         url:'http://kedja.archeproject.org/api/' + params.endpoint,
-        data: params.data,
+        params: params.params,
         config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
       })
       .then(
@@ -264,9 +275,13 @@ export const store = new Vuex.Store({
         siblings[1] = array[i+1]
       }
       return siblings
-    }
+    },
 
     //API
+
+    getWalls: state => () => {
+      return state.walls;
+    },
 
   },
 });
