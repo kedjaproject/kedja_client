@@ -1,7 +1,8 @@
 <template>
   <div class="CardButton" :class="{'active': active}">
 
-    X
+    <slot>
+    </slot>
 
   </div>
 </template>
@@ -50,7 +51,7 @@ export default {
 }
 
 .active{
-  background: yellow;
+  background: salmon;
 }
 
 </style>

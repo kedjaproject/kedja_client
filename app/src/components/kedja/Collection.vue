@@ -95,28 +95,37 @@ export default {
   flex-direction: column;
 
   border: 1px solid #EAEAEA;
-  padding: 20px;
   background: #CADBDA;
   /*position: relative;*/
 }
 
-.Collection:hover{
+.Collection:nth-child(even){
   background: #ACCECC;
 }
 
+.Collection:hover{
+
+}
+
+.collectionHeader{
+  padding: 0 20px 0 20px;
+  border-bottom: 1px solid white;
+}
+
 .collectionContent{
+  padding: 20px;
   flex: 1;
   overflow-y: scroll;
+}
+
+.collectionFooter{
+  padding: 20px;
 }
 
 .cards{
   display: flex;
   flex-direction: column;
   position: relative;
-}
-
-.fullWidth{
-  margin: 5px 0 5px 0;
 }
 
 .remove{
