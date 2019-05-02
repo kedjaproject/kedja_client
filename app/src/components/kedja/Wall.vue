@@ -1,8 +1,8 @@
 <template>
-  <div class="Wall">
+  <div class="Wall" v-if="wall">
 
     <div class="wallHeader">
-      <EditableInput v-model="wall.rid" tag="h1"></EditableInput>
+      <EditableInput v-model="data.title" tag="h1" @change="updateTitle($event)"></EditableInput>
     </div>
 
     <div class="wallContent">
@@ -22,6 +22,9 @@
     </div-->
 
   </div>
+  <div v-else>
+    Loading wall
+  </div>
 </template>
 
 <script>
@@ -40,17 +43,31 @@ export default {
   },
   data () {
     return {
-      wall: ""
+
     }
   },
   props: {
   },
   computed: {
+    wall: function () {
+      return store.getters.getActiveWall();
+    },
+    data: function () {
+      return this.wall.data;
+    },
     collections: function () {
       return this.wall.contained;
     },
     connections: function () {
       return store.state.connections;
+    },
+    /*title: function () {
+      return this.data.title
+    }*/
+  },
+  watch: {
+    title: function (val) {
+      //console.log(val)
     }
   },
   methods: {
@@ -60,21 +77,53 @@ export default {
         let params = {
           endpoint: "recursive_read/" + wallId,
           successCallback: (data) => {
-            this.wall = data.data;
+            console.log(data)
+            //this.wall = data.data;
+            store.commit('setActiveWall',{wall: data.data});
           },
         }
         store.commit('makeAPICall', params);
       }
+    },
+    getConnectionsFromParam: function () {
+      let wallId = this.$route.params['wallId'];
+      if(wallId){
+        let params = {
+          endpoint: "list_contained_relations/" + wallId,
+          successCallback: (data) => {
+            console.log(data)
+            store.commit('setConnections',{connections: data.data});
+          },
+        }
+        store.commit('makeAPICall', params);
+      }
+    },
+    getWallLocal: function () {
+      this.wall = store.getters.getActiveWall();
     },
     createCollection: function () {
       store.commit('createCollectionInWall',{wall: this.wall});
     },
     removeCollection: function (collection) {
       //store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+    },
+    updateTitle: function (title) {
+      let params = {
+        endpoint: "update/Wall/" + this.wall.rid,
+        params: {title: title},
+        method: "put",
+        successCallback: (data) => {
+          console.log(data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
     }
   },
   mounted: function () {
     this.getWallFromParam();
+    this.getConnectionsFromParam();
+    //this.getWallLocal();
   }
 }
 </script>

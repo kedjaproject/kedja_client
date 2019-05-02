@@ -2,14 +2,18 @@
   <div class="Card" :class="{
     'selected': card.states.selected,
     'selectedConnectedOther': card.states.selectedConnected == false,
-    'connected': connectedCousin,
+    'connected': connected,
+    'canConnect': canConnect,
     'connectedOther': card.states.connected == false,
-    'connecting': card.states.connecting,
-    'connectable': connectable
+    'connecting': card.states.connecting
     }" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <div class="main" @click="setSelected($event)">
+    <div class="main" @click="clicked">
       <h4>{{card.data.title}}</h4>
+      <pre>
+        {{card.states}}
+      </pre>
+      {{connectedCardIds}}
     </div>
 
     <!--EditableInput v-model="card.name" tag="span" ref="input-name" class="cardName" @click="focusAndSelect()"></EditableInput-->
@@ -52,17 +56,17 @@ export default {
       return this.card.states.selected == true;
     },
     connections: function () {
-      return store.getters.getDeepConnectionsByCardId(this.card.id)
+      return store.getters.getDeepConnectionsByCardId(this.card.rid)
     },
     connectedCardIds: function () {
       let arr = []
       this.connections.forEach((conn, iConn) => {
-        if(conn.members[0] != this.card.id){
+        if(conn.members[0] != this.card.rid){
           if(arr.indexOf(conn.members[0]) == -1){
             arr.push(conn.members[0])
           }
         }
-        if(conn.members[1] != this.card.id){
+        if(conn.members[1] != this.card.rid){
           if(arr.indexOf(conn.members[1]) == -1){
             arr.push(conn.members[1])
           }
@@ -73,14 +77,28 @@ export default {
     connecting: function () {
       return this.card.states.connecting == true;
     },
-    connectedCousin: function () {
-      return this.card.states.cousin && this.card.states.connected;
+    connected: function () {
+      return this.card.states.connectingCanConnect && this.card.states.connected;
     },
-    connectable: function () {
-      return this.card.states.cousin && !this.card.states.connected
+    canConnect: function () {
+      return this.card.states.connectingCanConnect && !this.card.states.connected
     }
   },
   methods: {
+    clicked: function () {
+      if(this.connecting){
+        this.toggleConnecting()
+      }
+      if(this.canConnect){
+        this.connect()
+      }
+      if(this.connected){
+        this.unconnect()
+      }
+      else{
+        this.setSelected()
+      }
+    },
     setHovering: function (flag){
       /*this.hovering = flag;
       if(flag){
@@ -97,11 +115,13 @@ export default {
         if(!this.selected){
 
           //connection
-          store.commit('setDeepConnectionsByCardId',{id: this.card.id});
+          store.commit('setDeepConnectionsByCardId',{id: this.card.rid});
 
           //selection
-          store.commit('setCardsState',{cardIds: [this.card.id], stateName: "selected"});
-          store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected"});
+          store.commit('setCardState',{card: this.card, stateName: "selected", stateFlag: true});
+          store.commit('setCardsState',{cardIds: [this.card.rid], stateName: "selected", stateFlag: false, invertCollection: true});
+
+          store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "selectedConnected", stateFlag: true});
         }
         else{
           //connection
@@ -110,24 +130,35 @@ export default {
 
           //selection
           store.commit('resetCardsState',{stateName: "selected"});
-          store.commit('resetCardsState',{stateName: "selectedConnected"});
+          store.commit('resetCardsState',{stateName: "connected"});
+          //store.commit('resetCardsState',{stateName: "selectedConnected"});
         }
       //}
     },
     toggleConnecting: function (e){
-      //if(e.srcElement == this.$el){
       console.log("connecting " + this.connecting)
-        if(!this.connecting){
-          store.commit('setCardsState',{cardIds: [this.card.id], stateName: "connecting"});
-          store.commit('setCardsState',{cardIds: this.connectedCardIds, stateName: "connected"});
-          store.commit('setCousinsByCardId',{id: this.card.id});
-        }
-        else{
-          store.commit('resetCardsState',{stateName: "connecting"});
-          store.commit('resetCardsState',{stateName: "connected"});
-          store.commit('resetCardsState',{stateName: "cousin"});
-        }
-      //}
+      if(!this.connecting){
+
+        store.commit('setCardState',{card: this.card, stateName: "connecting", stateFlag: true});
+
+        let cousins = store.getters.getClosestCardCousins(this.card)
+        store.commit('setCardsState',{cards: store.getters.getClosestCardCousins(this.card), stateName: "canConnect", stateFlag: true});
+        store.commit('setCardsState',{cards: store.getters.getClosestCardCousins(this.card), stateName: "canConnect", stateFlag: false, invertCollection: true});
+
+      }
+      else{
+        store.commit('resetCardsState',{stateName: "connecting"});
+        store.commit('resetCardsState',{stateName: "canConnect"});
+        //store.commit('resetCardsState',{stateName: "connectingCanConnect"});
+      }
+    },
+    connect: function () {
+      let connectingCard = store.getters.getCardsByState('connecting')[0]
+      store.commit('createConnection',{card0: connectingCard, card1: this.card});
+    },
+    unconnect: function () {
+      let connectingCard = store.getters.getCardsByState('connecting')[0]
+      store.commit('removeConnection',{card0: connectingCard, card1: this.card});
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)
@@ -190,8 +221,8 @@ export default {
 .selectedConnectedOther:not(.selected){
 }
 
-.connected:not(:hover){
-  background: #FFFFFF;
+.connected{
+  background: green;
 }
 
 .connectedOther:not(:hover){
@@ -202,7 +233,7 @@ export default {
   border: 5px solid yellow;
 }
 
-.connectable{
+.canConnect{
   box-shadow: 5px 5px 2px black;
 }
 

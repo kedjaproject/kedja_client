@@ -5,15 +5,11 @@
       Skapa ny vägg
     </button>
 
-    <div v-for="wall in walls.data">
+    <div v-for="wall in walls">
       <router-link :to="{ name: 'Wall', params: {wallId: wall.rid} }">
-        {{wall.rid}}
+        <strong>{{wall.data.title}}</strong> [{{wall.rid}}]
       </router-link>
     </div>
-
-    <pre>
-      {{walls}}
-    </pre>
 
   </div>
 </template>

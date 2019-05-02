@@ -49,8 +49,8 @@ export default {
   },
   methods: {
     setBounds: function () {
-      let el0 = document.getElementById(this.from);
-      let el1 = document.getElementById(this.to);
+      let el0 = document.getElementById(this.from.toString());
+      let el1 = document.getElementById(this.to.toString());
 
       //Start point
       this.x0 = el0.getBoundingClientRect().x + el0.getBoundingClientRect().width;

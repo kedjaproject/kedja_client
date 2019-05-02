@@ -2,7 +2,7 @@
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <div class="collectionHeader">
-      <EditableInput v-model="collection.rid" tag="h3"></EditableInput>
+      <EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
 
       <!--button class="remove" v-if="hovering" @click="removeCollection" title="Ta bort samling">
         x
@@ -65,6 +65,18 @@ export default {
     },
     removeCard: function (card) {
       store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+    },
+    updateTitle: function (title) {
+      let params = {
+        endpoint: "update/Collection/" + this.collection.rid,
+        params: {title: title},
+        method: "put",
+        successCallback: (data) => {
+          console.log(data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
     }
   },
   mounted: function () {

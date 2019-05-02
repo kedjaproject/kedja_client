@@ -85,6 +85,7 @@ export default {
     emitToParent: function () {
       var val = this.textTemp.trim() !== "" ? this.textTemp : this.placeholder;
       this.$emit('input',val);
+      this.$emit('change',val);
     }
   }
 }
