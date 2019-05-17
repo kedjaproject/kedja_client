@@ -117,13 +117,26 @@ export const store = new Vuex.Store({
       let rid = wall.rid;
 
       let params = {
+        endpoint: rid+"?type_name=Collection",
+        params: {title: 'Ny samling'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+          wall.contained.push(data.data)
+        }
+      }
+
+      /*let params = {
         endpoint: "create/Collection/" + rid,
         params: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
+          console.log(data)
           wall.contained.push(data.data)
         },
-      }
+      }*/
+
+      ///
 
       store.commit('makeAPICall',params);
 
@@ -138,14 +151,27 @@ export const store = new Vuex.Store({
         params: {title: 'Nytt kort'},
         method: "post",
         successCallback: (data) => {
-          collection.contained.push(data.data)
           console.log(data)
+          collection.contained.push(data.data)
         },
       }
 
       store.commit('makeAPICall',params);
 
       //collection.cards.push(Factory.Card())
+    },
+
+    getContainedCards: (state, {collection}) => {
+      let params = {
+        endpoint: "list/Card/" + collection.rid,
+        method: "get",
+        successCallback: (data) => {
+          console.log(data)
+          Vue.set(collection, 'contained', data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
     },
 
     createConnection: (state, {card0, card1}) => {
@@ -187,17 +213,45 @@ export const store = new Vuex.Store({
     //Remove data
 
     removeCollectionFromWall: (state, {wall, collection}) => {
-      let index = wall.collections.indexOf(collection)
-      if(index != -1){
-        wall.collections.splice(index,1)
+
+      let params = {
+        endpoint: "delete/Collection/" + collection.rid,
+        //params: {title: 'Nytt kort'},
+        method: "delete",
+        successCallback: (data) => {
+          console.log(data)
+
+          let index = wall.contained.indexOf(collection)
+          if(index != -1){
+            wall.contained.splice(index,1)
+          }
+
+        },
       }
+
+      store.commit('makeAPICall',params);
+
     },
 
     removeCardFromCollection: (state, {collection,card}) => {
-      let index = collection.cards.indexOf(card)
-      if(index != -1){
-        collection.cards.splice(index,1)
+
+      let params = {
+        endpoint: "delete/Card/" + card.rid,
+        //params: {title: 'Nytt kort'},
+        method: "delete",
+        successCallback: (data) => {
+          console.log(data)
+
+          let index = collection.contained.indexOf(card)
+          if(index != -1){
+            collection.contained.splice(index,1)
+          }
+
+        },
       }
+
+      store.commit('makeAPICall',params);
+
     },
 
     setDeepConnectionsByCardId: (state, {id}) => {
@@ -239,10 +293,10 @@ export const store = new Vuex.Store({
 
       axios({
         method: method,
-        url:'https://staging-server.kedja.org/api/' + params.endpoint,
+        url:'https://staging-server.kedja.org/' + params.endpoint,
         //url:'http://kedja.archeproject.org/api/' + params.endpoint,
         params: params.params,
-        config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
+        //config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
       })
       .then(
         params.successCallback,

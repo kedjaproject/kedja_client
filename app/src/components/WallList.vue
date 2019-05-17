@@ -41,7 +41,7 @@ export default {
     getWalls: function () {
 
       let params = {
-        endpoint: "list/Wall/1",
+        endpoint: "list",
         //endpoint: "create/Wall/1",
         successCallback: (data) => {
           this.successCallbackGetWalls(data);

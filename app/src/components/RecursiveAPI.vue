@@ -32,7 +32,8 @@ export default {
     getData: function () {
 
       let params = {
-        endpoint: "recursive_read/1",
+        //endpoint: "recursive_read/1",
+        endpoint: "1657424841601769/wall",
         //endpoint: "create/Wall/1",
         successCallback: (data) => {
           this.successCallbackGetWalls(data);

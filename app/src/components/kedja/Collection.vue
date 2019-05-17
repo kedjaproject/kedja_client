@@ -3,10 +3,12 @@
 
     <div class="collectionHeader">
       <EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
+      <!--{{collection.rid}}-->
+      <br />
 
-      <!--button class="remove" v-if="hovering" @click="removeCollection" title="Ta bort samling">
-        x
-      </button-->
+      <button @click="removeCollection" title="Ta bort samling">
+        🗑️
+      </button>
 
     </div>
 
@@ -79,6 +81,11 @@ export default {
       store.commit('makeAPICall',params);
     }
   },
+  created: function () {
+    if(!this.collection.contained){
+      store.commit('getContainedCards',{collection: this.collection});
+    }
+  },
   mounted: function () {
 
   }
@@ -120,6 +127,7 @@ export default {
 
 .collectionFooter{
   padding: 20px;
+  border-top: 1px solid white;
 }
 
 .cards{

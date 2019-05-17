@@ -2,6 +2,8 @@ button{
   border: 1px solid #CADBDA;
   background: #FFFFFF;
   filter:opacity(0.5);
+  padding: 10px;
+  font-size: 12pt;
 }
 button:hover{
   border: 1px solid #CADBDA;

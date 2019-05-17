@@ -2,10 +2,16 @@
   <div class="Wall" v-if="wall">
 
     <div class="wallHeader">
+
+      <kedja-logo class="logo"></kedja-logo>
       <EditableInput v-model="data.title" tag="h1" @change="updateTitle($event)"></EditableInput>
+
     </div>
 
     <div class="wallContent">
+      <div class="wallSettingsContainer">
+        ⚙️
+      </div>
       <div id="collections">
         <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
         <button @click="createCollection" title="Lägg till ny samling">+</button>
@@ -14,7 +20,6 @@
     </div>
 
     <div class="wallFooter">
-      Wall footer
     </div>
 
     <!--div v-if="connections.length">
@@ -30,6 +35,7 @@
 <script>
 
 import { store } from '@/store';
+import KedjaLogo from '@/components/KedjaLogo'
 import Collection from './Collection'
 import Connection from './Connection'
 import EditableInput from '@/components/general/EditableInput'
@@ -37,6 +43,7 @@ import EditableInput from '@/components/general/EditableInput'
 export default {
   name: 'Wall',
   components: {
+    KedjaLogo,
     Collection,
     Connection,
     EditableInput
@@ -75,7 +82,7 @@ export default {
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
-          endpoint: "recursive_read/" + wallId,
+          endpoint: wallId + "/wall",
           successCallback: (data) => {
             console.log(data)
             //this.wall = data.data;
@@ -105,11 +112,11 @@ export default {
       store.commit('createCollectionInWall',{wall: this.wall});
     },
     removeCollection: function (collection) {
-      //store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+      store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
     },
     updateTitle: function (title) {
       let params = {
-        endpoint: "update/Wall/" + this.wall.rid,
+        endpoint: this.wall.rid,
         params: {title: title},
         method: "put",
         successCallback: (data) => {
@@ -141,13 +148,33 @@ export default {
 
 }
 
+.wallHeader{
+  background: white;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid #EAEAEA;
+  align-items: center;
+}
+
+.logo{
+  padding: 20px;
+  border-right: 2px solid #EAEAEA;
+}
+
 .wallContent{
   /* LAYOUT */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
   flex: 1;
   overflow-y: auto;
+}
+
+.wallSettingsContainer{
+  background: white;
+  padding: 20px;
+  display: flex;
+  align-items: flex-end;
 }
 
 #collections{
@@ -157,10 +184,11 @@ export default {
   width: 100%;
   overflow-x: scroll;
   flex: 1;
+  padding: 20px;
 }
 
 .collection{
-  flex: 0 0 250px;
+  flex: 0 0 300px;
   margin: 1px;
 }
 
