@@ -30,7 +30,7 @@ export const store = new Vuex.Store({
     initWallsFromAPI: (state, {}) => {
 
       let params = {
-        endpoint: "list/Wall/1",
+        endpoint: "walls",
         successCallback: (data) => {
           state.walls = data.data;
         },
@@ -101,7 +101,7 @@ export const store = new Vuex.Store({
 
     createWall: (state, {}) => {
       let params = {
-        endpoint: "create/Wall/1",
+        endpoint: "walls",
         params: {title: 'Ny vägg'},
         method: "post",
         successCallback: (data) => {
@@ -117,7 +117,7 @@ export const store = new Vuex.Store({
       let rid = wall.rid;
 
       let params = {
-        endpoint: rid+"?type_name=Collection",
+        endpoint: "wals/"+rid+"/collections",
         params: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
@@ -147,7 +147,7 @@ export const store = new Vuex.Store({
       let rid = collection.rid;
 
       let params = {
-        endpoint: "create/Card/" + rid,
+        endpoint: "collections/" + rid + "/cards",
         params: {title: 'Nytt kort'},
         method: "post",
         successCallback: (data) => {
@@ -163,7 +163,7 @@ export const store = new Vuex.Store({
 
     getContainedCards: (state, {collection}) => {
       let params = {
-        endpoint: "list/Card/" + collection.rid,
+        endpoint: "collections/" + collection.rid + "/cards",
         method: "get",
         successCallback: (data) => {
           console.log(data)
@@ -179,6 +179,8 @@ export const store = new Vuex.Store({
       console.log("Connect cards: " + card0.rid + " and " + card1.rid)
 
       let params = {
+        // FIXME: Must have structure /walls/<wall rid>/relations
+        // Data must be serialized as json
         endpoint: "create_relation/" + card0.rid + "/" + card1.rid,
         params: {},
         method: "post",
@@ -197,6 +199,8 @@ export const store = new Vuex.Store({
       console.log("Unconnect cards: " + card0.rid + " and " + card1.rid)
 
       let params = {
+        // FIXME: Must have structure /walls/<wall rid>/relations/<relation_id>
+        // Relations are deleted by their relation_id and not by cards rid
         endpoint: "delete_relation/" + card0.rid + "/" + card1.rid,
         params: {},
         method: "delete",
@@ -215,8 +219,7 @@ export const store = new Vuex.Store({
     removeCollectionFromWall: (state, {wall, collection}) => {
 
       let params = {
-        endpoint: "delete/Collection/" + collection.rid,
-        //params: {title: 'Nytt kort'},
+        endpoint: "walls/" + wall.rid + "/collections/" + collection.rid,
         method: "delete",
         successCallback: (data) => {
           console.log(data)
@@ -236,8 +239,7 @@ export const store = new Vuex.Store({
     removeCardFromCollection: (state, {collection,card}) => {
 
       let params = {
-        endpoint: "delete/Card/" + card.rid,
-        //params: {title: 'Nytt kort'},
+        endpoint: "collections/" + collection.rid + "/cards/" + card.rid,
         method: "delete",
         successCallback: (data) => {
           console.log(data)
@@ -293,8 +295,8 @@ export const store = new Vuex.Store({
 
       axios({
         method: method,
-        url:'https://staging-server.kedja.org/' + params.endpoint,
-        //url:'http://kedja.archeproject.org/api/' + params.endpoint,
+        url:'https://staging-server.kedja.org/api/1/' + params.endpoint,
+        //url:'http://localhost:65643/api/1/' + params.endpoint,
         params: params.params,
         //config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
       })
