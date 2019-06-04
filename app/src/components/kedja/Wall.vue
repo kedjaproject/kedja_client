@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-
+      collections: ""
     }
   },
   props: {
@@ -62,9 +62,9 @@ export default {
     data: function () {
       return this.wall.data;
     },
-    collections: function () {
+    /*collections: function () {
       return this.wall.contained;
-    },
+    },*/
     connections: function () {
       return store.state.connections;
     },
@@ -82,11 +82,26 @@ export default {
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
-          endpoint: wallId + "/wall",
+          //endpoint: wallId + "/wall",
+          endpoint: 'walls/' + wallId,
           successCallback: (data) => {
             console.log(data)
             //this.wall = data.data;
             store.commit('setActiveWall',{wall: data.data});
+          },
+        }
+        store.commit('makeAPICall', params);
+      }
+    },
+    getCollectionsFromAPI: function () {
+      let wallId = this.$route.params['wallId'];
+      if(wallId){
+        let params = {
+          //endpoint: wallId + "/wall",
+          endpoint: 'walls/' + wallId + "/collections",
+          successCallback: (data) => {
+            console.log(data)
+            this.collections = data.data
           },
         }
         store.commit('makeAPICall', params);
@@ -129,7 +144,8 @@ export default {
   },
   mounted: function () {
     this.getWallFromParam();
-    this.getConnectionsFromParam();
+    this.getCollectionsFromAPI();
+    //this.getConnectionsFromParam();
     //this.getWallLocal();
   }
 }

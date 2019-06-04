@@ -41,13 +41,11 @@ export default {
   },
   data () {
     return {
-      hovering: false
+      hovering: false,
+      cards: ""
     }
   },
   computed: {
-    cards: function () {
-      return this.collection.contained
-    },
     cardsFiltered: function () {
       return this.cards//.filter(card => card.states.selected != false || card.states.selectedConnected != false)
     }
@@ -61,6 +59,17 @@ export default {
     },
     removeCollection: function () {
       this.$emit('removeCollection',this.collection)
+    },
+    getCardsFromAPI: function () {
+      let params = {
+        //endpoint: wallId + "/wall",
+        endpoint: 'collections/' + this.collection.rid + "/cards",
+        successCallback: (data) => {
+          console.log(data)
+          this.cards = data.data;
+        },
+      }
+      store.commit('makeAPICall', params);
     },
     createCard: function () {
       store.commit('createCardInCollection',{collection: this.collection});
@@ -87,7 +96,7 @@ export default {
     }
   },
   mounted: function () {
-
+    this.getCardsFromAPI();
   }
 }
 </script>
