@@ -13,7 +13,7 @@
         ⚙️
       </div>
       <div id="collections">
-        <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection"></collection>
+        <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" :prid="wall.rid"></collection>
         <button @click="createCollection" title="Lägg till ny samling">+</button>
       </div>
       <connection :from="connection.members[0]" :to="connection.members[1]" v-for="connection in connections"></connection>
@@ -131,8 +131,8 @@ export default {
     },
     updateTitle: function (title) {
       let params = {
-        endpoint: this.wall.rid,
-        params: {title: title},
+        endpoint: "walls/" + this.wall.rid,
+        data: {title: title},
         method: "put",
         successCallback: (data) => {
           console.log(data.data)

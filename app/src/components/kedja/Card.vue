@@ -50,7 +50,8 @@ export default {
     }
   },
   props: {
-    card: ""
+    card: "",
+    prid: ""
   },
   computed: {
     selected: function () {
@@ -171,8 +172,8 @@ export default {
     },
     updateTitle: function (title) {
       let params = {
-        endpoint: "update/Card/" + this.card.rid,
-        params: {title: title},
+        endpoint: "collections/" + this.prid + "/cards/" + this.card.rid,
+        data: {title: title},
         method: "put",
         successCallback: (data) => {
           console.log(data.data)

@@ -296,9 +296,8 @@ export const store = new Vuex.Store({
       axios({
         method: method,
         url:'https://staging-server.kedja.org/api/1/' + params.endpoint,
-        //url:'http://localhost:65643/api/1/' + params.endpoint,
         params: params.params,
-        //config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
+        data: params.data
       })
       .then(
         params.successCallback,

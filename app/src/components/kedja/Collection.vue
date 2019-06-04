@@ -14,7 +14,7 @@
 
     <div class="collectionContent">
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid" tabindex="0"></card>
+        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
       </transition-group>
 
     </div>
@@ -51,7 +51,8 @@ export default {
     }
   },
   props: {
-    collection: ""
+    collection: "",
+    prid: ""
   },
   methods: {
     setHovering: function (status){
@@ -79,8 +80,8 @@ export default {
     },
     updateTitle: function (title) {
       let params = {
-        endpoint: this.collection.rid,
-        params: {title: title},
+        endpoint: "walls/" + this.prid + "/collections/" + this.collection.rid,
+        data: {title: title},
         method: "put",
         successCallback: (data) => {
           console.log(data.data)
