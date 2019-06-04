@@ -48,6 +48,10 @@ export const store = new Vuex.Store({
       Vue.set(wall,'collections',collections);
     },
 
+    setWallConnections: (state, {wall, connections}) => {
+      Vue.set(wall,'connections',connections);
+    },
+
     setCollectionCards: (state, {collection, cards}) => {
       Vue.set(collection,'cards',cards);
     },
@@ -58,6 +62,8 @@ export const store = new Vuex.Store({
 
     initWall: (state, wall) => {
       Vue.set(wall, 'collections', [])
+      Vue.set(wall, 'connections', [])
+      Vue.set(wall, 'dirtyDraw', true)
     },
 
     initCollection: (state, collection) => {
@@ -66,6 +72,10 @@ export const store = new Vuex.Store({
 
     initCard: (state, card) => {
       Vue.set(card, 'states', {})
+    },
+
+    initConnection: (state, connection) => {
+      Vue.set(connection, 'dirtyDraw', false)
     },
 
     /*prepareData: (state, {}) => {
@@ -176,6 +186,18 @@ export const store = new Vuex.Store({
 
       store.commit('makeAPICall',params);
     },*/
+
+    setDirtyDraw: (state) => {
+
+      let wall = store.getters.getActiveWall();
+
+      Vue.set(wall,'dirtyDraw',true)
+
+      Vue.nextTick().then(function () {
+        Vue.set(wall,'dirtyDraw',false)
+      })
+
+    },
 
     createConnection: (state, {card0, card1}) => {
 

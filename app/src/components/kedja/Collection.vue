@@ -11,7 +11,7 @@
 
     </div>
 
-    <div class="collectionContent">
+    <div class="collectionContent" ref="collectionContent">
       <transition-group name="fade" mode="out-in" class="cards">
         <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
       </transition-group>
@@ -124,6 +124,9 @@ export default {
       }
 
       store.commit('makeAPICall',params);
+    },
+    handleScroll: function () {
+      store.commit('setDirtyDraw');
     }
   },
   created: function () {
@@ -131,6 +134,10 @@ export default {
   },
   mounted: function () {
     this.getCardsFromAPI();
+
+    this.$refs.collectionContent.addEventListener('scroll', this.handleScroll);
+
+
   }
 }
 </script>

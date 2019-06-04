@@ -6,6 +6,8 @@
 
 <script>
 
+import { store } from '@/store';
+
 //import Component from '@/components/Component'
 
 export default {
@@ -22,10 +24,16 @@ export default {
     }
   },
   props: {
-    from: "",
-    to: ""
+    connection: "",
+    dirtyDraw: false
   },
   computed: {
+    from: function () {
+      return this.connection.members[0]
+    },
+    to: function () {
+      return this.connection.members[1]
+    },
     width: function () {
       return Math.abs(this.x1 - this.x0);
     },
@@ -46,11 +54,20 @@ export default {
       },
       deep: false
     }*/
+    dirtyDraw: function (val){
+      if(val){
+        this.setBounds();
+      }
+    }
   },
   methods: {
+    redraw: function () {
+      this.setBounds();
+      this.drawCanvas();
+    },
     setBounds: function () {
-      let el0 = document.getElementById(this.from.toString());
-      let el1 = document.getElementById(this.to.toString());
+      let el0 = document.getElementById(this.from);
+      let el1 = document.getElementById(this.to);
 
       //Start point
       this.x0 = el0.getBoundingClientRect().x + el0.getBoundingClientRect().width;
@@ -59,9 +76,6 @@ export default {
       //End point
       this.x1 = el1.getBoundingClientRect().x;
       this.y1 = el1.getBoundingClientRect().y + el1.getBoundingClientRect().height / 2;
-
-      this.drawCanvas();
-
     },
     drawCanvas: function () {
       var c = this.$el.getElementsByTagName("canvas")[0];
@@ -103,11 +117,14 @@ export default {
 
     }
   },
+  created: function () {
+    store.commit('initConnection',this.connection);
+  },
   mounted: function () {
-    this.setBounds();
+    this.redraw();
   },
   updated: function () {
-    this.setBounds();
+    this.redraw();
   }
 }
 </script>
@@ -119,6 +136,7 @@ export default {
   background: #ff000000;
   height: 0px auto;
   padding: 0;
+  pointer-events:none;
 }
 
 .canvasConnection{

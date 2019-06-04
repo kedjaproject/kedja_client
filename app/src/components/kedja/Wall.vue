@@ -16,7 +16,7 @@
         <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" :prid="wall.rid"></collection>
         <button @click="createCollection" title="Lägg till ny samling">+</button>
       </div>
-      <connection :from="connection.members[0]" :to="connection.members[1]" v-for="connection in connections"></connection>
+      <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
     </div>
 
     <div class="wallFooter">
@@ -66,7 +66,7 @@ export default {
       return this.wall.collections;
     },
     connections: function () {
-      return store.state.connections;
+      return this.wall.connections;
     },
     /*title: function () {
       return this.data.title
@@ -79,6 +79,7 @@ export default {
     wall: function () {
       store.commit('initWall',this.wall);
       this.getCollectionsFromAPI();
+      this.getConnectionsFromAPI();
     }
   },
   methods: {
@@ -113,14 +114,15 @@ export default {
         store.commit('makeAPICall', params);
       }
     },
-    getConnectionsFromParam: function () {
+    getConnectionsFromAPI: function () {
+      console.log("get connections")
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
-          endpoint: "list_contained_relations/" + wallId,
+          endpoint: "walls/" + wallId + "/relations",
           successCallback: (data) => {
             console.log(data)
-            store.commit('setConnections',{connections: data.data});
+            store.commit('setWallConnections', {wall: this.wall, connections: data.data});
           },
         }
         store.commit('makeAPICall', params);
