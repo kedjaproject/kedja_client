@@ -13,11 +13,11 @@
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput>
-      {{card.rid}}
-      <pre>
+      <!--{{card.rid}}-->
+      <!--pre>
         {{card.states}}
-      </pre>
-      {{connectedCardIds}}
+      </pre-->
+      <!--{{connectedCardIds}}-->
     </div>
 
     <!--button class="remove" v-if="hovering" @click="removeCard">

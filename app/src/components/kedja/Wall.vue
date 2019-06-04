@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-      collections: ""
+      //collections: ""
     }
   },
   props: {
@@ -62,9 +62,9 @@ export default {
     data: function () {
       return this.wall.data;
     },
-    /*collections: function () {
-      return this.wall.contained;
-    },*/
+    collections: function () {
+      return this.wall.collections;
+    },
     connections: function () {
       return store.state.connections;
     },
@@ -75,6 +75,10 @@ export default {
   watch: {
     title: function (val) {
       //console.log(val)
+    },
+    wall: function () {
+      store.commit('initWall',this.wall);
+      this.getCollectionsFromAPI();
     }
   },
   methods: {
@@ -94,6 +98,7 @@ export default {
       }
     },
     getCollectionsFromAPI: function () {
+      console.log("get collections")
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
@@ -101,7 +106,8 @@ export default {
           endpoint: 'walls/' + wallId + "/collections",
           successCallback: (data) => {
             console.log(data)
-            this.collections = data.data
+            //this.collections = data.data
+            store.commit('setWallCollections', {wall: this.wall, collections: data.data});
           },
         }
         store.commit('makeAPICall', params);
@@ -124,10 +130,36 @@ export default {
       this.wall = store.getters.getActiveWall();
     },
     createCollection: function () {
-      store.commit('createCollectionInWall',{wall: this.wall});
+      //store.commit('createCollectionInWall',{wall: this.wall});
+      let params = {
+        endpoint: "walls/" + this.wall.rid + "/collections",
+        data: {title: 'Ny samling'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+          this.collections.push(data.data)
+        }
+      }
+
+      store.commit('makeAPICall',params);
     },
     removeCollection: function (collection) {
-      store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+      //store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+      let params = {
+        endpoint: "walls/" + this.wall.rid + "/collections/" + collection.rid,
+        method: "delete",
+        successCallback: (data) => {
+          console.log(data)
+
+          let index = this.wall.collections.indexOf(collection)
+          if(index != -1){
+            this.wall.collections.splice(index,1)
+          }
+
+        },
+      }
+
+      store.commit('makeAPICall',params);
     },
     updateTitle: function (title) {
       let params = {
@@ -142,9 +174,11 @@ export default {
       store.commit('makeAPICall',params);
     }
   },
+  created: function () {
+  },
   mounted: function () {
     this.getWallFromParam();
-    this.getCollectionsFromAPI();
+    //this.getCollectionsFromAPI();
     //this.getConnectionsFromParam();
     //this.getWallLocal();
   }

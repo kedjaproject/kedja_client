@@ -3,8 +3,7 @@
 
     <div class="collectionHeader">
       <EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
-      {{collection.rid}}
-      <br />
+      <!--{{collection.rid}}-->
 
       <button @click="removeCollection" title="Ta bort samling">
         🗑️
@@ -42,10 +41,13 @@ export default {
   data () {
     return {
       hovering: false,
-      cards: ""
+      //cards: ""
     }
   },
   computed: {
+    cards: function () {
+      return this.collection.cards;
+    },
     cardsFiltered: function () {
       return this.cards//.filter(card => card.states.selected != false || card.states.selectedConnected != false)
     }
@@ -53,6 +55,11 @@ export default {
   props: {
     collection: "",
     prid: ""
+  },
+  watch: {
+    /*collection: function () {
+      this.getCardsFromAPI()
+    }*/
   },
   methods: {
     setHovering: function (status){
@@ -62,21 +69,49 @@ export default {
       this.$emit('removeCollection',this.collection)
     },
     getCardsFromAPI: function () {
+      console.log("Get cards")
       let params = {
         //endpoint: wallId + "/wall",
         endpoint: 'collections/' + this.collection.rid + "/cards",
         successCallback: (data) => {
           console.log(data)
-          this.cards = data.data;
+          //this.cards = data.data;
+          store.commit('setCollectionCards', {collection: this.collection, cards: data.data});
         },
       }
       store.commit('makeAPICall', params);
     },
     createCard: function () {
-      store.commit('createCardInCollection',{collection: this.collection});
+      //store.commit('createCardInCollection',{collection: this.collection});
+      let params = {
+        endpoint: "collections/" + this.collection.rid + "/cards",
+        data: {title: 'Nytt kort'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+          this.cards.push(data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
     },
     removeCard: function (card) {
-      store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+      //store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+      let params = {
+        endpoint: "collections/" + this.collection.rid + "/cards/" + card.rid,
+        method: "delete",
+        successCallback: (data) => {
+          console.log(data)
+
+          let index = this.collection.cards.indexOf(card)
+          if(index != -1){
+            this.collection.cards.splice(index,1)
+          }
+
+        },
+      }
+
+      store.commit('makeAPICall',params);
     },
     updateTitle: function (title) {
       let params = {
@@ -92,9 +127,7 @@ export default {
     }
   },
   created: function () {
-    if(!this.collection.contained){
-      store.commit('getContainedCards',{collection: this.collection});
-    }
+    store.commit('initCollection',this.collection);
   },
   mounted: function () {
     this.getCardsFromAPI();
