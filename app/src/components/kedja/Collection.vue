@@ -3,7 +3,7 @@
 
     <div class="collectionHeader">
       <EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
-      <!--{{collection.rid}}-->
+      {{collection.rid}}
       <br />
 
       <button @click="removeCollection" title="Ta bort samling">
@@ -70,7 +70,7 @@ export default {
     },
     updateTitle: function (title) {
       let params = {
-        endpoint: "update/Collection/" + this.collection.rid,
+        endpoint: this.collection.rid,
         params: {title: title},
         method: "put",
         successCallback: (data) => {

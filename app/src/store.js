@@ -100,7 +100,20 @@ export const store = new Vuex.Store({
     //Create data
 
     createWall: (state, {}) => {
+
       let params = {
+        endpoint: 1+"?type_name=Wall",
+        params: {title: 'Ny vägg'},
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+          wall.contained.push(data.data)
+        }
+      }
+
+      store.commit('makeAPICall',params);
+
+      /*let params = {
         endpoint: "create/Wall/1",
         params: {title: 'Ny vägg'},
         method: "post",
@@ -109,7 +122,7 @@ export const store = new Vuex.Store({
         },
       }
 
-      store.commit('makeAPICall',params);
+      store.commit('makeAPICall',params);*/
     },
 
     createCollectionInWall: (state, {wall}) => {
@@ -118,25 +131,13 @@ export const store = new Vuex.Store({
 
       let params = {
         endpoint: rid+"?type_name=Collection",
-        params: {title: 'Ny samling'},
+        data: 'title=Ny samling',
         method: "post",
         successCallback: (data) => {
           console.log(data)
           wall.contained.push(data.data)
         }
       }
-
-      /*let params = {
-        endpoint: "create/Collection/" + rid,
-        params: {title: 'Ny samling'},
-        method: "post",
-        successCallback: (data) => {
-          console.log(data)
-          wall.contained.push(data.data)
-        },
-      }*/
-
-      ///
 
       store.commit('makeAPICall',params);
 
@@ -147,8 +148,9 @@ export const store = new Vuex.Store({
       let rid = collection.rid;
 
       let params = {
-        endpoint: "create/Card/" + rid,
-        params: {title: 'Nytt kort'},
+        //endpoint: "create/Card/" + rid,
+        endpoint: rid + "?type_name=Card",
+        data: 'title: Nytt kort',
         method: "post",
         successCallback: (data) => {
           console.log(data)
@@ -215,8 +217,8 @@ export const store = new Vuex.Store({
     removeCollectionFromWall: (state, {wall, collection}) => {
 
       let params = {
-        endpoint: "delete/Collection/" + collection.rid,
-        //params: {title: 'Nytt kort'},
+        //endpoint: "delete/Collection/" + collection.rid,
+        endpoint: wall.rid + '/' + collection.rid,
         method: "delete",
         successCallback: (data) => {
           console.log(data)
@@ -293,9 +295,10 @@ export const store = new Vuex.Store({
 
       axios({
         method: method,
+        //url:'https://staging-server.kedja.org/' + params.endpoint,
         url:'https://staging-server.kedja.org/' + params.endpoint,
         //url:'http://kedja.archeproject.org/api/' + params.endpoint,
-        params: params.params,
+        data: params.data,
         //config: {headers: { 'Cache-Control': 'no-cache', 'Cache-Control': 'no-store' }}
       })
       .then(
