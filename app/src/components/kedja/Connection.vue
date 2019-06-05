@@ -17,6 +17,7 @@ export default {
   },*/
   data () {
     return {
+      loaded: false,
       x0: "",
       y0: "",
       x1: "",
@@ -72,11 +73,24 @@ export default {
     }
   },
   methods: {
+    firstDraw: function () {
+      let el0 = document.getElementById(this.from);
+      let el1 = document.getElementById(this.to);
+
+      if(el0 && el1){
+        store.commit('setDirtyDraw');
+      }
+      else{
+        setTimeout(this.firstDraw, 100);
+      }
+
+    },
     redraw: function () {
       this.setBounds();
       this.drawCanvas();
     },
     setBounds: function () {
+
       let el0 = document.getElementById(this.from);
       let el1 = document.getElementById(this.to);
 
@@ -146,7 +160,7 @@ export default {
     store.commit('initConnection',this.connection);
   },
   mounted: function () {
-    this.redraw();
+    this.firstDraw();
   },
   updated: function () {
     this.redraw();

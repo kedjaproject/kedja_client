@@ -14,7 +14,8 @@ export const store = new Vuex.Store({
     activeWall: "",
     connections: [],
     tabIndexCounter: 0,
-    connectionBounds: ""
+    connectionBounds: "",
+    userState: ""
     //schema: Schema
   },
   mutations: {
@@ -26,6 +27,7 @@ export const store = new Vuex.Store({
       //state.walls = walls.slice();
       //store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
+      //store.commit('resetUserState');
     },
 
     /*initWallsFromAPI: (state, {}) => {
@@ -40,6 +42,20 @@ export const store = new Vuex.Store({
       store.commit('makeAPICall',params);
 
     },*/
+
+    resetUserState: (state) => {
+      store.commit('setUserState',{name: 'default'});
+    },
+
+    setUserState: (state, {name, data}) => {
+      store.commit('setDirtyDraw');
+      state.userState = {name: name, data: data ? data : {}, rand: Math.random()}
+    },
+
+    forceUserStateUpdate: (state) => {
+      store.commit('setDirtyDraw');
+      state.userState.rand = Math.random()
+    },
 
     setActiveWall: (state, {wall}) => {
       state.activeWall = wall;
@@ -64,7 +80,7 @@ export const store = new Vuex.Store({
     initWall: (state, wall) => {
       Vue.set(wall, 'collections', [])
       Vue.set(wall, 'connections', [])
-      Vue.set(wall, 'dirtyDraw', true)
+      Vue.set(wall, 'dirtyDraw', false)
     },
 
     initCollection: (state, collection) => {
@@ -104,6 +120,18 @@ export const store = new Vuex.Store({
 
       cards.forEach((card, iCard) => {
         store.commit('setCardState',{card: card, stateName: stateName, stateFlag: stateFlag});
+      })
+
+    },
+
+    resetCardState: (state, {card}) => {
+
+      let wall = store.getters.getActiveWall();
+
+      wall.collections.forEach((collection, iCollection) => {
+        collection.cards.forEach((card, iCard) => {
+          store.commit('setCardState',{card: card, stateName: stateName, stateFlag: undefined});
+        })
       })
 
     },
@@ -353,6 +381,10 @@ export const store = new Vuex.Store({
       return true
     },*/
 
+    getUserState: state => {
+      return state.userState;
+    },
+
     getActiveWall: state => (id) => {
       //return state.walls[state.activeWallId];
       return state.activeWall;
@@ -399,10 +431,8 @@ export const store = new Vuex.Store({
 
     getClosestCardCousins: state => (card) => {
       let collection = store.getters.getCollectionByCard(card);
-      console.log(collection)
       let wall = store.getters.getActiveWall();
       let siblings = store.getters.getClosestArraySiblings(wall.collections,collection)
-      console.log(siblings)
 
       let cousins = []
 

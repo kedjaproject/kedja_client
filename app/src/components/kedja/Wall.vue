@@ -62,6 +62,9 @@ export default {
   props: {
   },
   computed: {
+    userState: function () {
+      return store.getters.getUserState;
+    },
     wall: function () {
       return store.getters.getActiveWall();
     },
@@ -193,6 +196,7 @@ export default {
           console.log(data)
           //store.commit('addConnectionToWall',{wall: this.wall, connection: data.data});
           this.wall.connections.push(data.data)
+          store.commit('forceUserStateUpdate');
         },
       }
 
@@ -213,7 +217,8 @@ export default {
           let index = this.wall.connections.indexOf(connection)
           if(index != -1){
             this.wall.connections.splice(index,1)
-            store.commit('setDirtyDraw');
+            //store.commit('setDirtyDraw');
+            store.commit('forceUserStateUpdate');
           }
 
         },
