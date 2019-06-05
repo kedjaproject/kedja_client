@@ -13,7 +13,8 @@ export const store = new Vuex.Store({
     activeWallId: 0,
     activeWall: "",
     connections: [],
-    tabIndexCounter: 0
+    tabIndexCounter: 0,
+    connectionBounds: ""
     //schema: Schema
   },
   mutations: {
@@ -193,6 +194,8 @@ export const store = new Vuex.Store({
 
       Vue.set(wall,'dirtyDraw',true)
 
+      state.connectionBounds = document.getElementsByClassName("collectionContent")[0].getBoundingClientRect();
+
       Vue.nextTick().then(function () {
         Vue.set(wall,'dirtyDraw',false)
       })
@@ -206,7 +209,7 @@ export const store = new Vuex.Store({
       let params = {
         // FIXME: Must have structure /walls/<wall rid>/relations
         // Data must be serialized as json
-        endpoint: "create_relation/" + card0.rid + "/" + card1.rid,
+        endpoint: "walls/" + card0.rid + "/" + card1.rid,
         params: {},
         method: "post",
         successCallback: (data) => {
@@ -217,6 +220,10 @@ export const store = new Vuex.Store({
       store.commit('makeAPICall',params);
 
       //collection.cards.push(Factory.Card())
+    },
+
+    addConnectionToWall: (state, {wall, connection}) => {
+      wall.connections.push(connection)
     },
 
     removeConnection: (state, {card0, card1}) => {

@@ -57,6 +57,9 @@ export default {
     selected: function () {
       return this.card.states.selected == true;
     },
+    selectedConnected: function () {
+      return this.card.states.selectedConnected == true;
+    },
     connections: function () {
       return store.getters.getDeepConnectionsByCardId(this.card.rid)
     },
@@ -92,12 +95,13 @@ export default {
         this.toggleConnecting()
       }
       if(this.canConnect){
-        this.connect()
+        if(!this.selectedConnected){
+          this.connect()
+        }
+        else{
+          this.unconnect()
+        }
       }
-      if(this.connected){
-        this.unconnect()
-      }
-
       if(!this.canConnect){
         this.setSelected()
       }
@@ -160,12 +164,14 @@ export default {
       }
     },
     connect: function () {
-      let connectingCard = store.getters.getCardsByState('connecting')[0]
-      store.commit('createConnection',{card0: connectingCard, card1: this.card});
+      console.log("Connect")
+      let cardOther = store.getters.getCardsByState('connecting')[0]
+      this.$emit('connect',{members: [cardOther.rid, this.card.rid]})
     },
     unconnect: function () {
-      let connectingCard = store.getters.getCardsByState('connecting')[0]
-      store.commit('removeConnection',{card0: connectingCard, card1: this.card});
+      console.log("Unconnect")
+      let cardOther = store.getters.getCardsByState('connecting')[0]
+      this.$emit('unconnect',{members: [cardOther.rid, this.card.rid]})
     },
     removeCard: function () {
       this.$emit('removeCard',this.card)

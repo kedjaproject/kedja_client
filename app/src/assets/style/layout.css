@@ -27,3 +27,15 @@ body{
 .fullWidth{
   width: 100%;
 }
+
+.z0{
+  z-index: 0
+}
+
+.z1{
+  z-index: 1
+}
+
+.z2{
+  z-index: 2
+}

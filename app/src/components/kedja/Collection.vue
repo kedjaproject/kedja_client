@@ -13,9 +13,8 @@
 
     <div class="collectionContent" ref="collectionContent">
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
+        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
       </transition-group>
-
     </div>
 
     <div class="collectionFooter">
@@ -125,6 +124,12 @@ export default {
 
       store.commit('makeAPICall',params);
     },
+    connect: function (params) {
+      this.$emit('connect',params)
+    },
+    unconnect: function (params) {
+      this.$emit('unconnect',params)
+    },
     handleScroll: function () {
       store.commit('setDirtyDraw');
     }
@@ -136,8 +141,6 @@ export default {
     this.getCardsFromAPI();
 
     this.$refs.collectionContent.addEventListener('scroll', this.handleScroll);
-
-
   }
 }
 </script>
@@ -156,17 +159,17 @@ export default {
   /*position: relative;*/
 }
 
-.Collection:nth-child(even){
-  background: #ACCECC;
-}
-
-.Collection:hover{
-
-}
-
 .collectionHeader{
   padding: 0 20px 0 20px;
   border-bottom: 1px solid white;
+  background: #CADBDA;
+}
+
+.Collection:nth-child(even),
+.Collection:nth-child(even) .collectionHeader,
+.Collection:nth-child(even) .collectionFooter
+{
+  background: #ACCECC;
 }
 
 .collectionContent{
@@ -178,6 +181,7 @@ export default {
 .collectionFooter{
   padding: 20px;
   border-top: 1px solid white;
+  background: #CADBDA;
 }
 
 .cards{

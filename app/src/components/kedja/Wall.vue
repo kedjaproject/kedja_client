@@ -1,10 +1,14 @@
 <template>
-  <div class="Wall" v-if="wall">
+  <div class="Wall z1" v-if="wall">
 
     <div class="wallHeader">
 
       <kedja-logo class="logo"></kedja-logo>
       <EditableInput v-model="data.title" tag="h1" @change="updateTitle($event)"></EditableInput>
+
+      <!--div>
+        {{connections}}
+      </div-->
 
     </div>
 
@@ -13,7 +17,7 @@
         ⚙️
       </div>
       <div id="collections">
-        <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" :prid="wall.rid"></collection>
+        <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="wall.rid"></collection>
         <button @click="createCollection" title="Lägg till ny samling">+</button>
       </div>
       <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
@@ -21,6 +25,8 @@
 
     <div class="wallFooter">
     </div>
+
+
 
     <!--div v-if="connections.length">
       <connection :from="connections[0].members[0]" :to="connections[0].members[1]"></connection>
@@ -174,7 +180,47 @@ export default {
       }
 
       store.commit('makeAPICall',params);
-    }
+    },
+    connect: function (p) {
+      //store.commit('createConnection',params);
+      console.log(p.members)
+
+      let params = {
+        endpoint: "walls/" + this.wall.rid + "/relations",
+        data: p,
+        method: "post",
+        successCallback: (data) => {
+          console.log(data)
+          //store.commit('addConnectionToWall',{wall: this.wall, connection: data.data});
+          this.wall.connections.push(data.data)
+        },
+      }
+
+      store.commit('makeAPICall',params);
+    },
+    unconnect: function (p) {
+      //store.commit('createConnection',params);
+      console.log(p.members)
+
+      let connection = this.wall.connections.filter(c => c.members.indexOf(p.members[0]) != -1 && c.members.indexOf(p.members[1]) != -1)[0];
+
+      let params = {
+        endpoint: "walls/" + this.wall.rid + "/relations/" + connection.relation_id,
+        method: "delete",
+        successCallback: (data) => {
+          console.log(data)
+
+          let index = this.wall.connections.indexOf(connection)
+          if(index != -1){
+            this.wall.connections.splice(index,1)
+            store.commit('setDirtyDraw');
+          }
+
+        },
+      }
+
+      store.commit('makeAPICall',params);
+    },
   },
   created: function () {
   },
@@ -197,6 +243,7 @@ export default {
 
   /* STYLING */
   background: #EAEAEA;
+  z-index: 2;
 
 }
 
@@ -219,7 +266,7 @@ export default {
   flex-direction: row;
 
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .wallSettingsContainer{

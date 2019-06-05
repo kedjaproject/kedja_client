@@ -1,6 +1,6 @@
 <template>
-  <div class="Connection" :style="{'top': top-5+'px', 'left': left+'px'}">
-    <canvas class="canvasConnection" :width="width" :height="height+10" />
+  <div class="Connection z0" :style="{'top': yMin+'px', 'left': left+'px'}">
+    <canvas class="canvasConnection" :width="width" :height="height" />
   </div>
 </template>
 
@@ -20,7 +20,9 @@ export default {
       x0: "",
       y0: "",
       x1: "",
-      y1: ""
+      y1: "",
+      y0Bounds: "",
+      y1Bounds: ""
     }
   },
   props: {
@@ -28,6 +30,15 @@ export default {
     dirtyDraw: false
   },
   computed: {
+    yMin: function () {
+      return store.state.connectionBounds.y
+    },
+    yMax: function () {
+      return store.state.connectionBounds.y + store.state.connectionBounds.height
+    },
+    height: function () {
+      return this.yMax - this.yMin
+    },
     from: function () {
       return this.connection.members[0]
     },
@@ -37,9 +48,9 @@ export default {
     width: function () {
       return Math.abs(this.x1 - this.x0);
     },
-    height: function () {
+    /*height: function () {
       return Math.abs(this.y1 - this.y0);
-    },
+    },*/
     left: function () {
       return Math.min(this.x0, this.x1);
     },
@@ -56,7 +67,7 @@ export default {
     }*/
     dirtyDraw: function (val){
       if(val){
-        this.setBounds();
+        this.redraw();
       }
     }
   },
@@ -71,22 +82,34 @@ export default {
 
       //Start point
       this.x0 = el0.getBoundingClientRect().x + el0.getBoundingClientRect().width;
-      this.y0 = el0.getBoundingClientRect().y + el0.getBoundingClientRect().height / 2;
+      //this.y0 = el0.getBoundingClientRect().y + el0.getBoundingClientRect().height / 2;
+      this.y0 = el0.getBoundingClientRect().y - this.yMin + el0.getBoundingClientRect().height / 2;
 
       //End point
       this.x1 = el1.getBoundingClientRect().x;
-      this.y1 = el1.getBoundingClientRect().y + el1.getBoundingClientRect().height / 2;
+      //this.y1 = el1.getBoundingClientRect().y + el1.getBoundingClientRect().height / 2;
+      this.y1 = el1.getBoundingClientRect().y - this.yMin + el1.getBoundingClientRect().height / 2;
+
+      //Bounds
+      /*this.y0Bounds = this.yMin;
+      this.y1Bounds = this.yMax;*/
+
     },
     drawCanvas: function () {
+
       var c = this.$el.getElementsByTagName("canvas")[0];
       var ctx = c.getContext("2d");
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "#000000";
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = "#ffffff";
 
       //Curve
       ctx.beginPath();
-      var y0 = this.y0 > this.y1 ? this.height + 5 : 5;
-      var y1 = this.y0 > this.y1 ? 5 : this.height + 5;
+      //var y0 = this.y0 > this.y1 ? this.height + 5 : 5;
+      //var y1 = this.y0 > this.y1 ? 5 : this.height + 5;
+      var y0 = this.y0;
+      var y1 = this.y1;
 
       /*
       ctx.moveTo(0, y0);
@@ -103,17 +126,19 @@ export default {
       ctx.lineTo(this.width, y1);
       ctx.stroke();
 
-
       ctx.lineWidth = 3;
+
+
       //Start circle
-      ctx.beginPath();
+      /*ctx.beginPath();
       ctx.arc(0, y0, 5, 0, 2 * Math.PI);
       ctx.fill();
 
       //End circle
       ctx.beginPath();
       ctx.arc(this.width, y1, 5, 0, 2 * Math.PI);
-      ctx.fill();
+      ctx.fill();*/
+
 
     }
   },
