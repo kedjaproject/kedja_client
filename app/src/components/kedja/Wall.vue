@@ -1,10 +1,13 @@
 <template>
-  <div class="Wall z1" v-if="wall">
+  <div class="Wall">
 
     <div class="wallHeader">
 
-      <kedja-logo class="logo"></kedja-logo>
-      <EditableInput v-model="data.title" tag="h1" @change="updateTitle($event)"></EditableInput>
+      <drop-down :items="[{label: 'Exportera vägg som'},{label: 'Versionshistorik'},{label: 'Radera vägg', f: removeWall}]">
+        <h2>
+          <EditableInput v-model="data.title" tag="span" @change="updateTitle($event)"></EditableInput> &#9663;
+        </h2>
+      </drop-down>
 
       <!--div>
         {{connections}}
@@ -13,9 +16,6 @@
     </div>
 
     <div class="wallContent">
-      <div class="wallSettingsContainer">
-        ⚙️
-      </div>
       <div id="collections">
         <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="wall.rid"></collection>
         <button @click="createCollection" title="Lägg till ny samling">+</button>
@@ -33,15 +33,13 @@
     </div-->
 
   </div>
-  <div v-else>
-    Loading wall
-  </div>
 </template>
 
 <script>
 
 import { store } from '@/store';
-import KedjaLogo from '@/components/KedjaLogo'
+import KedjaHeader from '@/components/layout/KedjaHeader'
+import DropDown from '@/components/DropDown'
 import Collection from './Collection'
 import Connection from './Connection'
 import EditableInput from '@/components/general/EditableInput'
@@ -49,7 +47,8 @@ import EditableInput from '@/components/general/EditableInput'
 export default {
   name: 'Wall',
   components: {
-    KedjaLogo,
+    KedjaHeader,
+    DropDown,
     Collection,
     Connection,
     EditableInput
@@ -60,14 +59,15 @@ export default {
     }
   },
   props: {
+    wall: ""
   },
   computed: {
     userState: function () {
       return store.getters.getUserState;
     },
-    wall: function () {
+    /*wall: function () {
       return store.getters.getActiveWall();
-    },
+    },*/
     data: function () {
       return this.wall.data;
     },
@@ -92,21 +92,6 @@ export default {
     }
   },
   methods: {
-    getWallFromParam: function () {
-      let wallId = this.$route.params['wallId'];
-      if(wallId){
-        let params = {
-          //endpoint: wallId + "/wall",
-          endpoint: 'walls/' + wallId,
-          successCallback: (data) => {
-            console.log(data)
-            //this.wall = data.data;
-            store.commit('setActiveWall',{wall: data.data});
-          },
-        }
-        store.commit('makeAPICall', params);
-      }
-    },
     getCollectionsFromAPI: function () {
       console.log("get collections")
       let wallId = this.$route.params['wallId'];
@@ -150,6 +135,18 @@ export default {
           console.log(data)
           this.collections.push(data.data)
         }
+      }
+
+      store.commit('makeAPICall',params);
+    },
+    removeWall: function () {
+      //this.$router.push({ name: 'ViewWallList', params: {}  })
+      let params = {
+        endpoint: "walls/" + this.wall.rid,
+        method: "delete",
+        successCallback: (data) => {
+          this.$router.push({ name: 'ViewWallList'})
+        },
       }
 
       store.commit('makeAPICall',params);
@@ -230,7 +227,6 @@ export default {
   created: function () {
   },
   mounted: function () {
-    this.getWallFromParam();
     //this.getCollectionsFromAPI();
     //this.getConnectionsFromParam();
     //this.getWallLocal();
@@ -242,27 +238,21 @@ export default {
 <style scoped>
 
 .Wall{
+
+  flex: 1;
+
   /* LAYOUT */
   display: flex;
   flex-direction: column;
 
   /* STYLING */
-  background: #EAEAEA;
-  z-index: 2;
 
 }
 
 .wallHeader{
-  background: white;
   display: flex;
   flex-direction: row;
-  border-bottom: 2px solid #EAEAEA;
-  align-items: center;
-}
-
-.logo{
-  padding: 20px;
-  border-right: 2px solid #EAEAEA;
+  align-items: flex-start;
 }
 
 .wallContent{
@@ -274,13 +264,6 @@ export default {
   overflow: hidden;
 }
 
-.wallSettingsContainer{
-  background: white;
-  padding: 20px;
-  display: flex;
-  align-items: flex-end;
-}
-
 #collections{
   display: flex;
   flex-direction: row;
@@ -288,7 +271,6 @@ export default {
   width: 100%;
   overflow-x: scroll;
   flex: 1;
-  padding: 20px;
 }
 
 .collection{

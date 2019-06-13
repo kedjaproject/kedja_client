@@ -2,12 +2,19 @@
   <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
     <div class="collectionHeader">
-      <EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
+
+      <drop-down :items="[{label: 'Exportera vägg som'},{label: 'Versionshistorik'},{label: 'Radera samling', f: removeCollection}]">
+        <h2 class="nomargin">
+          <EditableInput v-model="collection.data.title" tag="span" @change="updateTitle($event)"></EditableInput> &#9663;
+        </h2>
+      </drop-down>
+
+      <!--EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput-->
       <!--{{collection.rid}}-->
 
-      <button @click="removeCollection" title="Ta bort samling">
+      <!--button @click="removeCollection" title="Ta bort samling">
         🗑️
-      </button>
+      </button-->
 
     </div>
 
@@ -28,12 +35,14 @@
 <script>
 
 import { store } from '@/store';
+import DropDown from '@/components/DropDown'
 import Card from './Card'
 import EditableInput from '@/components/general/EditableInput'
 
 export default {
   name: 'Collection',
   components: {
+    DropDown,
     Card,
     EditableInput
   },
@@ -160,7 +169,7 @@ export default {
 }
 
 .collectionHeader{
-  padding: 0 20px 0 20px;
+  padding: 10px 20px 10px 20px;
   border-bottom: 1px solid white;
   background: #CADBDA;
 }

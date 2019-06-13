@@ -6,6 +6,7 @@
 
 <script>
 
+//import { store } from '@/store';
 //import Component from '@/components/Component'
 
 export default {

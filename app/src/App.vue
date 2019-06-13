@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <kedja-header id="header"></kedja-header>
+    <!--kedja-header id="header"></kedja-header-->
     <router-view id="router"/>
     <kedja-footer id="footer"></kedja-footer>
   </div>

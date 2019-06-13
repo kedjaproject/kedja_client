@@ -1,6 +1,6 @@
 <template>
   <div class="KedjaLogo">
-    <router-link :to="{ name: 'WallList', params: {} }">
+    <router-link :to="{ name: 'ViewWallList', params: {} }">
       KEDJA.
     </router-link>
   </div>
@@ -33,9 +33,11 @@ export default {
 <style scoped>
 
 .KedjaLogo{
-  font-size: 30pt;
+  font-size: 20pt;
   font-weight: bold;
   color: gray;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 </style>

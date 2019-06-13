@@ -22,8 +22,6 @@ export default {
       y0: "",
       x1: "",
       y1: "",
-      y0Bounds: "",
-      y1Bounds: ""
     }
   },
   props: {
@@ -91,22 +89,31 @@ export default {
     },
     setBounds: function () {
 
-      let el0 = document.getElementById(this.from);
-      let el1 = document.getElementById(this.to);
+      if(document.getElementById(this.from) && document.getElementById(this.to)){
+        let el0 = document.getElementById(this.from);
+        let el1 = document.getElementById(this.to);
 
-      //Start point
-      this.x0 = el0.getBoundingClientRect().x + el0.getBoundingClientRect().width;
-      //this.y0 = el0.getBoundingClientRect().y + el0.getBoundingClientRect().height / 2;
-      this.y0 = el0.getBoundingClientRect().y - this.yMin + el0.getBoundingClientRect().height / 2;
+        let elLeft, elRight;
 
-      //End point
-      this.x1 = el1.getBoundingClientRect().x;
-      //this.y1 = el1.getBoundingClientRect().y + el1.getBoundingClientRect().height / 2;
-      this.y1 = el1.getBoundingClientRect().y - this.yMin + el1.getBoundingClientRect().height / 2;
+        if(el0.getBoundingClientRect().x < el1.getBoundingClientRect().x){
+          elLeft = el0;
+          elRight = el1;
+        }
+        else{
+          elLeft = el1;
+          elRight = el0;
+        }
 
-      //Bounds
-      /*this.y0Bounds = this.yMin;
-      this.y1Bounds = this.yMax;*/
+        //Start point
+        this.x0 = elLeft.getBoundingClientRect().x + elLeft.getBoundingClientRect().width;
+        //this.y0 = el0.getBoundingClientRect().y + el0.getBoundingClientRect().height / 2;
+        this.y0 = elLeft.getBoundingClientRect().y - this.yMin + elLeft.getBoundingClientRect().height / 2;
+
+        //End point
+        this.x1 = elRight.getBoundingClientRect().x;
+        //this.y1 = el1.getBoundingClientRect().y + el1.getBoundingClientRect().height / 2;
+        this.y1 = elRight.getBoundingClientRect().y - this.yMin + elRight.getBoundingClientRect().height / 2;
+      }
 
     },
     drawCanvas: function () {

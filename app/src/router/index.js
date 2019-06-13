@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Landing from '@/components/Landing'
-import WallList from '@/components/WallList'
-import Wall from '@/components/kedja/Wall'
+import ViewWallList from '@/components/views/ViewWallList'
+import ViewWall from '@/components/views/ViewWall'
 import RecursiveAPI from '@/components/RecursiveAPI'
 
 Vue.use(Router)
@@ -17,13 +17,13 @@ export default new Router({
     },
     {
       path: '/walls',
-      name: 'WallList',
-      component: WallList
+      name: 'ViewWallList',
+      component: ViewWallList
     },
     {
       path: '/walls/:wallId',
-      name: 'Wall',
-      component: Wall
+      name: 'ViewWall',
+      component: ViewWall
     },
     {
       path: '/recursive',
