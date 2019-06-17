@@ -13,8 +13,12 @@ button:hover{
 }
 
 input{
-  border: 0px solid gray;
   background-color: #FFFFFFaa;
+}
+
+textarea{
+  height: 10em;
+  font-size: 12pt;
 }
 
 /* Hidden input fields - visible on focus (click) */

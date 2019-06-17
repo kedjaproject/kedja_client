@@ -12,7 +12,10 @@
     <div class="main" @click.capture="clicked">
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
-      <EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput>
+      <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
+      <h3>
+        {{card.data.title}}
+      </h3>
       <!--span>{{card.rid}}</span-->
       <!--pre>
         {{card.states}}
@@ -27,7 +30,7 @@
     </button-->
 
     <div v-if="card.states.selected" class="selectedButtons">
-      <card-button @click.native="removeCard()">🗑️</card-button>
+      <!--card-button @click.native="removeCard()">🗑️</card-button-->
       <card-button @click.native="toggleConnecting($event)" :active="card.states.connecting">🔗</card-button>
     </div>
 

@@ -7,7 +7,10 @@
       </button>
     </kedja-header>
 
-    <wall :wall="wall"></wall>
+    <div class="content">
+      <wall :wall="wall"></wall>
+      <context-menu class="contextMenu" v-model="menuData" :style="{'flex-basis': menuData ? '300px' : '0px'}"></context-menu>
+    </div>
 
   </div>
 </template>
@@ -17,15 +20,18 @@
 import { store } from '@/store';
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
+import ContextMenu from '@/components/contextMenu/ContextMenu'
 
 export default {
   name: 'ViewWall',
   components: {
     KedjaHeader,
-    Wall
+    Wall,
+    ContextMenu
   },
   data () {
     return {
+      menuData: ""
     }
   },
   props: {
@@ -34,6 +40,9 @@ export default {
     wall: function () {
       return store.getters.getActiveWall();
     },
+    sidebarFlex: function () {
+
+    }
   },
   methods: {
     getWallFromParam: function () {
@@ -78,6 +87,26 @@ export default {
   /* LAYOUT */
   display: flex;
   flex-direction: column;
+  transition: all 0.5s;
+}
+
+.content{
+
+  flex: 1;
+  overflow: hidden;
+
+  /* LAYOUT */
+  display: flex;
+  flex-direction: row;
+  transition: all 0.5s;
+
+}
+
+.contextMenu{
+  flex-basis: 300px;
+  flex: 0 0;
+  border: 1px solid lightgray;
+  transition: all 0.5s;
 }
 
 </style>

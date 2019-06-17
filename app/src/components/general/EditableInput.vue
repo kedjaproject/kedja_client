@@ -100,11 +100,9 @@ export default {
   }
 
   .textSpan{
-    font-weight: bold;
   }
 
   .textSpan:hover{
-    font-weight: bold;
     color: #ACCECC
   }
 

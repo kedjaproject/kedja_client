@@ -12,8 +12,9 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Landing',
-      component: Landing
+      /*name: 'Landing',
+      component: Landing*/
+      redirect: '/walls'
     },
     {
       path: '/walls',

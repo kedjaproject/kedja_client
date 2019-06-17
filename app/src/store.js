@@ -448,7 +448,7 @@ export const store = new Vuex.Store({
 
     getCollectionByCard: state => (card) => {
       let wall = store.getters.getActiveWall()
-      return wall.collections.filter(collection => collection.cards.indexOf(card) != -1)[0]
+      return wall.collections.find(collection => collection.cards.indexOf(card) != -1)
 
       /*wall.contained.forEach((collection, iCollection) => {
         let card = collection.contained.find(c => c.rid == card.rid);
