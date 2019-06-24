@@ -1,6 +1,6 @@
 <template>
   <div class="KedjaLogo">
-    <router-link :to="{ name: 'ViewWallList', params: {} }">
+    <router-link :to="{ name: 'Login', params: {} }">
       KEDJA.
     </router-link>
   </div>

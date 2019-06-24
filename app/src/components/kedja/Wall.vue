@@ -13,12 +13,17 @@
 
     </div>
 
-    <div class="wallContent">
+    <div class="wallContent" ref="wallContent">
       <div id="collections">
-        <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="wall.rid"></collection>
-        <button @click="createCollection" title="Lägg till ny samling">+</button>
+        <collections :collections="collections" :prid="wall.prid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect"></collections>
+
+
+        <!--collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="wall.rid"></collection-->
+
       </div>
-      <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
+      <div class="connections">
+        <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
+      </div>
     </div>
 
     <div class="wallFooter">
@@ -35,9 +40,10 @@
 
 <script>
 
-import { store } from '@/store';
+//import { store } from '@/store';
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import DropDown from '@/components/DropDown'
+import Collections from './Collections'
 import Collection from './Collection'
 import Connection from './Connection'
 import EditableInput from '@/components/general/EditableInput'
@@ -47,6 +53,7 @@ export default {
   components: {
     KedjaHeader,
     DropDown,
+    Collections,
     Collection,
     Connection,
     EditableInput
@@ -61,10 +68,10 @@ export default {
   },
   computed: {
     userState: function () {
-      return store.getters.getUserState;
+      return this.$store.getters.getUserState;
     },
     /*wall: function () {
-      return store.getters.getActiveWall();
+      return this.$store.getters.getActiveWall();
     },*/
     data: function () {
       return this.wall.data;
@@ -80,62 +87,55 @@ export default {
     }*/
   },
   watch: {
-    title: function (val) {
-      //console.log(val)
-    },
     wall: function () {
-      store.commit('initWall',this.wall);
+      this.$store.commit('initWall',this.wall);
       this.getCollectionsFromAPI();
       this.getConnectionsFromAPI();
+    },
+    collections: function () {
     }
   },
   methods: {
     getCollectionsFromAPI: function () {
-      console.log("get collections")
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
           //endpoint: wallId + "/wall",
           endpoint: 'walls/' + wallId + "/collections",
           successCallback: (data) => {
-            console.log(data)
-            //this.collections = data.data
-            store.commit('setWallCollections', {wall: this.wall, collections: data.data});
+            this.$store.commit('setWallCollections', {wall: this.wall, collections: data.data});
           },
         }
-        store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params);
       }
     },
     getConnectionsFromAPI: function () {
-      console.log("get connections")
       let wallId = this.$route.params['wallId'];
       if(wallId){
         let params = {
           endpoint: "walls/" + wallId + "/relations",
           successCallback: (data) => {
-            console.log(data)
-            store.commit('setWallConnections', {wall: this.wall, connections: data.data});
+            this.$store.commit('setWallConnections', {wall: this.wall, connections: data.data});
           },
         }
-        store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params);
       }
     },
     getWallLocal: function () {
-      this.wall = store.getters.getActiveWall();
+      this.wall = this.$store.getters.getActiveWall();
     },
     createCollection: function () {
-      //store.commit('createCollectionInWall',{wall: this.wall});
+      //this.$store.commit('createCollectionInWall',{wall: this.wall});
       let params = {
         endpoint: "walls/" + this.wall.rid + "/collections",
         data: {title: 'Ny samling'},
         method: "post",
         successCallback: (data) => {
-          console.log(data)
           this.collections.push(data.data)
         }
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     removeWall: function () {
       //this.$router.push({ name: 'ViewWallList', params: {}  })
@@ -147,10 +147,10 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     removeCollection: function (collection) {
-      //store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+      //this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
       let params = {
         endpoint: "walls/" + this.wall.rid + "/collections/" + collection.rid,
         method: "delete",
@@ -165,7 +165,7 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     updateTitle: function (title) {
       let params = {
@@ -173,14 +173,13 @@ export default {
         data: {title: title},
         method: "put",
         successCallback: (data) => {
-          console.log(data.data)
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     connect: function (p) {
-      //store.commit('createConnection',params);
+      //this.$store.commit('createConnection',params);
       console.log(p.members)
 
       let params = {
@@ -189,16 +188,16 @@ export default {
         method: "post",
         successCallback: (data) => {
           console.log(data)
-          //store.commit('addConnectionToWall',{wall: this.wall, connection: data.data});
+          //this.$store.commit('addConnectionToWall',{wall: this.wall, connection: data.data});
           this.wall.connections.push(data.data)
-          store.commit('forceUserStateUpdate');
+          this.$store.commit('forceUserStateUpdate');
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     unconnect: function (p) {
-      //store.commit('createConnection',params);
+      //this.$store.commit('createConnection',params);
       console.log(p.members)
 
       let connection = this.wall.connections.filter(c => c.members.indexOf(p.members[0]) != -1 && c.members.indexOf(p.members[1]) != -1)[0];
@@ -212,15 +211,19 @@ export default {
           let index = this.wall.connections.indexOf(connection)
           if(index != -1){
             this.wall.connections.splice(index,1)
-            //store.commit('setDirtyDraw');
-            store.commit('forceUserStateUpdate');
+            //this.$store.commit('setDirtyDraw');
+            this.$store.commit('forceUserStateUpdate');
           }
 
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
+    handleScroll: function () {
+      console.log("scroll")
+      this.$store.commit('setDirtyDraw');
+    }
   },
   created: function () {
   },
@@ -228,6 +231,17 @@ export default {
     //this.getCollectionsFromAPI();
     //this.getConnectionsFromParam();
     //this.getWallLocal();
+    /*this.$nextTick(function() {
+      console.log(this.$refs)
+      console.log(this.$refs.collections)
+      console.log(this.$refs.wallContent)
+    })*/
+
+    //this.$refs.collections.addEventListener('scroll', this.handleScroll);
+    //document.getElementById('collections').addEventListener('scroll', this.handleScroll);
+  },
+  updated: function () {
+
   }
 }
 </script>
@@ -264,16 +278,8 @@ export default {
 
 #collections{
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  width: 100%;
-  overflow-x: scroll;
-  flex: 1;
-}
 
-.collection{
-  flex: 0 0 300px;
-  margin: 1px;
+  flex: 1;
 }
 
 </style>

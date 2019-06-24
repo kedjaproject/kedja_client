@@ -32,7 +32,6 @@
 
 <script>
 
-import { store } from '@/store';
 import DropDown from '@/components/DropDown'
 import Card from './Card'
 import EditableInput from '@/components/general/EditableInput'
@@ -75,20 +74,18 @@ export default {
       this.$emit('removeCollection',this.collection)
     },
     getCardsFromAPI: function () {
-      console.log("Get cards")
       let params = {
         //endpoint: wallId + "/wall",
         endpoint: 'collections/' + this.collection.rid + "/cards",
         successCallback: (data) => {
-          console.log(data)
           //this.cards = data.data;
-          store.commit('setCollectionCards', {collection: this.collection, cards: data.data});
+          this.$store.commit('setCollectionCards', {collection: this.collection, cards: data.data});
         },
       }
-      store.commit('makeAPICall', params);
+      this.$store.commit('makeAPICall', params);
     },
     createCard: function () {
-      //store.commit('createCardInCollection',{collection: this.collection});
+      //this.$store.commit('createCardInCollection',{collection: this.collection});
       let params = {
         endpoint: "collections/" + this.collection.rid + "/cards",
         data: {title: 'Nytt kort'},
@@ -99,10 +96,10 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     removeCard: function (card) {
-      //store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+      //this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card});
       let params = {
         endpoint: "collections/" + this.collection.rid + "/cards/" + card.rid,
         method: "delete",
@@ -117,7 +114,7 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     updateTitle: function (title) {
       let params = {
@@ -129,7 +126,7 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     connect: function (params) {
       this.$emit('connect',params)
@@ -138,11 +135,11 @@ export default {
       this.$emit('unconnect',params)
     },
     handleScroll: function () {
-      store.commit('setDirtyDraw');
+      this.$store.commit('setDirtyDraw');
     }
   },
   created: function () {
-    store.commit('initCollection',this.collection);
+    this.$store.commit('initCollection',this.collection);
   },
   mounted: function () {
     this.getCardsFromAPI();
@@ -161,7 +158,7 @@ export default {
   display: flex;
   flex-direction: column;
 
-  border: 1px solid #EAEAEA;
+  border: 0px solid #EAEAEA;
   background: #CADBDA;
   /*position: relative;*/
 }

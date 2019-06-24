@@ -34,7 +34,6 @@
 
 <script>
 
-import { store } from '@/store';
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
 
@@ -46,12 +45,15 @@ export default {
   },
   data () {
     return {
-      walls: ""
+      //walls: ""
     }
   },
   props: {
   },
   computed: {
+    walls: function () {
+      return this.$store.getters['walls/all']
+    }
   },
   methods: {
     getWalls: function () {
@@ -62,10 +64,13 @@ export default {
           this.walls = data.data;
         },
       }
-      store.commit('makeAPICall', params);
+      this.$store.commit('makeAPICall', params);
+    },
+    getWallsStore: function () {
+      this.$store.dispatch('walls/getWalls');
     },
     createWall: function () {
-      //store.commit('createCollectionInWall',{wall: this.wall});
+      //this.$store.commit('createCollectionInWall',{wall: this.wall});
       let params = {
         endpoint: "walls",
         data: {title: 'Ny vägg'},
@@ -76,11 +81,14 @@ export default {
         }
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
   },
+  created: function () {
+
+  },
   mounted: function () {
-    this.getWalls();
+    this.getWallsStore();
   }
 }
 </script>

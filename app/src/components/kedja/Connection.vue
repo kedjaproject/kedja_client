@@ -6,8 +6,6 @@
 
 <script>
 
-import { store } from '@/store';
-
 //import Component from '@/components/Component'
 
 export default {
@@ -30,10 +28,10 @@ export default {
   },
   computed: {
     yMin: function () {
-      return store.state.connectionBounds.y
+      return this.$store.state.connectionBounds.y
     },
     yMax: function () {
-      return store.state.connectionBounds.y + store.state.connectionBounds.height
+      return this.$store.state.connectionBounds.y + this.$store.state.connectionBounds.height
     },
     height: function () {
       return this.yMax - this.yMin
@@ -76,7 +74,7 @@ export default {
       let el1 = document.getElementById(this.to);
 
       if(el0 && el1){
-        store.commit('setDirtyDraw');
+        this.$store.commit('setDirtyDraw');
       }
       else{
         setTimeout(this.firstDraw, 100);
@@ -164,7 +162,7 @@ export default {
     }
   },
   created: function () {
-    store.commit('initConnection',this.connection);
+    this.$store.commit('initConnection',this.connection);
   },
   mounted: function () {
     this.firstDraw();

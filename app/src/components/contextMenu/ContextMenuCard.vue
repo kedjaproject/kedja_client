@@ -33,7 +33,6 @@
 
 <script>
 
-import { store } from '@/store';
 import CardButton from '@/components/kedja/CardButton'
 //import Component from '@/components/Component'
 
@@ -51,7 +50,7 @@ export default {
   },
   computed: {
     collection: function () {
-      return store.getters.getCollectionByCard(this.card)
+      return this.$store.getters.getCollectionByCard(this.card)
     }
   },
   methods: {
@@ -65,10 +64,10 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
     removeCard: function () {
-      //store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+      //this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card});
       let params = {
         endpoint: "collections/" + this.collection.rid + "/cards/" + this.card.rid,
         method: "delete",
@@ -83,7 +82,7 @@ export default {
         },
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
   },
   mounted: function () {

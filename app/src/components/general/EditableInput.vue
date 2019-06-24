@@ -25,7 +25,6 @@
 <script>
 
 import Vue from 'vue'
-import { store } from '@/store';
 import WrapperComponent from './WrapperComponent';
 
 export default {

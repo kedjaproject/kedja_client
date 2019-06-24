@@ -8,7 +8,6 @@
 
 <script>
 
-import { store } from '@/store';
 import KedjaHeader from '@/components/layout/KedjaHeader';
 import KedjaFooter from '@/components/layout/KedjaFooter';
 
@@ -19,7 +18,7 @@ export default {
     KedjaFooter
   },
   created: function () {
-    store.commit('init',{});
+    this.$store.commit('init',{});
   },
   mounted: function () {
     document.activeElement.blur()

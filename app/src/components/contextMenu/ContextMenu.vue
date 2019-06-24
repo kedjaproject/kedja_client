@@ -1,8 +1,9 @@
 <template>
   <div class="ContextMenu">
 
-    <div class="handle">
-      &#9664;
+    <div class="handle" @click="toggleForceClose()" :class="{'forceClose': forceClose}">
+      <span v-if="hasContent">&#9658;</span>
+      <span v-else>&#9664;</span>
     </div>
 
     <div v-if="card">
@@ -14,7 +15,6 @@
 
 <script>
 
-import { store } from '@/store';
 import ContextMenuCard from '@/components/contextMenu/ContextMenuCard'
 //import Component from '@/components/Component'
 
@@ -25,6 +25,7 @@ export default {
   },
   data () {
     return {
+      forceClose: false
     }
   },
   props: {
@@ -32,29 +33,30 @@ export default {
   },
   computed: {
     userState: function () {
-      return store.state.userState
+      return this.$store.state.userState
     },
     card: function () {
       if(this.userState.name == "selectCard"){
-        return store.getters.getCardById(this.userState.data.rid)
+        return this.$store.getters.getCardById(this.userState.data.rid)
       }
       return undefined
     },
-    content: function () {
-      if(this.card){
-        this.emitData(this.card)
-        return this.card
-      }
-
+    hasContent: function () {
+      return this.card;
     }
   },
   watch:{
+    hasContent: function (val) {
+      this.emitData(val)
+    }
   },
   methods: {
     emitData(data) {
-      this.$emit('input', {
-        data
-      })
+      let d = this.forceClose ? false : data;
+      this.$emit('input',d)
+    },
+    toggleForceClose: function () {
+      this.forceClose = !this.forceClose;
     }
   },
   mounted: function () {
@@ -71,6 +73,7 @@ export default {
   background: white;
 
   padding: 20px;
+
 }
 
 .handle{
@@ -87,6 +90,10 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.forceClose{
+  background: red;
 }
 
 </style>

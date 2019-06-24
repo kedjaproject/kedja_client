@@ -12,8 +12,6 @@
 
 <script>
 
-import { store } from '@/store';
-
 import Wall from '@/components/kedja/Wall'
 
 export default {
@@ -29,10 +27,10 @@ export default {
   },
   computed: {
     walls: function () {
-      return store.state.walls
+      return this.$store.state.walls
     },
     activeWallId: function () {
-      return store.state.activeWallId
+      return this.$store.state.activeWallId
     }
   },
   methods: {

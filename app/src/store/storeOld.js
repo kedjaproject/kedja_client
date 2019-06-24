@@ -8,6 +8,7 @@ import Factory from '@/Factory';
 import { walls } from '@/assets/walls.json';
 
 export const store = new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production',
   state: {
     walls: [],
     activeWallId: 0,
@@ -15,7 +16,8 @@ export const store = new Vuex.Store({
     connections: [],
     tabIndexCounter: 0,
     connectionBounds: "",
-    userState: ""
+    userState: "",
+    auth: ""
     //schema: Schema
   },
   mutations: {
@@ -28,6 +30,7 @@ export const store = new Vuex.Store({
       //store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
       //store.commit('resetUserState');
+      store.commit('setAuthFromLocalStorage');
     },
 
     /*initWallsFromAPI: (state, {}) => {
@@ -42,6 +45,14 @@ export const store = new Vuex.Store({
       store.commit('makeAPICall',params);
 
     },*/
+
+    setAuthFromLocalStorage: (state) => {
+      if (typeof(Storage) !== "undefined") {
+        state.auth = localStorage.getItem("auth");
+      } else {
+        console.log("No local storage support")
+      }
+    },
 
     resetUserState: (state) => {
       store.commit('setUserState',{name: 'default'});
@@ -95,17 +106,7 @@ export const store = new Vuex.Store({
       Vue.set(connection, 'dirtyDraw', false)
     },
 
-    /*prepareData: (state, {}) => {
-      state.walls.forEach((wall, iWall) => {
-        wall.collections.forEach((collection, iCollection) => {
-          collection.cards.forEach((card, iCard) => {
-            Vue.set(card, 'states', {})
-          })
-        })
-      })
-    },*/
-
-    setCardsState: (state, {cards, cardIds, stateName, stateFlag, invertCollection}) => {
+    /*setCardsState: (state, {cards, cardIds, stateName, stateFlag, invertCollection}) => {
 
       console.log("Set cards state: " + stateName);
       console.log(cardIds);
@@ -150,70 +151,6 @@ export const store = new Vuex.Store({
 
     setCardState: (state, {card, stateName, stateFlag}) => {
       Vue.set(card.states, stateName, stateFlag)
-    },
-
-    //Create data
-
-    createWall: (state, {}) => {
-      let params = {
-        endpoint: "walls",
-        params: {title: 'Ny vägg'},
-        method: "post",
-        successCallback: (data) => {
-          state.walls.push(data.data)
-        },
-      }
-
-      store.commit('makeAPICall',params);
-    },
-
-    /*createCollectionInWall: (state, {wall}) => {
-
-      let rid = wall.rid;
-
-      let params = {
-        endpoint: "walls/" + rid + "/collections",
-        data: {title: 'Ny samling'},
-        method: "post",
-        successCallback: (data) => {
-          console.log(data)
-          wall.contained.push(data.data)
-        }
-      }
-
-      store.commit('makeAPICall',params);
-
-    },*/
-
-    /*createCardInCollection: (state, {collection}) => {
-
-      let rid = collection.rid;
-
-      let params = {
-        endpoint: "collections/" + rid + "/cards",
-        params: {title: 'Nytt kort'},
-        method: "post",
-        successCallback: (data) => {
-          console.log(data)
-          collection.contained.push(data.data)
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-    },*/
-
-    /*getContainedCards: (state, {collection}) => {
-      let params = {
-        endpoint: "collections/" + collection.rid + "/cards",
-        method: "get",
-        successCallback: (data) => {
-          console.log(data)
-          Vue.set(collection, 'contained', data.data)
-        },
-      }
-
-      store.commit('makeAPICall',params);
     },*/
 
     setDirtyDraw: (state) => {
@@ -229,92 +166,6 @@ export const store = new Vuex.Store({
       })
 
     },
-
-    createConnection: (state, {card0, card1}) => {
-
-      console.log("Connect cards: " + card0.rid + " and " + card1.rid)
-
-      let params = {
-        // FIXME: Must have structure /walls/<wall rid>/relations
-        // Data must be serialized as json
-        endpoint: "walls/" + card0.rid + "/" + card1.rid,
-        params: {},
-        method: "post",
-        successCallback: (data) => {
-          console.log(data)
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-      //collection.cards.push(Factory.Card())
-    },
-
-    addConnectionToWall: (state, {wall, connection}) => {
-      wall.connections.push(connection)
-    },
-
-    removeConnection: (state, {card0, card1}) => {
-
-      console.log("Unconnect cards: " + card0.rid + " and " + card1.rid)
-
-      let params = {
-        // FIXME: Must have structure /walls/<wall rid>/relations/<relation_id>
-        // Relations are deleted by their relation_id and not by cards rid
-        endpoint: "delete_relation/" + card0.rid + "/" + card1.rid,
-        params: {},
-        method: "delete",
-        successCallback: (data) => {
-          console.log(data)
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-      //collection.cards.push(Factory.Card())
-    },
-
-    //Remove data
-
-    /*removeCollectionFromWall: (state, {wall, collection}) => {
-
-      let params = {
-        endpoint: "walls/" + wall.rid + "/collections/" + collection.rid,
-        method: "delete",
-        successCallback: (data) => {
-          console.log(data)
-
-          let index = wall.collections.indexOf(collection)
-          if(index != -1){
-            wall.collections.splice(index,1)
-          }
-
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-    },*/
-
-    /*removeCardFromCollection: (state, {collection,card}) => {
-
-      let params = {
-        endpoint: "collections/" + collection.rid + "/cards/" + card.rid,
-        method: "delete",
-        successCallback: (data) => {
-          console.log(data)
-
-          let index = collection.cards.indexOf(card)
-          if(index != -1){
-            collection.cards.splice(index,1)
-          }
-
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-    },*/
 
     setDeepConnectionsByCardId: (state, {id}) => {
       console.log("Set deep connections")
@@ -375,17 +226,50 @@ export const store = new Vuex.Store({
     }
 
   },
+  actions: {
+
+    setAuth: (context, {auth}) => {
+      if (typeof(Storage) !== "undefined") {
+        localStorage.setItem("auth", auth);
+      } else {
+        console.log("No local storage support")
+      }
+      context.commit('setAuthFromLocalStorage');
+    },
+
+    resetAuth: (context) => {
+      if (typeof(Storage) !== "undefined") {
+        localStorage.removeItem("auth");
+      } else {
+        console.log("No local storage support")
+      }
+      context.commit('setAuthFromLocalStorage');
+    },
+
+    checkAuth: (context) => {
+      if(!context.getters.getAuth){
+
+      }
+    },
+
+  },
   getters: {
 
     /*myGetter: state => (param) => {
       return true
     },*/
 
+    getAuth: state => {
+      return state.auth;
+    },
+
+
+
     getUserState: state => {
       return state.userState;
     },
 
-    getActiveWall: state => (id) => {
+    getActiveWall: state => () => {
       //return state.walls[state.activeWallId];
       return state.activeWall;
     },

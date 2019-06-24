@@ -3,21 +3,40 @@
 
     <kedja-logo></kedja-logo>
 
-    <slot>
-    </slot>
+    <div class="slot">
+      <slot>
+      </slot>
+    </div>
+
+    <div class="user">
+      <div v-if="auth">
+        <drop-down :items="[{label: 'Min profil'},{label: 'Mina väggar'},{label: 'Logga ut', f: logout}]">
+          <div class="right">
+            <router-link :to="{ name: 'LoggedIn'}">
+              {{auth}}
+            </router-link>
+          </div>
+        </drop-down>
+      </div>
+      <div v-else>
+        <router-link :to="{ name: 'Login'}">Logga in</router-link>
+      </div>
+
+    </div>
 
   </div>
 </template>
 
 <script>
 
-//import Component from '@/components/Component'
 import KedjaLogo from '@/components/KedjaLogo'
+import DropDown from '@/components/DropDown'
 
 export default {
   name: 'KedjaHeader',
   components: {
-    KedjaLogo
+    KedjaLogo,
+    DropDown
   },
   data () {
     return {
@@ -26,8 +45,15 @@ export default {
   props: {
   },
   computed: {
+    auth: function () {
+      return this.$store.getters.getAuth;
+    }
   },
   methods: {
+    logout: function (e) {
+      this.$store.dispatch('resetAuth');
+      this.$router.push({ name: 'Login'})
+    }
   },
   mounted: function () {
   }
@@ -37,6 +63,21 @@ export default {
 <style scoped>
 
 .KedjaHeader{
+  display: flex;
+  flex-direction: row;
+}
+
+.slot{
+  flex: 1;
+}
+
+.user{
+  flex: 0 1 200px;
+  align-items: flex-end;
+}
+
+.right{
+  text-align: right;
 }
 
 </style>

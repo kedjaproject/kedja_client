@@ -9,7 +9,7 @@
 
     <div class="content">
       <wall :wall="wall"></wall>
-      <context-menu class="contextMenu" v-model="menuData" :style="{'flex-basis': menuData ? '300px' : '0px'}"></context-menu>
+      <context-menu class="contextMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu>
     </div>
 
   </div>
@@ -17,7 +17,6 @@
 
 <script>
 
-import { store } from '@/store';
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
 import ContextMenu from '@/components/contextMenu/ContextMenu'
@@ -31,14 +30,14 @@ export default {
   },
   data () {
     return {
-      menuData: ""
+      menuOpen: ""
     }
   },
   props: {
   },
   computed: {
     wall: function () {
-      return store.getters.getActiveWall();
+      return this.$store.getters.getActiveWall();
     },
     sidebarFlex: function () {
 
@@ -52,16 +51,14 @@ export default {
           //endpoint: wallId + "/wall",
           endpoint: 'walls/' + wallId,
           successCallback: (data) => {
-            console.log(data)
-            //this.wall = data.data;
-            store.commit('setActiveWall',{wall: data.data});
+            this.$store.commit('setActiveWall',{wall: data.data});
           },
         }
-        store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params);
       }
     },
     createCollection: function () {
-      //store.commit('createCollectionInWall',{wall: this.wall});
+      //this.$store.commit('createCollectionInWall',{wall: this.wall});
       let params = {
         endpoint: "walls/" + this.wall.rid + "/collections",
         data: {title: 'Ny samling'},
@@ -72,7 +69,7 @@ export default {
         }
       }
 
-      store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params);
     },
   },
   mounted: function () {
@@ -107,6 +104,7 @@ export default {
   flex: 0 0;
   border: 1px solid lightgray;
   transition: all 0.5s;
+  overflow: hidden;
 }
 
 </style>
