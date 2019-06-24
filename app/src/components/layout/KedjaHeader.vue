@@ -13,7 +13,7 @@
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
             <router-link :to="{ name: 'Profile'}">
-              {{userData.userid}}
+              {{userData.first_name}} {{userData.last_name}}
             </router-link>
           </div>
         </drop-down>

@@ -8,17 +8,17 @@
       Du är inloggad som
 
       <h2>
-        {{userData.userid}} {{userData.first_name}} {{userData.last_name}}
+        {{userData.first_name}} {{userData.last_name}}
       </h2>
 
       <h3>Uppdatera profil</h3>
 
       <form @submit.prevent="updateProfile">
         <label>
-          <input type="text" v-model="userData.first_name" />
+          <input type="text" v-model="userDataEditable.first_name" />
         </label>
         <label>
-          <input type="text" v-model="userData.last_name" />
+          <input type="text" v-model="userDataEditable.last_name" />
         </label>
         <button type="submit">Spara ändringar</button>
       </form>
@@ -40,7 +40,7 @@ export default {
   },
   data () {
     return {
-      userProfile: ""
+      userDataEditable: ""
     }
   },
   props: {
@@ -53,7 +53,7 @@ export default {
   methods: {
     getUserProfile: function () {
       let params = {
-        endpoint: "users/" + this.userid,
+        endpoint: "users/" + this.userData.userid,
         successCallback: (response) => {
           this.userProfile = response.data;
         }
@@ -63,14 +63,15 @@ export default {
     },
     updateProfile: function () {
       let params = {
-        endpoint: "users/" + this.userid,
+        endpoint: "users/" + this.userData.userid,
         method: "put",
         data: {
-          first_name: this.firstName,
-          last_name: this.lastName
+          first_name: this.userDataEditable.first_name,
+          last_name: this.userDataEditable.last_name
         },
         successCallback: (response) => {
-          this.methods = response.data;
+          this.$store.dispatch('setUserData', {field: "first_name", value: response.data.data.first_name});
+          this.$store.dispatch('setUserData', {field: "last_name", value: response.data.data.last_name});
         }
       }
 
@@ -78,6 +79,7 @@ export default {
     }
   },
   created: function () {
+    this.userDataEditable = Object.assign({}, this.userData);
   },
   mounted: function () {
     this.getUserProfile();

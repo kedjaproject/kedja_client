@@ -71,10 +71,10 @@ export const store = new Vuex.Store({
 
     setUserDataFromLocalStorage: (state) => {
       if (typeof(Storage) !== "undefined") {
-        state.userData.auth = localStorage.getItem("auth");
-        state.userData.userid = localStorage.getItem("userid");
-        state.userData.first_name = localStorage.getItem("first_name");
-        state.userData.last_name = localStorage.getItem("last_name");
+        Vue.set(state.userData,'auth',localStorage.getItem("auth"))
+        Vue.set(state.userData,'userid',localStorage.getItem("userid"))
+        Vue.set(state.userData,'first_name',localStorage.getItem("first_name"))
+        Vue.set(state.userData,'last_name',localStorage.getItem("last_name"))
       } else {
         console.log("No local storage support")
       }
@@ -238,7 +238,7 @@ export const store = new Vuex.Store({
         method: method,
         url:'https://staging-server.kedja.org/api/1/' + payload.endpoint,
         headers: {
-          Authorization: store.getters.getAuth
+          Authorization: store.getters.getUserData.auth
         },
         params: payload.params,
         data: payload.data
