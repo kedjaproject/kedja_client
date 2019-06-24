@@ -203,19 +203,26 @@ export const store = new Vuex.Store({
 
     //API
 
-    makeAPICall: (state, params) => {
+    makeAPICall: (state, payload) => {
 
-      let method = params.method ? params.method : "get";
+      let method = payload.method ? payload.method : "get";
+
+      let errorCallback = payload.errorCallback ? payload.errorCallback : function (response) {
+        console.log(response)
+      }
 
       axios({
         method: method,
-        url:'https://staging-server.kedja.org/api/1/' + params.endpoint,
-        params: params.params,
-        data: params.data
+        url:'https://staging-server.kedja.org/api/1/' + payload.endpoint,
+        headers: {
+          Authorization: store.getters.getAuth
+        },
+        params: payload.params,
+        data: payload.data
       })
       .then(
-        params.successCallback,
-        this.errorCallback
+        payload.successCallback,
+        errorCallback
       )
       .catch(error => {
         console.log(error);
@@ -262,10 +269,13 @@ export const store = new Vuex.Store({
       return axios({
         method: method,
         url:'https://staging-server.kedja.org/api/1/' + payload.endpoint,
+        headers: {
+          Authorization: store.getters.getAuth
+        },
         params: payload.params,
         data: payload.data
       })
-      
+
     },
 
   },

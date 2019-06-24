@@ -78,6 +78,10 @@ export default {
         successCallback: (data) => {
           console.log(data)
           this.walls.push(data.data)
+        },
+        errorCallback: (data) => {
+          console.log("Du är inte inloggad. Logga in för att fortsätta.")
+          console.log(data)
         }
       }
 

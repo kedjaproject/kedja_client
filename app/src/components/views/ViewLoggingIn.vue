@@ -5,13 +5,8 @@
     </kedja-header>
 
     <div class="viewContent">
-
-      Du är inloggad med auth {{auth}}
-
+      Du loggas in.
     </div>
-
-
-
 
   </div>
 </template>

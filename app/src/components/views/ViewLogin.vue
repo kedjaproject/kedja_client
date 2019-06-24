@@ -15,14 +15,12 @@
         <button>Logga in</button>
       </form-->
 
-      <h2>Logga in</h2>
+      <h3>Logga in / Registrera nytt konto med</h3>
 
-      <div>
-        Logga in med:
-        <p v-for="method in methods">
+        <h2 v-for="method in methods">
           <a :href="method.url">{{method.title}}</a>
-        </p>
-      </div>
+        </h2>
+
 
     </div>
 
