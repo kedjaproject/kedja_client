@@ -3,7 +3,7 @@
 
     <div class="collectionHeader">
 
-      <drop-down :items="[{label: 'Exportera vägg som'},{label: 'Versionshistorik'},{label: 'Radera samling', f: removeCollection}]">
+      <drop-down :items="[{label: 'Radera samling', f: removeCollection}]">
           <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
