@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Landing from '@/components/Landing'
+import ViewHome from '@/components/views/ViewHome'
 import ViewLogin from '@/components/views/ViewLogin'
 import ViewLoggingIn from '@/components/views/ViewLoggingIn'
 import ViewRegister from '@/components/views/ViewRegister'
+import ViewProfile from '@/components/views/ViewProfile'
 import ViewWallList from '@/components/views/ViewWallList'
 import ViewWall from '@/components/views/ViewWall'
 
@@ -34,13 +36,18 @@ export default new Router({
       component: ViewRegister
     },
     {
-      path: '/loggedIn',
-      name: 'LoggedIn',
-      redirect: '/walls'
+      path: '/home',
+      name: 'Home',
+      component: ViewHome
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: ViewProfile
     },
     {
       path: '/walls',
-      name: 'ViewWallList',
+      name: 'Walls',
       component: ViewWallList
     },
     {

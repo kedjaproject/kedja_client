@@ -9,11 +9,11 @@
     </div>
 
     <div class="user">
-      <div v-if="auth">
-        <drop-down :items="[{label: 'Min profil'},{label: 'Mina väggar'},{label: 'Logga ut', f: logout}]">
+      <div v-if="userData.userid">
+        <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
-            <router-link :to="{ name: 'LoggedIn'}">
-              {{auth}}
+            <router-link :to="{ name: 'Profile'}">
+              {{userData.userid}}
             </router-link>
           </div>
         </drop-down>
@@ -45,13 +45,19 @@ export default {
   props: {
   },
   computed: {
-    auth: function () {
-      return this.$store.getters.getAuth;
+    userData: function () {
+      return this.$store.getters.getUserData;
     }
   },
   methods: {
+    goToProfile: function (e) {
+      this.$router.push({ name: 'Profile'})
+    },
+    goToWalls: function (e) {
+      this.$router.push({ name: 'Walls'})
+    },
     logout: function (e) {
-      this.$store.dispatch('resetAuth');
+      this.$store.dispatch('logout');
       this.$router.push({ name: 'Login'})
     }
   },

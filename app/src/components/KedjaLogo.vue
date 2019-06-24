@@ -1,6 +1,6 @@
 <template>
   <div class="KedjaLogo">
-    <router-link :to="{ name: 'Login', params: {} }">
+    <router-link :to="{ name: 'Home', params: {} }">
       KEDJA.
     </router-link>
   </div>

@@ -19,8 +19,8 @@
       <form @submit.prevent="register">
         <label >
           <input type="checkbox" /> Jag går med på allt.
-          <button type="submit">Sälj min själ</button>
         </label>
+        <button type="submit">Sälj min själ</button>
       </form>
 
     </div>
@@ -55,7 +55,8 @@ export default {
         endpoint: "auth/register/" + this.registerToken,
         method: "post",
         successCallback: (response) => {
-          this.$store.dispatch('setAuth', {auth: response.data.Authorization});
+          this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
+          this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
         }
       }
 

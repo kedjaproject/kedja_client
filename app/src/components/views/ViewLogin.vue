@@ -47,8 +47,8 @@ export default {
   props: {
   },
   computed: {
-    auth: function () {
-      return this.$store.getters.getAuth;
+    userData: function () {
+      return this.$store.getters.getUserData;
     }
   },
   methods: {
@@ -62,13 +62,13 @@ export default {
 
       this.$store.commit('makeAPICall',params);
     },
-    login: function (e) {
+    /*login: function (e) {
       this.$store.dispatch('setAuth', {auth: this.email});
       this.$router.push({ name: 'LoggedIn'})
-    },
+    },*/
     loggedIn: function () {
-      if(this.auth){
-        this.$router.push({ name: 'LoggedIn'})
+      if(this.userData.userid){
+        this.$router.push({ name: 'Home'})
       }
     }
   },

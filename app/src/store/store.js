@@ -20,7 +20,9 @@ export const store = new Vuex.Store({
     tabIndexCounter: 0,
     connectionBounds: "",
     userState: "",
-    auth: ""
+    auth: "",
+    userid: "",
+    userData: {}
     //schema: Schema
   },
   mutations: {
@@ -33,7 +35,9 @@ export const store = new Vuex.Store({
       //store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
       //store.commit('resetUserState');
-      store.commit('setAuthFromLocalStorage');
+      //store.commit('setAuthFromLocalStorage');
+      //store.commit('setUserIdFromLocalStorage');
+      store.commit('setUserDataFromLocalStorage');
     },
 
     /*initWallsFromAPI: (state, {}) => {
@@ -49,9 +53,28 @@ export const store = new Vuex.Store({
 
     },*/
 
-    setAuthFromLocalStorage: (state) => {
+    /*setAuthFromLocalStorage: (state) => {
       if (typeof(Storage) !== "undefined") {
         state.auth = localStorage.getItem("auth");
+      } else {
+        console.log("No local storage support")
+      }
+    },
+
+    setUserIdFromLocalStorage: (state) => {
+      if (typeof(Storage) !== "undefined") {
+        state.userData.userid = localStorage.getItem("userid");
+      } else {
+        console.log("No local storage support")
+      }
+    },*/
+
+    setUserDataFromLocalStorage: (state) => {
+      if (typeof(Storage) !== "undefined") {
+        state.userData.auth = localStorage.getItem("auth");
+        state.userData.userid = localStorage.getItem("userid");
+        state.userData.first_name = localStorage.getItem("first_name");
+        state.userData.last_name = localStorage.getItem("last_name");
       } else {
         console.log("No local storage support")
       }
@@ -238,22 +261,25 @@ export const store = new Vuex.Store({
   },
   actions: {
 
-    setAuth: (context, {auth}) => {
+    setUserData: (context, {field,value}) => {
       if (typeof(Storage) !== "undefined") {
-        localStorage.setItem("auth", auth);
+        localStorage.setItem(field, value);
       } else {
         console.log("No local storage support")
       }
-      context.commit('setAuthFromLocalStorage');
+      context.commit('setUserDataFromLocalStorage');
     },
 
-    resetAuth: (context) => {
+    logout: (context) => {
       if (typeof(Storage) !== "undefined") {
         localStorage.removeItem("auth");
+        localStorage.removeItem("userid");
+        localStorage.removeItem("first_name");
+        localStorage.removeItem("last_name");
       } else {
         console.log("No local storage support")
       }
-      context.commit('setAuthFromLocalStorage');
+      context.commit('setUserDataFromLocalStorage');
     },
 
     checkAuth: (context) => {
@@ -285,8 +311,8 @@ export const store = new Vuex.Store({
       return true
     },*/
 
-    getAuth: state => {
-      return state.auth;
+    getUserData: state => {
+      return state.userData;
     },
 
     getUserState: state => {

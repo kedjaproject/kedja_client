@@ -44,8 +44,9 @@ export default {
         endpoint: "auth/credentials/" + this.userid + "/" + this.token,
         method: "post",
         successCallback: (response) => {
-          this.$store.dispatch('setAuth', {auth: response.data.Authorization});
-          this.$router.push({name: "LoggedIn"})
+          this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
+          this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          this.$router.push({name: "Home"})
         }
       }
 
