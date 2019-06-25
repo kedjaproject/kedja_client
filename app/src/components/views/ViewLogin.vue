@@ -18,9 +18,8 @@
       <h3>Logga in / Registrera nytt konto med</h3>
 
         <h2 v-for="method in methods">
-          <a :href="method.url">{{method.title}}</a>
+          <a :href="loginUrl(method)">{{method.title}}</a>
         </h2>
-
 
     </div>
 
@@ -52,6 +51,9 @@ export default {
     }
   },
   methods: {
+    loginUrl: function (method) {
+      return method.url + '?came_from=' + window.location.origin
+    },
     getLoginMethods: function () {
       let params = {
         endpoint: "auth/methods",
