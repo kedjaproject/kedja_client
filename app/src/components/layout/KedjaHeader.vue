@@ -4,8 +4,12 @@
     <kedja-logo></kedja-logo>
 
     <div class="slot">
+
       <slot>
       </slot>
+
+      <!--{{userState}}-->
+      
     </div>
 
     <div class="user">
@@ -46,6 +50,9 @@ export default {
   props: {
   },
   computed: {
+    userState: function () {
+      return this.$store.getters.getUserState;
+    },
     userData: function () {
       return this.$store.getters.getUserData;
     },

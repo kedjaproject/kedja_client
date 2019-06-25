@@ -30,7 +30,6 @@ h1, .h1{
 
 h2, .h2{
   font-family: "Lato";
-  padding: 5px;
   font-weight: 700;
   color: #707070;
   font-size: 1.5em;
@@ -40,7 +39,6 @@ h2, .h2{
 
 h3, .h3{
   font-family: "Lato";
-  padding: 5px;
   font-weight: 300;
   font-size: 1.5em;
   margin-bottom: 0.1em;

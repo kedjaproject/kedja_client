@@ -46,12 +46,12 @@ export default {
   cursor: pointer;
 }
 
-.CardButton:hover{
+.CardButton:hover:not(.active){
   background: lightgray;
 }
 
 .active{
-  background: salmon;
+  background: #ffdc27;
 }
 
 </style>

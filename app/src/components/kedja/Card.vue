@@ -1,15 +1,22 @@
 <template>
-  <div class="Card" :class="{
+  <div class="Card" @click="clicked" :class="{
     'selected': card.states.selected,
+    'selectingConnected': card.states.selectingConnected,
+    'selectingNotConnected': card.states.selectingNotConnected,
     'selectedConnectedOther': card.states.selectedConnected == false,
-    'connected': card.states.connected,
-    'canConnect': card.states.canConnect,
+    'connectingConnected': card.states.connectingConnected,
+    'connectingNotConnected': card.states.connectingNotConnected,
+    'connectingCantConnect': card.states.connectingCantConnect,
     'cannotConnect': canConnect == false && !connecting,
     'connectedOther': card.states.connected == false,
     'connecting': connecting
     }" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <div class="main" @click.capture="clicked">
+    <div class="selectedButtons">
+      <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
+    </div>
+
+    <div class="main">
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
@@ -29,10 +36,7 @@
       Ta bort kort
     </button-->
 
-    <div v-if="card.states.selected" class="selectedButtons">
-      <!--card-button @click.native="removeCard()">🗑️</card-button-->
-      <card-button @click.native="toggleConnecting($event)" :active="card.states.connecting">🔗</card-button>
-    </div>
+
 
   </div>
 </template>
@@ -89,8 +93,8 @@ export default {
       return arr
     },
     connecting: function () {
-      //return this.card.states.connecting == true;
-      return this.userState.name == 'connectCard' && this.userState.data.rid == this.card.rid
+      return this.card.states.connecting == true;
+      //return this.userState.name == 'connectCard' && this.userState.data.rid == this.card.rid
     },
     connected: function () {
       return false;//this.card.states.canConnect && this.card.states.connected;
@@ -111,9 +115,19 @@ export default {
         //}
 
         //selectCard
-        if(s.name == 'selectCard' && s.data.rid == this.card.rid){
+        if(s.name == 'selectCard'){
           //this.$store.commit('setCardState',{card: this.card, stateName: "selected", stateFlag: true});
-          this.setState("selected",true)
+          if(s.data.rid == this.card.rid){ //If this is the card the user is interacting with
+            this.setState("selected",true)
+          }
+          else{ //Unless this is the card the user is interacting with
+            if(this.connectedCardIds.indexOf(s.data.rid) != -1){ //if card is connected
+              this.setState("selectingConnected",true)
+            }
+            else{ //if card is not connected
+              this.setState("selectingNotConnected",true)
+            }
+          }
         }
 
         //connectCard
@@ -124,13 +138,16 @@ export default {
             this.setState("connecting",true)
           }
           else{ //Unless this is the card the user is interacting with
-            if(this.connectedCardIds.indexOf(s.data.rid) != -1){
-              this.setState("connected",true)
+            if(this.connectedCardIds.indexOf(s.data.rid) != -1){ //if card is connected
+              this.setState("connectingConnected",true)
             }
-            else{
+            else{  //if card is not connected
               let cousins = this.$store.getters.getClosestCardCousins(this.card)
               if(cousins.find(c => c.rid == s.data.rid)){ //If not connected and the cards are closest cousins
-                this.setState("canConnect",true)
+                this.setState("connectingNotConnected",true)
+              }
+              else{
+                this.setState("connectingCantConnect",true)
               }
             }
           }
@@ -158,10 +175,10 @@ export default {
       if(this.card.states.connecting){
         this.setSelected()
       }
-      if(this.card.states.canConnect){
+      if(this.card.states.connectingNotConnected){
         this.connect()
       }
-      if(this.card.states.connected){
+      if(this.card.states.connectingConnected){
         this.unconnect()
       }
 
@@ -181,7 +198,7 @@ export default {
     },
     setSelected: function (e){
       //if(e.srcElement == this.$el){
-        if(!this.selected){
+        if(!this.card.states.selected){
 
           //User states
           this.$store.commit('setUserState',{name: "selectCard", data: {rid: this.card.rid}});
@@ -217,9 +234,9 @@ export default {
         }
       //}
     },
-    toggleConnecting: function (e){
-      console.log("connecting " + this.connecting)
-      if(!this.connecting){
+    toggleConnecting: function (){
+      console.log("Toggle connecting from " + this.card.states.connecting)
+      if(!this.card.states.connecting){
 
         //User states
         this.$store.commit('setUserState',{name: "connectCard", data: {rid: this.card.rid}});
@@ -289,16 +306,18 @@ export default {
   position: relative;
   background-clip: padding-box !important;
   margin-bottom: 10px;
-}
-
-.main{
-  padding: 15px;
   cursor: pointer;
 }
 
+h3{
+  margin-top: 0;
+}
+
+.main{
+  padding: 10px;
+}
+
 .selectedButtons{
-  padding: 5px;
-  background: rgb(245,245,245);
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -319,13 +338,31 @@ export default {
   outline: 0;
 }
 
-.connecting, .connected{
-  border: 5px solid salmon;
+.selectingConnected {
 }
 
-.canConnect{
-  border: 5px solid forestgreen;
+.selectingNotConnected {
+  filter: opacity(0.6);
 }
+
+.connecting{
+  border: 5px solid #ffdc27;
+  background: lightyellow;
+  outline: 0;
+}
+
+.connectingConnected{
+  border: 5px solid #ffdc27;
+}
+
+.connectingNotConnected{
+}
+
+.connectingCantConnect{
+  filter: opacity(0.6);
+}
+
+
 
 .cannotConnect{
   /*filter: opacity(0.5);*/

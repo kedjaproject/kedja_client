@@ -130,33 +130,32 @@ export default {
       var y0 = this.y0;
       var y1 = this.y1;
 
-      /*
-      ctx.moveTo(0, y0);
-      //ctx.lineTo(this.width, y1);
-      ctx.bezierCurveTo(this.width / 2, y0, this.width / 2, y1, this.width, y1);
-      ctx.stroke();
-      */
 
+      ctx.moveTo(0, y0);
+      ctx.lineTo(this.width, y1);
+      //ctx.bezierCurveTo(this.width / 2, y0, this.width / 2, y1, this.width, y1);
+      ctx.stroke();
 
       //Pipe 90deg angles
-      ctx.moveTo(0, y0);
+      /*ctx.moveTo(0, y0);
       ctx.lineTo(this.width / 2, y0);
       ctx.lineTo(this.width / 2, y1);
       ctx.lineTo(this.width, y1);
       ctx.stroke();
 
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 3;*/
 
 
+      ctx.fillStyle = "#ffdc27";
       //Start circle
-      /*ctx.beginPath();
-      ctx.arc(0, y0, 5, 0, 2 * Math.PI);
+      ctx.beginPath();
+      ctx.arc(0, y0, 15, 0, 2 * Math.PI);
       ctx.fill();
 
       //End circle
       ctx.beginPath();
-      ctx.arc(this.width, y1, 5, 0, 2 * Math.PI);
-      ctx.fill();*/
+      ctx.arc(this.width, y1, 15, 0, 2 * Math.PI);
+      ctx.fill();
 
 
     }

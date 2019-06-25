@@ -89,6 +89,7 @@ export const store = new Vuex.Store({
     setUserState: (state, {name, data}) => {
       store.commit('setDirtyDraw');
       state.userState = {name: name, data: data ? data : {}, rand: Math.random()}
+      //console.log(state.userState)
     },
 
     forceUserStateUpdate: (state) => {
@@ -355,6 +356,9 @@ export const store = new Vuex.Store({
 
     getUserState: state => {
       return state.userState;
+    },
+
+    getUserInitials: state => {
     },
 
     getActiveWall: state => () => {
