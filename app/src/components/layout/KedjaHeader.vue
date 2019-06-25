@@ -63,8 +63,18 @@ export default {
       this.$router.push({ name: 'Walls'})
     },
     logout: function (e) {
-      this.$store.dispatch('logout');
-      this.$router.push({ name: 'Login'})
+
+      let params = {
+        endpoint: "auth/logout",
+        method: "post",
+        successCallback: (response) => {
+          this.$store.dispatch('logout');
+          this.$router.push({ name: 'Login'})
+        }
+      }
+
+      this.$store.commit('makeAPICall',params);
+
     }
   },
   mounted: function () {
