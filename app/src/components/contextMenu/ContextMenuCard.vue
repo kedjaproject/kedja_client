@@ -1,9 +1,9 @@
 <template>
   <div class="ContextMenuCard">
 
-    <pre>
+    <!--pre>
       {{card}}
-    </pre>
+    </pre-->
 
     <div class="header">
       <input v-model="card.data.title" class="h2" @change="updateTitle()"/>
