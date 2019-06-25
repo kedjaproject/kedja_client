@@ -55,8 +55,11 @@ export default {
         endpoint: "auth/register/" + this.registerToken,
         method: "post",
         successCallback: (response) => {
-          this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
-          this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          console.log(response)
+          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name});
+          //this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
+          //this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          this.$router.push({name: "Home"})
         }
       }
 

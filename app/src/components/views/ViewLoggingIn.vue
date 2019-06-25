@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewRegister">
+  <div class="ViewLoggingIn">
 
     <kedja-header>
     </kedja-header>
@@ -17,7 +17,7 @@ import KedjaHeader from '@/components/layout/KedjaHeader'
 //import Component from '@/components/Component'
 
 export default {
-  name: 'ViewRegister',
+  name: 'ViewLoggingIn',
   components: {
     KedjaHeader
   },
@@ -44,14 +44,16 @@ export default {
         endpoint: "auth/credentials/" + this.userid + "/" + this.token,
         method: "post",
         successCallback: (response) => {
-          this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
-          this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          console.log(response)
+          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name});
+          //this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
+          //this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
           this.$router.push({name: "Home"})
         }
       }
 
       this.$store.commit('makeAPICall',params);
-    }
+    },
   },
   created: function () {
   },
@@ -63,7 +65,7 @@ export default {
 
 <style scoped>
 
-.ViewRegister{
+.ViewLoggingIn{
   /* LAYOUT */
   display: flex;
   flex-direction: column;

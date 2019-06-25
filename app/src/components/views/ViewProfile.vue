@@ -15,10 +15,10 @@
 
       <form @submit.prevent="updateProfile">
         <label>
-          <input type="text" v-model="userDataEditable.first_name" />
+          <input type="text" v-model="userDataEditable.first_name" placeholder="Förnamn" />
         </label>
         <label>
-          <input type="text" v-model="userDataEditable.last_name" />
+          <input type="text" v-model="userDataEditable.last_name" placeholder="Efternamn" />
         </label>
         <button type="submit">Spara ändringar</button>
       </form>
@@ -55,7 +55,7 @@ export default {
       let params = {
         endpoint: "users/" + this.userData.userid,
         successCallback: (response) => {
-          this.userProfile = response.data;
+          this.userDataEditable = response.data.data;
         }
       }
 
@@ -76,10 +76,10 @@ export default {
       }
 
       this.$store.commit('makeAPICall',params);
-    }
+    },
   },
   created: function () {
-    this.userDataEditable = Object.assign({}, this.userData);
+
   },
   mounted: function () {
     this.getUserProfile();

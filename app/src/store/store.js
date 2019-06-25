@@ -270,6 +270,19 @@ export const store = new Vuex.Store({
       context.commit('setUserDataFromLocalStorage');
     },
 
+    login: (context, {auth,userid,first_name,last_name}) => {
+      if (typeof(Storage) !== "undefined") {
+        context.dispatch('setUserData', {field: "auth", value: auth});
+        context.dispatch('setUserData', {field: "userid", value: userid});
+        context.dispatch('setUserData', {field: "first_name", value: first_name});
+        context.dispatch('setUserData', {field: "last_name", value: last_name});
+      } else {
+        console.log("No local storage support")
+      }
+      context.commit('setUserDataFromLocalStorage');
+      //context.dispatch('setUserProfileFromAPI')
+    },
+
     logout: (context) => {
       if (typeof(Storage) !== "undefined") {
         localStorage.removeItem("auth");
@@ -280,6 +293,29 @@ export const store = new Vuex.Store({
         console.log("No local storage support")
       }
       context.commit('setUserDataFromLocalStorage');
+    },
+
+    setUserProfileFromAPI: (context) => {
+
+      let userData = store.getters.getUserData
+
+      let params = {
+        endpoint: "users/" + this.userData.userid,
+        successCallback: (response) => {
+
+          if (typeof(Storage) !== "undefined") {
+            this.$store.dispatch('setUserData', {field: "first_name", value: response.data.data.first_name});
+            this.$store.dispatch('setUserData', {field: "last_name", value: response.data.data.last_name});
+          } else {
+            console.log("No local storage support")
+          }
+
+          context.commit('setUserDataFromLocalStorage');
+
+        }
+      }
+
+      this.$store.commit('makeAPICall',params);
     },
 
     checkAuth: (context) => {
