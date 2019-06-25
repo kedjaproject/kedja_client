@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
     walls: wallModule
   },
   state: {
+    env: {},
     walls: [],
     activeWallId: 0,
     activeWall: "",
@@ -30,7 +31,8 @@ export const store = new Vuex.Store({
     /*myMutation: (state, {param}) => {
     },*/
 
-    init: (state, {}) => {
+    init: (state, {env}) => {
+      Vue.set(state,'env',env);
       //state.walls = walls.slice();
       //store.commit('initWallsFromAPI',{});
       //store.commit('prepareData',{});
@@ -236,7 +238,7 @@ export const store = new Vuex.Store({
 
       axios({
         method: method,
-        url:'https://staging-server.kedja.org/api/1/' + payload.endpoint,
+        url: state.env.API_SERVER + state.env.API_PATH + payload.endpoint,
         headers: {
           Authorization: store.getters.getUserData.auth
         },

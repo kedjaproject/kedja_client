@@ -17,8 +17,14 @@ export default {
     KedjaHeader,
     KedjaFooter
   },
+  data () {
+    return {
+      env: process.env
+    }
+  },
   created: function () {
-    this.$store.commit('init',{});
+    this.$store.commit('init',{env: this.env});
+
   },
   mounted: function () {
     document.activeElement.blur()
