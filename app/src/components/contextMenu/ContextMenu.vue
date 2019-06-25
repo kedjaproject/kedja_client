@@ -77,7 +77,7 @@ export default {
 
   background: white;
 
-  padding: 20px;
+  padding: 0px;
 
 }
 
@@ -98,6 +98,7 @@ export default {
 }
 
 .menuContent{
+  padding: 20px;
   /*flex: 1;
   overflow-y: scroll;*/
 }

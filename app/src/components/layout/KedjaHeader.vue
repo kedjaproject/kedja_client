@@ -18,7 +18,7 @@
           </div>
         </drop-down>
       </div>
-      <div v-else>
+      <div v-else class="right">
         <router-link :to="{ name: 'Login'}">Logga in</router-link>
       </div>
 
@@ -79,7 +79,6 @@ export default {
 
 .user{
   flex: 0 1 200px;
-  align-items: flex-end;
 }
 
 .right{

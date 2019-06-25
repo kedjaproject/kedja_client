@@ -315,7 +315,8 @@ export default {
 }
 
 .selected{
-  background: #eeffee;
+  border: 5px solid #ffdc27;
+  outline: 0;
 }
 
 .connecting, .connected{

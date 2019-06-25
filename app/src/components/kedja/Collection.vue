@@ -23,7 +23,7 @@
     </div>
 
     <div class="collectionFooter">
-      <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">Lägg till nytt kort</button>
+      <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">+ Nytt kort</button>
     </div>
 
 
