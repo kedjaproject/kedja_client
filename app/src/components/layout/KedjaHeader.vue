@@ -13,7 +13,8 @@
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
             <router-link :to="{ name: 'Profile'}">
-              {{userData.first_name}} {{userData.last_name}}
+              <span v-if="userFullName.length">{{userFullName}}</span>
+              <span v-else>Inloggad användare</span>
             </router-link>
           </div>
         </drop-down>
@@ -47,6 +48,11 @@ export default {
   computed: {
     userData: function () {
       return this.$store.getters.getUserData;
+    },
+    userFullName: function () {
+      if(this.userData.first_name && this.userData.last_name){
+        return this.userData.first_name + " " + this.userData.last_name;
+      }
     }
   },
   methods: {
