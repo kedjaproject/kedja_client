@@ -1,6 +1,10 @@
 <template>
   <div class="ContextMenuCard">
 
+    <pre>
+      {{card}}
+    </pre>
+
     <div class="header">
       <input v-model="card.data.title" class="h2" @change="updateTitle()"/>
       <card-button @click.native="removeCard()">🗑️</card-button>
@@ -11,21 +15,29 @@
     <h3>
       Beskrivning
     </h3>
-    <p>
-      Denna funktion är under utveckling
-    </p>
-    <textarea placeholder="Lägg till beskrivning"></textarea>
+    <textarea placeholder="Lägg till beskrivning" readonly>Här kommer du att kunna lägga till en kortare beskrivning av kortet i fritextfält.</textarea>
 
     <h3>
       Åtgärder
     </h3>
     <p>
-      Denna funktion är under utveckling
+      Här kommer du att kunna ladda upp bilagor såsom pdf:er, bilder etc. som har med kortet att göra. Här hittar du även funktioner som hjälper dig att organisera och struktura kortet med:
+      <ul>
+        <li>
+          ansvarig (användare som ansvarar för specifikt kort.
+        </li>
+        <li>
+          indikator (knapp med 3 lägen som påvisar kortets status; planerad/påbörjad/avslutad)
+        </li>
+        <li>
+          slutdatum (datum då kortets aktivitet ska/bör vara uppfylld)
+        </li>
+      </ul>
     </p>
 
     <h3>Kommentarer</h3>
     <p>
-      Denna funktion är under utveckling
+      Här kommer du att kunna kommentera tankar och ändringar som rör kortet med andra användare.
     </p>
 
   </div>

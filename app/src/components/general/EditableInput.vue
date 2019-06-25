@@ -102,7 +102,7 @@ export default {
   }
 
   .textSpan:hover{
-    color: #ACCECC
+    color: black;
   }
 
   input, textarea{

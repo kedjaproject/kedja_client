@@ -8,8 +8,8 @@
     </kedja-header>
 
     <div class="content">
-      <wall :wall="wall"></wall>
-      <context-menu class="contextMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu>
+      <wall :wall="wall" class="wall"></wall>
+      <context-menu class="contextMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '100px'}"></context-menu>
     </div>
 
   </div>
@@ -99,12 +99,17 @@ export default {
 
 }
 
+.wall{
+  flex: 1;
+}
+
 .contextMenu{
   flex-basis: 300px;
   flex: 0 0;
   border: 1px solid lightgray;
   transition: all 0.5s;
   overflow: hidden;
+  overflow-y: scroll;
 }
 
 </style>

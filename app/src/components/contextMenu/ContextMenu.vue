@@ -6,8 +6,10 @@
       <span v-else>&#9664;</span>
     </div>
 
-    <div v-if="card">
-      <ContextMenuCard :card="card"></ContextMenuCard>
+    <div class="menuContent">
+      <div v-if="card">
+        <ContextMenuCard :card="card"></ContextMenuCard>
+      </div>
     </div>
 
   </div>
@@ -67,9 +69,12 @@ export default {
 <style scoped>
 
 .ContextMenu{
+
+  display: flex;
+  flex-direction: column;
+
   position: relative;
 
-  width: 300px;
   background: white;
 
   padding: 20px;
@@ -90,6 +95,11 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.menuContent{
+  /*flex: 1;
+  overflow-y: scroll;*/
 }
 
 .forceClose{
