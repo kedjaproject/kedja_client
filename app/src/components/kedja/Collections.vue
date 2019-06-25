@@ -43,14 +43,15 @@ export default {
     unconnect: function (p) {
       this.$emit('unconnect',p)
     },
-    handleScroll: function () {
+    /*handleScroll: function () {
       this.$store.commit('setDirtyDraw');
-    }
+    }*/
   },
   created: function () {
   },
   mounted: function () {
-    this.$refs.collections.addEventListener('scroll', this.handleScroll);
+    //this.$refs.collections.addEventListener('scroll', this.handleScroll);
+    this.$emit('mounted')
   }
 }
 </script>

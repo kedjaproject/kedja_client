@@ -8,8 +8,8 @@
       <slot>
       </slot>
 
-      <!--{{userState}}-->
-      
+      <!--span>{{userState}}</span-->
+
     </div>
 
     <div class="user">

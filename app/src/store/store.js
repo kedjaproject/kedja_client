@@ -370,9 +370,11 @@ export const store = new Vuex.Store({
       let cardFound = undefined;
       let wall = store.getters.getActiveWall()
       wall.collections.forEach((collection, iCollection) => {
-        let card = collection.cards.find(c => c.rid == id);
-        if(card){
-          cardFound = card;
+        if(collection.cards){
+          let card = collection.cards.find(c => c.rid == id);
+          if(card){
+            cardFound = card;
+          }
         }
       })
       return cardFound

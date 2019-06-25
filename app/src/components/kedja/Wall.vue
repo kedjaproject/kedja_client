@@ -10,8 +10,8 @@
     </div>
 
     <div class="wallContent" ref="wallContent">
-      <div id="collections">
-        <collections :collections="collections" :prid="wall.prid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect"></collections>
+      <div id="collections" ref="colls">
+        <collections :collections="collections" :prid="wall.prid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
       </div>
       <div class="connections">
         <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
@@ -207,8 +207,11 @@ export default {
       this.$store.commit('makeAPICall',params);
     },
     handleScroll: function () {
-      console.log("scroll")
       this.$store.commit('setDirtyDraw');
+    },
+    collectionsMounted: function () {
+      //document.getElementById('collections').addEventListener('scroll', this.handleScroll);
+      this.$refs.colls.addEventListener('scroll', this.handleScroll);
     }
   },
   created: function () {
@@ -224,7 +227,7 @@ export default {
     })*/
 
     //this.$refs.collections.addEventListener('scroll', this.handleScroll);
-    //document.getElementById('collections').addEventListener('scroll', this.handleScroll);
+
   },
   updated: function () {
 
