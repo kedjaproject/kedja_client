@@ -8,8 +8,13 @@
     </kedja-header>
 
     <div class="content">
-      <wall :wall="wall" class="wall"></wall>
-      <context-menu class="contextMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '100px'}"></context-menu>
+      <wall :wall="wall" class="mywall"></wall>
+      <context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu>
+      <!--context-menu class="cxtMenu" v-model="menuOpen"></context-menu-->
+      <!--div class="wlls">
+      </div-->
+      <!--div class="menu">
+      </div-->
     </div>
 
   </div>
@@ -81,6 +86,7 @@ export default {
 <style scoped>
 
 .ViewWall{
+
   /* LAYOUT */
   display: flex;
   flex-direction: column;
@@ -89,27 +95,37 @@ export default {
 
 .content{
 
+  /*vertical flex*/
   flex: 1;
   overflow: hidden;
 
   /* LAYOUT */
   display: flex;
   flex-direction: row;
-  transition: all 0.5s;
+  justify-content: space-between;
+  /*transition: all 0.5s;*/
 
 }
 
-.wall{
+.mywall{
   flex: 1;
 }
 
-.contextMenu{
-  flex-basis: 300px;
+.cxtMenu{
   flex: 0 0;
   border: 1px solid lightgray;
-  transition: all 0.5s;
-  overflow: hidden;
   overflow-y: scroll;
+  transition: all 0.5s;
+}
+
+.wlls{
+  flex: 1;
+  background: green;
+}
+
+.menu{
+  flex: 0 0 400px;
+  background: red;
 }
 
 </style>

@@ -67,7 +67,7 @@ export default {
   flex-direction: row;
 
   /* STYLING */
-  overflow-x: scroll;
+  /*overflow-x: scroll;*/
 }
 
 .collection{

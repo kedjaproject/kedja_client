@@ -7,19 +7,11 @@
         <EditableInput v-model="data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
-      <!--div>
-        {{connections}}
-      </div-->
-
     </div>
 
     <div class="wallContent" ref="wallContent">
       <div id="collections">
         <collections :collections="collections" :prid="wall.prid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect"></collections>
-
-
-        <!--collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="wall.rid"></collection-->
-
       </div>
       <div class="connections">
         <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
@@ -28,12 +20,6 @@
 
     <div class="wallFooter">
     </div>
-
-
-
-    <!--div v-if="connections.length">
-      <connection :from="connections[0].members[0]" :to="connections[0].members[1]"></connection>
-    </div-->
 
   </div>
 </template>
@@ -251,13 +237,12 @@ export default {
 
 .Wall{
 
-  flex: 1;
-
   /* LAYOUT */
   display: flex;
   flex-direction: column;
 
   /* STYLING */
+  overflow-x: hidden;
 
 }
 
@@ -278,6 +263,7 @@ export default {
 
 #collections{
   display: flex;
+  overflow-x: scroll;
 
   flex: 1;
 }

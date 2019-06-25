@@ -1,10 +1,10 @@
 <template>
   <div class="ContextMenu">
 
-    <div class="handle" @click="toggleForceClose()" :class="{'forceClose': forceClose}">
+    <!--div class="handle" @click="toggleForceClose()" :class="{'forceClose': forceClose}">
       <span v-if="hasContent">&#9658;</span>
       <span v-else>&#9664;</span>
-    </div>
+    </div-->
 
     <div class="menuContent">
       <div v-if="card">
