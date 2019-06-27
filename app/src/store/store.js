@@ -23,7 +23,8 @@ export const store = new Vuex.Store({
     userState: "",
     auth: "",
     userid: "",
-    userData: {}
+    userData: {},
+    dirtyDraw: true
     //schema: Schema
   },
   mutations: {
@@ -40,6 +41,7 @@ export const store = new Vuex.Store({
       //store.commit('setAuthFromLocalStorage');
       //store.commit('setUserIdFromLocalStorage');
       store.commit('setUserDataFromLocalStorage');
+      store.commit('setDirtyDraw');
     },
 
     /*initWallsFromAPI: (state, {}) => {
@@ -186,12 +188,12 @@ export const store = new Vuex.Store({
 
       let wall = store.getters.getActiveWall();
 
-      Vue.set(wall,'dirtyDraw',true)
+      Vue.set(state,'dirtyDraw',true)
 
-      state.connectionBounds = document.getElementsByClassName("collectionContent")[0].getBoundingClientRect();
+      //state.connectionBounds = document.getElementsByClassName("collectionContent")[0].getBoundingClientRect();
 
       Vue.nextTick().then(function () {
-        Vue.set(wall,'dirtyDraw',false)
+        Vue.set(state,'dirtyDraw',false)
       })
 
     },

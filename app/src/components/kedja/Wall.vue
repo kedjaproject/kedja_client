@@ -11,10 +11,16 @@
 
     <div class="wallContent" ref="wallContent">
       <div id="collections" ref="colls">
-        <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-      </div>
-      <div class="connections">
-        <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
+
+        <div class="wrapper">
+
+          <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+          <!--connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection-->
+
+          <connections :connections="connections" boundsElementId="collections" class="connections"></connections>
+
+        </div>
+
       </div>
     </div>
 
@@ -32,6 +38,7 @@ import DropDown from '@/components/DropDown'
 import Collections from './Collections'
 import Collection from './Collection'
 import Connection from './Connection'
+import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
 export default {
@@ -42,6 +49,7 @@ export default {
     Collections,
     Collection,
     Connection,
+    Connections,
     EditableInput
   },
   data () {
@@ -269,9 +277,23 @@ export default {
 
 #collections{
   display: flex;
+  flex-direction: row;
   overflow-x: scroll;
-
   flex: 1;
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.connections{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 </style>

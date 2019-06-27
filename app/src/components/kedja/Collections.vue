@@ -1,9 +1,9 @@
 <template>
   <div class="Collections" ref="collections">
 
-      <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
+    <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
 
-      <button @click="createCollection" title="Lägg till ny samling" class="new">+ Ny samling</button>
+    <button @click="createCollection" title="Lägg till ny samling" class="new">+ Ny samling</button>
 
   </div>
 </template>
@@ -15,7 +15,7 @@ import Collection from './Collection'
 export default {
   name: 'Collections',
   components: {
-    Collection,
+    Collection
   },
   data () {
     return {
@@ -27,6 +27,9 @@ export default {
     prid: ""
   },
   computed: {
+    dirtyDraw: function () {
+      return this.$store.state.dirtyDraw
+    }
   },
   watch: {
   },
@@ -61,25 +64,35 @@ export default {
 
 .Collections{
 
+  flex: 1 0;
+
+  /* LAYOUT */
+  display: inline-flex;
+  flex-direction: row;
+
+  /* STYLING */
+  /*overflow-x: scroll;*/
+  /*position: relative;*/
+}
+
+.wrapper{
   flex: 1;
 
   /* LAYOUT */
   display: flex;
   flex-direction: row;
-
-  /* STYLING */
-  /*overflow-x: scroll;*/
+  position: relative;
+  width: 100%;
 }
 
 .collection{
-  flex: 0 0 300px;
+  /*flex: 0 0 300px;*/
+  min-width: 300px;
 }
-
 
 .new{
   align-self: center;
   margin: 10px;
 }
-
 
 </style>

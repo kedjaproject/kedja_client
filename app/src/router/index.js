@@ -8,6 +8,7 @@ import ViewRegister from '@/components/views/ViewRegister'
 import ViewProfile from '@/components/views/ViewProfile'
 import ViewWallList from '@/components/views/ViewWallList'
 import ViewWall from '@/components/views/ViewWall'
+import ScrollTest from '@/components/ScrollTest'
 
 Vue.use(Router)
 
@@ -54,6 +55,12 @@ export default new Router({
       path: '/walls/:wallId',
       name: 'ViewWall',
       component: ViewWall
+    },
+    {
+      path: '/scrollTest',
+      name: 'ScrollTest',
+      component: ScrollTest
     }
+
   ]
 })
