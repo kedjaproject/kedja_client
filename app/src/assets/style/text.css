@@ -30,17 +30,17 @@ h1, .h1{
 
 h2, .h2{
   font-family: "Lato";
-  font-weight: 700;
+  font-weight: 500;
   color: #707070;
-  font-size: 1.5em;
+  font-size: 1.7em;
   margin-bottom: 0.1em;
 
 }
 
 h3, .h3{
   font-family: "Lato";
-  font-weight: 300;
-  font-size: 1.5em;
+  font-weight: 500;
+  font-size: 1.4em;
   margin-bottom: 0.1em;
   color: gray;
 }

@@ -19,16 +19,6 @@
       </router-link-box>
     </div>
 
-    <h3>Gemensamma väggar</h3>
-
-    <div class="wallBoxes">
-      <router-link-box :to="{ name: 'ViewWall', params: {wallId: wall.rid} }" color="lightsteelblue" v-for="wall in walls" class="wallBox">
-        <h3>
-          {{wall.data.title}}
-        </h3>
-      </router-link-box>
-    </div>
-
   </div>
 </template>
 

@@ -227,6 +227,15 @@ export const store = new Vuex.Store({
 
     },
 
+    removeConnectionsByCardId: (state, cardId) => {
+
+      let wall = store.getters.getActiveWall();
+      console.log(wall.connections)
+      Vue.set(wall,'connections',wall.connections.filter(c => c.members.indexOf(cardId) == -1));
+      console.log(wall.connections)
+      store.commit('forceUserStateUpdate');
+    },
+
     //API
 
     makeAPICall: (state, payload) => {

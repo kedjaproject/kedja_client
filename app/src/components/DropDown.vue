@@ -83,7 +83,7 @@ export default {
 }
 
 .listItem:hover{
-  background: lightgray;
+  background: #eee;
 }
 
 </style>

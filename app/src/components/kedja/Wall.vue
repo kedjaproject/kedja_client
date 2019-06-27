@@ -11,7 +11,7 @@
 
     <div class="wallContent" ref="wallContent">
       <div id="collections" ref="colls">
-        <collections :collections="collections" :prid="wall.prid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+        <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
       </div>
       <div class="connections">
         <connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection>
@@ -129,7 +129,7 @@ export default {
         endpoint: "walls/" + this.wall.rid,
         method: "delete",
         successCallback: (data) => {
-          this.$router.push({ name: 'ViewWallList'})
+          this.$router.push({ name: 'Walls'})
         },
       }
 
@@ -192,14 +192,17 @@ export default {
         endpoint: "walls/" + this.wall.rid + "/relations/" + connection.relation_id,
         method: "delete",
         successCallback: (data) => {
-          console.log(data)
 
           let index = this.wall.connections.indexOf(connection)
+          console.log(index)
+          console.log(connection.relation_id)
+          console.log(this.wall.connections)
           if(index != -1){
             this.wall.connections.splice(index,1)
             //this.$store.commit('setDirtyDraw');
             this.$store.commit('forceUserStateUpdate');
           }
+          console.log(this.wall.connections)
 
         },
       }

@@ -6,7 +6,7 @@
     </pre-->
 
     <div class="header">
-      <input v-model="card.data.title" class="h2" @change="updateTitle()"/>
+      <input v-model="card.data.title" class="h3" @change="updateTitle()"/>
       <card-button @click.native="removeCard()">🗑️</card-button>
     </div>
 
@@ -15,7 +15,7 @@
     <h3>
       Beskrivning
     </h3>
-    <textarea placeholder="Lägg till beskrivning" readonly>Här kommer du att kunna lägga till en kortare beskrivning av kortet i fritextfält.</textarea>
+    <p>Här kommer du att kunna lägga till en kortare beskrivning av kortet i fritextfält.</p>
 
     <h3>
       Åtgärder
@@ -84,10 +84,9 @@ export default {
         endpoint: "collections/" + this.collection.rid + "/cards/" + this.card.rid,
         method: "delete",
         successCallback: (data) => {
-          console.log(data)
-
           let index = this.collection.cards.indexOf(this.card)
           if(index != -1){
+            this.$store.commit('removeConnectionsByCardId',this.card.rid)
             this.collection.cards.splice(index,1)
           }
 

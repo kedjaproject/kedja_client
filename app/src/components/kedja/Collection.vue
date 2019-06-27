@@ -177,7 +177,7 @@ export default {
 }
 
 .collectionContent{
-  padding: 20px;
+  padding: 30px;
   flex: 1;
   overflow-y: scroll;
 }

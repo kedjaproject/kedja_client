@@ -12,7 +12,7 @@
     'connecting': connecting
     }" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
 
-    <div class="selectedButtons">
+    <div class="top">
       <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
     </div>
 
@@ -32,9 +32,9 @@
       </pre-->
     </div>
 
-    <!--button class="remove" v-if="hovering" @click="removeCard">
-      Ta bort kort
-    </button-->
+    <div class="bottom">
+
+    </div>
 
 
 
@@ -262,15 +262,16 @@ export default {
     },
     connect: function () {
       console.log("Connect")
-      let cardOther = this.$store.getters.getCardsByState('connecting')[0]
+      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
       this.$emit('connect',{members: [cardOther.rid, this.card.rid]})
     },
     unconnect: function () {
       console.log("Unconnect")
-      let cardOther = this.$store.getters.getCardsByState('connecting')[0]
+      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
       this.$emit('unconnect',{members: [cardOther.rid, this.card.rid]})
     },
     removeCard: function () {
+      this.$store.commit('removeConnectionsByCardId',this.card.rid)
       this.$emit('removeCard',this.card)
     },
     updateTitle: function (title) {
@@ -302,25 +303,31 @@ export default {
   border-bottom: 5px solid transparent;*/
   background: #FFFFFF;
   /*transition: all 0.1s;*/
-  display: inline-block;
-  position: relative;
-  background-clip: padding-box !important;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 h3{
   margin-top: 0;
 }
 
-.main{
-  padding: 10px;
-}
-
-.selectedButtons{
+.top{
+  flex: 1 0 20px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.main{
+  flex: 1;
+  padding: 10px;
+}
+
+.bottom{
+  flex: 1 0 20px;
 }
 
 .selectedButtons * {
