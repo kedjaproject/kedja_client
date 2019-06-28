@@ -434,14 +434,11 @@ export const store = new Vuex.Store({
     getCollectionByCard: state => (card) => {
       let wall = store.getters.getActiveWall()
       return wall.collections.find(collection => collection.cards.indexOf(card) != -1)
+    },
 
-      /*wall.contained.forEach((collection, iCollection) => {
-        let card = collection.contained.find(c => c.rid == card.rid);
-        if(card){
-          collectionFound = collection;
-        }
-      })
-      return collectionFound*/
+    getCollectionArrayIdByCardId: state => (id) => {
+      let wall = store.getters.getActiveWall()
+      return wall.collections.findIndex(collection => collection.cards.find(card => card.rid == id ))
     },
 
     getCardsByState: state => (stateName) => {
@@ -473,13 +470,49 @@ export const store = new Vuex.Store({
         return []
       }
 
-      let connections = allConnections.filter(c => c.members[+!forward] == id)
+      //let connections = allConnections.filter(c => c.members[+!forward] == id)
+      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) != -1)
+
+      let nextCardIds = []
+      let connectionsRightDirection = []
+      connectionsBothDirections.forEach((c) => {
+        let col0 = store.getters.getCollectionArrayIdByCardId(c.members[0])
+        let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
+        let indexForward = col1 > col0 ? 1 : 0
+        let indexSelf = c.members.indexOf(id)
+        let indexOther = +!indexSelf //turns 1 to 0, and 0 to 1
+        if(forward == (indexForward == indexOther)){
+          nextCardIds.push(c.members[indexOther]);
+          connectionsRightDirection.push(c)
+        }
+      })
+
+      console.log(nextCardIds)
+
       let cc = [];
+      nextCardIds.forEach((cardId) => {
+        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,cardId,forward));
+      })
+      connectionsRightDirection = connectionsRightDirection.concat(cc);
+
+      /*connections = connections.filter(c => {
+        let col0 = store.getters.getCollectionArrayIdByCardId(c.members[0])
+        let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
+        let indexForward = col1 > col0 ? 1 : 0
+        let indexSelf = c.members.indexOf(id)
+        console.log(indexSelf)
+        let retVal = forward == (indexForward != indexSelf)
+        console.log(retVal)
+        return false
+      })*/
+
+      /*let cc = [];
       connections.forEach((connection, iConnection) => {
         cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,connection.members[+forward],forward));
       })
-      connections = connections.concat(cc);
-      return connections;
+      connections = connections.concat(cc);*/
+
+      return connectionsRightDirection;
     },
 
     getClosestArraySiblings: state => (array,item) => {

@@ -23,8 +23,8 @@
       <h3>
         {{card.data.title}}
       </h3>
-      <!--h4>{{card.rid}}</h4>
-      <div>
+      <!--h4>{{card.rid}}</h4-->
+      <!--div>
         {{deepConnectedCardIds}}
       </div>
       <br />
