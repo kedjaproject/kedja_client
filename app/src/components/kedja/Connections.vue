@@ -115,14 +115,14 @@ export default {
         if(el0.getBoundingClientRect().x < el1.getBoundingClientRect().x){
           elLeft = el0;
           elRight = el1;
-          inSelectedChainLeft = c0.states.selected || c0.states.selectingConnected
-          inSelectedChainRight = c1.states.selected || c1.states.selectingConnected
+          inSelectedChainLeft = c0.states.selected || c0.states.selectingConnected || c0.states.connectingConnected
+          inSelectedChainRight = c1.states.selected || c1.states.selectingConnected || c1.states.connectingConnected
         }
         else{
           elLeft = el1;
           elRight = el0;
-          inSelectedChainLeft = c1.states.selected || c1.states.selectingConnected
-          inSelectedChainRight = c0.states.selected || c0.states.selectingConnected
+          inSelectedChainLeft = c1.states.selected || c1.states.selectingConnected || c1.states.connectingConnected
+          inSelectedChainRight = c0.states.selected || c0.states.selectingConnected || c0.states.connectingConnected
         }
 
         //Start point
@@ -137,7 +137,7 @@ export default {
         ctx.lineWidth = 5;
         ctx.strokeStyle = "#ffff"
 
-        if(this.userState.name == "selectCard"){
+        if(this.userState.name == "selectCard" || this.userState.name == "connectCard"){
           if(inSelectedChainLeft && inSelectedChainRight){
           }
           else{

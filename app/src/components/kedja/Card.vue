@@ -265,7 +265,6 @@ export default {
   flex-direction: column;
   margin-bottom: 10px;
   cursor: pointer;
-  box-sizing: border-box;
 }
 
 h3{

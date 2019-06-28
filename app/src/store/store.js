@@ -487,8 +487,6 @@ export const store = new Vuex.Store({
         }
       })
 
-      console.log(nextCardIds)
-
       let cc = [];
       nextCardIds.forEach((cardId) => {
         cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,cardId,forward));
