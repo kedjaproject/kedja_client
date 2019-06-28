@@ -1,5 +1,5 @@
 <template>
-  <div class="ContextMenu">
+  <div class="ContextMenu" @click.stop>
 
     <!--div class="handle" @click="toggleForceClose()" :class="{'forceClose': forceClose}">
       <span v-if="hasContent">&#9658;</span>

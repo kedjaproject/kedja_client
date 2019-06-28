@@ -25,8 +25,23 @@ export default {
     boundsElementId: ""
   },
   computed: {
+    userState: function () {
+      return this.$store.getters.getUserState
+    },
     dirtyDraw: function () {
       return this.$store.state.dirtyDraw
+    },
+    connectionCards: function () {
+      let connectionCards = []
+      this.connections.forEach((conn) => {
+        connectionCards.push({
+          members: [
+            this.$store.getters.getCardById(conn.members[0]),
+            this.$store.getters.getCardById(conn.members[1])
+          ]
+        })
+      })
+      return connectionCards
     }
   },
   watch: {
@@ -37,9 +52,9 @@ export default {
       deep: false
     }*/
     dirtyDraw: function (val){
-      if(val){
+      //if(val){
         this.redraw();
-      }
+      //}
     }
   },
   methods: {
@@ -74,26 +89,28 @@ export default {
       var ctx = c.getContext("2d");
       ctx.clearRect(0, 0, c.width, c.height);
 
-      ctx.lineWidth = 6;
-      ctx.strokeStyle = "#fff";
-
       //Diagonal line across canvas
       /*ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(c.width, c.height);
       ctx.stroke();*/
 
-      this.connections.forEach((connection) => {
+      this.connectionCards.forEach((connection) => {
         this.drawConnection(ctx,connection)
       })
 
     },
     drawConnection: function (ctx,conn) {
 
-      let el0 = document.getElementById(conn.members[0]);
-      let el1 = document.getElementById(conn.members[1]);
+      let el0 = document.getElementById(conn.members[0].rid);
+      let el1 = document.getElementById(conn.members[1].rid);
 
       if(el0 && el1){
+
+        let c0 = conn.members[0]
+        let c1 = conn.members[1]
+        let inSelectedChain0 = c0.states.selected || c0.states.selectingConnected
+        let inSelectedChain1 = c1.states.selected || c1.states.selectingConnected
 
         let elLeft, elRight;
 
@@ -114,6 +131,18 @@ export default {
         let x1 = elRight.getBoundingClientRect().x - this.bounds.x + this.scroll.left;
         let y1 = elRight.getBoundingClientRect().y + elRight.getBoundingClientRect().height / 2 - this.bounds.y;
 
+        //Default rendering settings
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "#ffff"
+
+        if(this.userState.name == "selectCard"){
+          if(inSelectedChain0 && inSelectedChain1){
+          }
+          else{
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#fff5"
+          }
+        }
 
         ctx.beginPath();
         ctx.moveTo(x0 + 5, y0);
@@ -121,21 +150,22 @@ export default {
         ctx.stroke();
 
         //Connection points
-        ctx.fillStyle = "#ffdc27";
         //Start circle
+        ctx.fillStyle = this.userState.name == "default" || inSelectedChain0 ? "#ffdc27" : "#ffdc2722";
         ctx.beginPath();
-        ctx.arc(x0, y0, 15, -Math.PI/2, Math.PI/2);
+        ctx.arc(x0, y0, inSelectedChain0 ? 15 : 10, -Math.PI/2, Math.PI/2);
         ctx.fill();
 
-        //Start circle
+        //End circle
+        ctx.fillStyle = this.userState.name == "default" || inSelectedChain1 ? "#ffdc27" : "#ffdc2722";
         ctx.beginPath();
-        ctx.arc(x1, y1, 15, Math.PI/2, -Math.PI/2);
+        ctx.arc(x1, y1, inSelectedChain1 ? 15 : 10, Math.PI/2, -Math.PI/2);
         ctx.fill();
 
       }
-
-
-
+    },
+    getCardById: function (id) {
+      return this.$store.getters.getCardById(id);
     }
   },
   created: function () {

@@ -186,11 +186,7 @@ export const store = new Vuex.Store({
 
     setDirtyDraw: (state) => {
 
-      let wall = store.getters.getActiveWall();
-
       Vue.set(state,'dirtyDraw',true)
-
-      //state.connectionBounds = document.getElementsByClassName("collectionContent")[0].getBoundingClientRect();
 
       Vue.nextTick().then(function () {
         Vue.set(state,'dirtyDraw',false)
@@ -466,7 +462,7 @@ export const store = new Vuex.Store({
       let allConnections = store.getters.getActiveWall().connections;
       let connections = store.getters.getRecursiveConnectionsByCardId(allConnections,id,true)
       connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,id,false))
-      connections = [...new Set(connections)] //remove duplicates
+      //connections = [...new Set(connections)] //remove duplicates
       return connections;
     },
 

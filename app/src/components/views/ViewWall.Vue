@@ -1,5 +1,5 @@
 <template>
-  <div class="ViewWall">
+  <div class="ViewWall" @click="resetUserState">
 
     <kedja-header>
       <button @click="createCollection">
@@ -76,6 +76,9 @@ export default {
 
       this.$store.commit('makeAPICall',params);
     },
+    resetUserState() {
+      this.$store.commit('resetUserState');
+    }
   },
   mounted: function () {
     this.getWallFromParam();

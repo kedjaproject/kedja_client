@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" @click="clicked" :class="{
+  <div class="Card" @click.stop="clicked" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
@@ -23,13 +23,14 @@
       <h3>
         {{card.data.title}}
       </h3>
-      <!--span>{{card.rid}}</span-->
-      <!--pre>
+      <!--h4>{{card.rid}}</h4>
+      <div>
+        {{deepConnectedCardIds}}
+      </div>
+      <br />
+      <div>
         {{card.states}}
-      </pre-->
-      <!--pre>
-        {{connectedCardIds}}
-      </pre-->
+      </div-->
     </div>
 
     <div class="bottom">
@@ -307,7 +308,7 @@ h3{
 }
 
 .selectingNotConnected {
-  filter: opacity(0.6);
+  filter: opacity(0.3);
 }
 
 .connecting{
@@ -324,7 +325,7 @@ h3{
 }
 
 .connectingCantConnect{
-  filter: opacity(0.6);
+  filter: opacity(0.3);
 }
 
 
