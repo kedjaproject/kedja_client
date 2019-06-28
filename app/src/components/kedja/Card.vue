@@ -26,9 +26,8 @@
       <!--h4>{{card.rid}}</h4-->
       <!--div>
         {{deepConnectedCardIds}}
-      </div>
-      <br />
-      <div>
+      </div-->
+      <!--div>
         {{card.states}}
       </div-->
     </div>

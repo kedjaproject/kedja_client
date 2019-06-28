@@ -109,18 +109,20 @@ export default {
 
         let c0 = conn.members[0]
         let c1 = conn.members[1]
-        let inSelectedChain0 = c0.states.selected || c0.states.selectingConnected
-        let inSelectedChain1 = c1.states.selected || c1.states.selectingConnected
 
-        let elLeft, elRight;
+        let elLeft, elRight, inSelectedChainLeft, inSelectedChainRight;
 
         if(el0.getBoundingClientRect().x < el1.getBoundingClientRect().x){
           elLeft = el0;
           elRight = el1;
+          inSelectedChainLeft = c0.states.selected || c0.states.selectingConnected
+          inSelectedChainRight = c1.states.selected || c1.states.selectingConnected
         }
         else{
           elLeft = el1;
           elRight = el0;
+          inSelectedChainLeft = c1.states.selected || c1.states.selectingConnected
+          inSelectedChainRight = c0.states.selected || c0.states.selectingConnected
         }
 
         //Start point
@@ -136,7 +138,7 @@ export default {
         ctx.strokeStyle = "#ffff"
 
         if(this.userState.name == "selectCard"){
-          if(inSelectedChain0 && inSelectedChain1){
+          if(inSelectedChainLeft && inSelectedChainRight){
           }
           else{
             ctx.lineWidth = 1;
@@ -151,15 +153,15 @@ export default {
 
         //Connection points
         //Start circle
-        ctx.fillStyle = this.userState.name == "default" || inSelectedChain0 ? "#ffdc27" : "#ffdc2722";
+        ctx.fillStyle = this.userState.name == "default" || inSelectedChainLeft ? "#ffdc27" : "#ffdc2722";
         ctx.beginPath();
-        ctx.arc(x0, y0, inSelectedChain0 ? 15 : 10, -Math.PI/2, Math.PI/2);
+        ctx.arc(x0, y0, inSelectedChainLeft ? 15 : 10, -Math.PI/2, Math.PI/2);
         ctx.fill();
 
         //End circle
-        ctx.fillStyle = this.userState.name == "default" || inSelectedChain1 ? "#ffdc27" : "#ffdc2722";
+        ctx.fillStyle = this.userState.name == "default" || inSelectedChainRight ? "#ffdc27" : "#ffdc2722";
         ctx.beginPath();
-        ctx.arc(x1, y1, inSelectedChain1 ? 15 : 10, Math.PI/2, -Math.PI/2);
+        ctx.arc(x1, y1, inSelectedChainRight ? 15 : 10, Math.PI/2, -Math.PI/2);
         ctx.fill();
 
       }
