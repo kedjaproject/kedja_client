@@ -335,14 +335,15 @@ export const store = new Vuex.Store({
     },
 
     makeAPICall: (state, payload) => {
+      // FIXME: This whole method  shouldn't be here!
 
       let method = payload.method ? payload.method : "get";
 
       return axios({
         method: method,
-        url:'https://staging-server.kedja.org/api/1/' + payload.endpoint,
+        url: state.state.env.API_SERVER + state.state.env.API_PATH + payload.endpoint,
         headers: {
-          Authorization: store.getters.getAuth
+          Authorization: store.getters.getUserData.auth
         },
         params: payload.params,
         data: payload.data
