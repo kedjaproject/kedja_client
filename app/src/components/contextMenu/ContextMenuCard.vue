@@ -15,30 +15,15 @@
     <h3>
       Beskrivning
     </h3>
-    <p>Här kommer du att kunna lägga till en kortare beskrivning av kortet i fritextfält.</p>
+    <p>(Kommande funktion)</p>
 
     <h3>
       Åtgärder
     </h3>
-    <p>
-      Här kommer du att kunna ladda upp bilagor såsom pdf:er, bilder etc. som har med kortet att göra. Här hittar du även funktioner som hjälper dig att organisera och struktura kortet med:
-      <ul>
-        <li>
-          ansvarig (användare som ansvarar för specifikt kort.
-        </li>
-        <li>
-          indikator (knapp med 3 lägen som påvisar kortets status; planerad/påbörjad/avslutad)
-        </li>
-        <li>
-          slutdatum (datum då kortets aktivitet ska/bör vara uppfylld)
-        </li>
-      </ul>
-    </p>
+    <p>(Kommande funktion)</p>
 
     <h3>Kommentarer</h3>
-    <p>
-      Här kommer du att kunna kommentera tankar och ändringar som rör kortet med andra användare.
-    </p>
+    <p>(Kommande funktion)</p>
 
   </div>
 </template>
