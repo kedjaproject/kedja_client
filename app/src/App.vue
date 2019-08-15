@@ -23,7 +23,7 @@ export default {
     }
   },
   created: function () {
-    this.$store.commit('init',{env: this.env});
+    this.$store.commit('init', {env: this.env});
 
   },
   mounted: function () {

@@ -1,7 +1,7 @@
 <template>
   <div class="Collections" ref="collections">
 
-    <collection v-for="collection in collections" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
+    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
 
     <button @click="createCollection" title="Lägg till ny samling" class="new">+ Ny samling</button>
 
@@ -19,12 +19,12 @@ export default {
   },
   data () {
     return {
-      //collections: ""
+      // collections: ""
     }
   },
   props: {
-    collections: "",
-    prid: ""
+    collections: '',
+    prid: ''
   },
   computed: {
     dirtyDraw: function () {
@@ -38,22 +38,24 @@ export default {
       this.$emit('createCollection')
     },
     removeCollection: function (collection) {
-      this.$emit('removeCollection',collection)
+      this.$emit('removeCollection', collection)
     },
     connect: function (p) {
-      this.$emit('connect',p)
+      this.$emit('connect', p)
     },
     unconnect: function (p) {
-      this.$emit('unconnect',p)
-    },
-    /*handleScroll: function () {
+      this.$emit('unconnect', p)
+    }
+    /*
+    handleScroll: function () {
       this.$store.commit('setDirtyDraw');
-    }*/
+    }
+    */
   },
   created: function () {
   },
   mounted: function () {
-    //this.$refs.collections.addEventListener('scroll', this.handleScroll);
+    // this.$refs.collections.addEventListener('scroll', this.handleScroll);
     this.$emit('mounted')
   }
 }

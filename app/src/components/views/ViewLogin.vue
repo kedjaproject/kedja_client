@@ -17,7 +17,7 @@
 
       <h3>Logga in / Registrera nytt konto med</h3>
 
-        <h2 v-for="method in methods">
+        <h2 v-for="(method, k) in methods" :key="k">
           <a :href="loginUrl(method)">{{method.title}}</a>
         </h2>
 
@@ -38,16 +38,16 @@ export default {
   },
   data () {
     return {
-      email: "",
-      pass: "",
-      methods: ""
+      email: '',
+      pass: '',
+      methods: ''
     }
   },
   props: {
   },
   computed: {
     userData: function () {
-      return this.$store.getters.getUserData;
+      return this.$store.getters.getUserData
     }
   },
   methods: {
@@ -56,9 +56,9 @@ export default {
     },
     getLoginMethods: function () {
       let params = {
-        endpoint: "auth/methods",
+        endpoint: 'auth/methods',
         successCallback: (response) => {
-          this.methods = response.data;
+          this.methods = response.data
         }
       }
 

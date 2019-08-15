@@ -36,8 +36,6 @@
 
     </div>
 
-
-
   </div>
 </template>
 
@@ -58,8 +56,8 @@ export default {
     }
   },
   props: {
-    card: "",
-    prid: ""
+    card: '',
+    prid: ''
   },
   computed: {
     userState: function () {
@@ -70,7 +68,7 @@ export default {
       return this.userState.name == 'selectCard' && this.userState.data.rid == this.card.rid
     },
     selectedConnected: function () {
-      return this.card.states.selectedConnected == true;
+      return this.card.states.selectedConnected == true
     },
     connectionsDirect: function () {
       return this.$store.getters.getDirectConnectionsByCardId(this.card.rid)
@@ -111,7 +109,7 @@ export default {
       return arr
     },
     connecting: function () {
-      return this.card.states.connecting == true;
+      return this.card.states.connecting == true
       //return this.userState.name == 'connectCard' && this.userState.data.rid == this.card.rid
     },
     connected: function () {
@@ -204,18 +202,18 @@ export default {
 
     setSelected: function (e){
       if(!this.card.states.selected){
-        this.$store.commit('setUserState',{name: "selectCard", data: {rid: this.card.rid}});
+        this.$store.commit('setUserState',{name: "selectCard", data: {rid: this.card.rid}})
       }
       else{
-        this.$store.commit('resetUserState');
+        this.$store.commit('resetUserState')
       }
     },
     toggleConnecting: function (){
       if(!this.card.states.connecting){
-        this.$store.commit('setUserState',{name: "connectCard", data: {rid: this.card.rid}});
+        this.$store.commit('setUserState',{name: "connectCard", data: {rid: this.card.rid}})
       }
       else{
-        this.$store.commit('setUserState',{name: "selectCard", data: {rid: this.card.rid}});
+        this.$store.commit('setUserState',{name: "selectCard", data: {rid: this.card.rid}})
       }
     },
     connect: function () {
@@ -242,11 +240,11 @@ export default {
         },
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall',params)
     }
   },
   created: function () {
-    this.$store.commit('initCard',this.card);
+    this.$store.commit('initCard',this.card)
   },
   mounted: function () {
   }

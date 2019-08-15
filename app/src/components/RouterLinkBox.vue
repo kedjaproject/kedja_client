@@ -11,28 +11,30 @@
 
 <script>
 
-//import { store } from '@/store';
-//import Component from '@/components/Component'
+// import { store } from '@/store';
+// import Component from '@/components/Component'
 
 export default {
   name: 'RouterLinkBox',
-  /*components: {
+  /*
+  components: {
     Component
-  },*/
+  },
+  */
   data () {
     return {
     }
   },
   props: {
-    text: "",
-    color: "",
-    to: ""
+    text: '',
+    color: '',
+    to: ''
   },
   computed: {
   },
   methods: {
   },
-  mounted: function () {
+  mounted() {
   }
 }
 </script>

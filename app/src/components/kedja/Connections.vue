@@ -59,8 +59,8 @@ export default {
   },
   methods: {
     firstDraw: function () {
-      let el0 = document.getElementById(this.from);
-      let el1 = document.getElementById(this.to);
+      // let el0 = document.getElementById(this.from);
+      // let el1 = document.getElementById(this.to);
 
       if(document.getElementById(this.boundsElementId)){
         this.$store.commit('setDirtyDraw');
@@ -68,7 +68,6 @@ export default {
       else{
         setTimeout(this.firstDraw, 100);
       }
-
     },
     redraw: function () {
       this.setBounds();

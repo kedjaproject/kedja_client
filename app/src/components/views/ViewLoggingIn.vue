@@ -14,7 +14,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ViewLoggingIn',
@@ -28,18 +28,18 @@ export default {
   props: {
   },
   computed: {
-    auth: function () {
+    auth() {
       return this.$store.getters.getAuth;
     },
-    userid: function () {
+    userid() {
       return this.$route.query.u;
     },
-    token: function () {
+    token() {
       return this.$route.query.t;
     }
   },
   methods: {
-    login: function () {
+    login() {
       let params = {
         endpoint: "auth/credentials/" + this.userid + "/" + this.token,
         method: "post",
@@ -52,13 +52,13 @@ export default {
         }
       }
 
-      this.$store.commit('makeAPICall',params);
-    },
+      this.$store.commit('makeAPICall',params)
+    }
   },
-  created: function () {
+  created() {
   },
-  mounted: function () {
-    this.login();
+  mounted() {
+    this.login()
   }
 }
 </script>
