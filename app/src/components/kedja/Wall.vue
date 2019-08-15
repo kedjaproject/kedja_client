@@ -3,7 +3,7 @@
 
     <div class="wallHeader">
 
-      <drop-down :items="[{label: 'Radera vägg', f: removeWall}]">
+      <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
         <EditableInput v-model="data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
@@ -81,8 +81,8 @@ export default {
     /*
     title: function () {
       return this.data.title
-    }*
-    /
+    }
+    */
   },
   watch: {
     wall () {

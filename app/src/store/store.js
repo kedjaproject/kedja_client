@@ -240,9 +240,9 @@ export const store = new Vuex.Store({
     // API
 
     makeAPICall: (state, payload) => {
-      let method = payload.method ? payload.method : 'get'
+      let method = payload.method || 'get'
 
-      let errorCallback = payload.errorCallback ? payload.errorCallback : function (response) {
+      let errorCallback = payload.errorCallback || function (response) {
         console.log(response)
       }
 
