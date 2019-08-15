@@ -35,53 +35,55 @@ export default {
   },
   data () {
     return {
-      menuOpen: ""
+      menuOpen: ''
     }
   },
   props: {
   },
   computed: {
-    wall: function () {
-      return this.$store.getters.getActiveWall();
-    },
-    sidebarFlex: function () {
+    wall () {
+      return this.$store.getters.getActiveWall()
+    }
+    /*
+    sidebarFlex () {
 
     }
+    */
   },
   methods: {
     getWallFromParam: function () {
-      let wallId = this.$route.params['wallId'];
-      if(wallId){
+      let wallId = this.$route.params['wallId']
+      if (wallId) {
         let params = {
-          //endpoint: wallId + "/wall",
+          // endpoint: wallId + "/wall",
           endpoint: 'walls/' + wallId,
           successCallback: (data) => {
-            this.$store.commit('setActiveWall',{wall: data.data});
-          },
+            this.$store.commit('setActiveWall', {wall: data.data})
+          }
         }
-        this.$store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params)
       }
     },
-    createCollection: function () {
-      //this.$store.commit('createCollectionInWall',{wall: this.wall});
+    createCollection () {
+      // this.$store.commit('createCollectionInWall', {wall: this.wall})
       let params = {
-        endpoint: "walls/" + this.wall.rid + "/collections",
+        endpoint: 'walls/' + this.wall.rid + '/collections',
         data: {title: 'Ny samling'},
-        method: "post",
+        method: 'post',
         successCallback: (data) => {
           console.log(data)
           this.wall.collections.push(data.data)
         }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    resetUserState() {
-      this.$store.commit('resetUserState');
+    resetUserState () {
+      this.$store.commit('resetUserState')
     }
   },
-  mounted: function () {
-    this.getWallFromParam();
+  mounted () {
+    this.getWallFromParam()
   }
 }
 </script>

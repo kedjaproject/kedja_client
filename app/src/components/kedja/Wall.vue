@@ -32,7 +32,7 @@
 
 <script>
 
-//import { store } from '@/store';
+// import { store } from '@/store'
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import DropDown from '@/components/DropDown'
 import Collections from './Collections'
@@ -54,190 +54,188 @@ export default {
   },
   data () {
     return {
-      //collections: ""
+      // collections: ""
     }
   },
   props: {
-    wall: ""
+    wall: ''
   },
   computed: {
-    userState: function () {
-      return this.$store.getters.getUserState;
+    userState () {
+      return this.$store.getters.getUserState
     },
-    /*wall: function () {
+    /*
+    wall () {
       return this.$store.getters.getActiveWall();
-    },*/
-    data: function () {
-      return this.wall.data;
     },
-    collections: function () {
-      return this.wall.collections;
+    */
+    data () {
+      return this.wall.data
     },
-    connections: function () {
-      return this.wall.connections;
+    collections () {
+      return this.wall.collections
     },
-    /*title: function () {
+    connections () {
+      return this.wall.connections
+    }
+    /*
+    title: function () {
       return this.data.title
-    }*/
+    }*
+    /
   },
   watch: {
-    wall: function () {
-      this.$store.commit('initWall',this.wall);
-      this.getCollectionsFromAPI();
-      this.getConnectionsFromAPI();
+    wall () {
+      this.$store.commit('initWall', this.wall)
+      this.getCollectionsFromAPI()
+      this.getConnectionsFromAPI()
     },
     collections: function () {
     }
   },
   methods: {
-    getCollectionsFromAPI: function () {
-      let wallId = this.$route.params['wallId'];
-      if(wallId){
+    getCollectionsFromAPI () {
+      let wallId = this.$route.params['wallId']
+      if (wallId) {
         let params = {
-          //endpoint: wallId + "/wall",
-          endpoint: 'walls/' + wallId + "/collections",
+          // endpoint: wallId + "/wall",
+          endpoint: 'walls/' + wallId + '/collections',
           successCallback: (data) => {
-            this.$store.commit('setWallCollections', {wall: this.wall, collections: data.data});
-          },
+            this.$store.commit('setWallCollections', {wall: this.wall, collections: data.data})
+          }
         }
-        this.$store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params)
       }
     },
-    getConnectionsFromAPI: function () {
-      let wallId = this.$route.params['wallId'];
-      if(wallId){
+    getConnectionsFromAPI () {
+      let wallId = this.$route.params['wallId']
+      if (wallId) {
         let params = {
-          endpoint: "walls/" + wallId + "/relations",
+          endpoint: 'walls/' + wallId + '/relations',
           successCallback: (data) => {
-            this.$store.commit('setWallConnections', {wall: this.wall, connections: data.data});
-          },
+            this.$store.commit('setWallConnections', {wall: this.wall, connections: data.data})
+          }
         }
-        this.$store.commit('makeAPICall', params);
+        this.$store.commit('makeAPICall', params)
       }
     },
-    getWallLocal: function () {
-      this.wall = this.$store.getters.getActiveWall();
+    getWallLocal () {
+      this.wall = this.$store.getters.getActiveWall()
     },
-    createCollection: function () {
-      //this.$store.commit('createCollectionInWall',{wall: this.wall});
+    createCollection () {
+      // this.$store.commit('createCollectionInWall',{wall: this.wall})
       let params = {
-        endpoint: "walls/" + this.wall.rid + "/collections",
+        endpoint: 'walls/' + this.wall.rid + '/collections',
         data: {title: 'Ny samling'},
-        method: "post",
+        method: 'post',
         successCallback: (data) => {
           this.collections.push(data.data)
         }
       }
-
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    removeWall: function () {
-      //this.$router.push({ name: 'ViewWallList', params: {}  })
+    removeWall () {
+      // this.$router.push({ name: 'ViewWallList', params: {}  })
       let params = {
-        endpoint: "walls/" + this.wall.rid,
-        method: "delete",
+        endpoint: 'walls/' + this.wall.rid,
+        method: 'delete',
         successCallback: (data) => {
-          this.$router.push({ name: 'Walls'})
-        },
+          this.$router.push({name: 'Walls'})
+        }
       }
-
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    removeCollection: function (collection) {
-      //this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection});
+    removeCollection (collection) {
+      // this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection})
       let params = {
-        endpoint: "walls/" + this.wall.rid + "/collections/" + collection.rid,
-        method: "delete",
+        endpoint: 'walls/' + this.wall.rid + '/collections/' + collection.rid,
+        method: 'delete',
         successCallback: (data) => {
           console.log(data)
 
           let index = this.wall.collections.indexOf(collection)
-          if(index != -1){
-            this.wall.collections.splice(index,1)
+          if (index !== -1) {
+            this.wall.collections.splice(index, 1)
           }
-
-        },
+        }
       }
-
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    updateTitle: function (title) {
+    updateTitle (title) {
       let params = {
-        endpoint: "walls/" + this.wall.rid,
+        endpoint: 'walls/' + this.wall.rid,
         data: {title: title},
-        method: "put",
+        method: 'put',
         successCallback: (data) => {
-        },
+        }
       }
-
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    connect: function (p) {
-      //this.$store.commit('createConnection',params);
+    connect (p) {
+      // this.$store.commit('createConnection',params);
       console.log(p.members)
 
       let params = {
-        endpoint: "walls/" + this.wall.rid + "/relations",
+        endpoint: 'walls/' + this.wall.rid + '/relations',
         data: p,
-        method: "post",
+        method: 'post',
         successCallback: (data) => {
           console.log(data)
-          //this.$store.commit('addConnectionToWall',{wall: this.wall, connection: data.data});
+          // this.$store.commit('addConnectionToWall',{wall: this.wall, connection: data.data})
           this.wall.connections.push(data.data)
-          this.$store.commit('forceUserStateUpdate');
-        },
+          this.$store.commit('forceUserStateUpdate')
+        }
       }
-
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    unconnect: function (p) {
-      //this.$store.commit('createConnection',params);
+    unconnect (p) {
+      // this.$store.commit('createConnection',params)
       console.log(p.members)
 
-      let connection = this.wall.connections.filter(c => c.members.indexOf(p.members[0]) != -1 && c.members.indexOf(p.members[1]) != -1)[0];
+      let connection = this.wall.connections.filter(c => c.members.indexOf(p.members[0]) !== -1 && c.members.indexOf(p.members[1]) !== -1)[0]
 
       let params = {
-        endpoint: "walls/" + this.wall.rid + "/relations/" + connection.relation_id,
-        method: "delete",
+        endpoint: 'walls/' + this.wall.rid + '/relations/' + connection.relation_id,
+        method: 'delete',
         successCallback: (data) => {
-
           let index = this.wall.connections.indexOf(connection)
           console.log(index)
           console.log(connection.relation_id)
           console.log(this.wall.connections)
-          if(index != -1){
-            this.wall.connections.splice(index,1)
-            //this.$store.commit('setDirtyDraw');
-            this.$store.commit('forceUserStateUpdate');
+          if (index !== -1) {
+            this.wall.connections.splice(index, 1)
+            // this.$store.commit('setDirtyDraw');
+            this.$store.commit('forceUserStateUpdate')
           }
           console.log(this.wall.connections)
-
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    handleScroll: function () {
-      this.$store.commit('setDirtyDraw');
+    handleScroll () {
+      this.$store.commit('setDirtyDraw')
     },
-    collectionsMounted: function () {
-      //document.getElementById('collections').addEventListener('scroll', this.handleScroll);
-      this.$refs.colls.addEventListener('scroll', this.handleScroll);
+    collectionsMounted () {
+      // document.getElementById('collections').addEventListener('scroll', this.handleScroll)
+      this.$refs.colls.addEventListener('scroll', this.handleScroll)
     }
   },
-  created: function () {
+  created () {
   },
-  mounted: function () {
-    //this.getCollectionsFromAPI();
-    //this.getConnectionsFromParam();
-    //this.getWallLocal();
-    /*this.$nextTick(function() {
+  mounted () {
+    // this.getCollectionsFromAPI();
+    // this.getConnectionsFromParam();
+    // this.getWallLocal();
+    /*
+      this.$nextTick(function() {
       console.log(this.$refs)
       console.log(this.$refs.collections)
       console.log(this.$refs.wallContent)
-    })*/
+    })
+    */
 
-    //this.$refs.collections.addEventListener('scroll', this.handleScroll);
+    // this.$refs.collections.addEventListener('scroll', this.handleScroll);
 
   },
   updated: function () {

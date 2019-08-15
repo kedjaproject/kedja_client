@@ -50,41 +50,38 @@ export default {
   props: {
   },
   computed: {
-    userState: function () {
-      return this.$store.getters.getUserState;
+    userState () {
+      return this.$store.getters.getUserState
     },
-    userData: function () {
-      return this.$store.getters.getUserData;
+    userData () {
+      return this.$store.getters.getUserData
     },
-    userFullName: function () {
-      if(this.userData.first_name && this.userData.last_name){
-        return this.userData.first_name + " " + this.userData.last_name;
+    userFullName () {
+      if (this.userData.first_name && this.userData.last_name) {
+        return this.userData.first_name + ' ' + this.userData.last_name
       }
     }
   },
   methods: {
-    goToProfile: function (e) {
-      this.$router.push({ name: 'Profile'})
+    goToProfile (e) {
+      this.$router.push({name: 'Profile'})
     },
-    goToWalls: function (e) {
-      this.$router.push({ name: 'Walls'})
+    goToWalls (e) {
+      this.$router.push({name: 'Walls'})
     },
-    logout: function (e) {
-
+    logout (e) {
       let params = {
-        endpoint: "auth/logout",
-        method: "post",
+        endpoint: 'auth/logout',
+        method: 'post',
         successCallback: (response) => {
-          this.$store.dispatch('logout');
-          this.$router.push({ name: 'Login'})
+          this.$store.dispatch('logout')
+          this.$router.push({name: 'Login'})
         }
       }
-
-      this.$store.commit('makeAPICall',params);
-
+      this.$store.commit('makeAPICall', params)
     }
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

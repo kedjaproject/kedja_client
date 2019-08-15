@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+/*
 import Landing from '@/components/Landing'
+*/
 import ViewHome from '@/components/views/ViewHome'
 import ViewLogin from '@/components/views/ViewLogin'
 import ViewLoggingIn from '@/components/views/ViewLoggingIn'
@@ -13,12 +15,14 @@ import ScrollTest from '@/components/ScrollTest'
 Vue.use(Router)
 
 export default new Router({
-  mode: "history",
+  mode: 'history',
   routes: [
     {
       path: '/',
-      /*name: 'Landing',
-      component: Landing*/
+      /*
+      name: 'Landing',
+      component: Landing
+      */
       redirect: '/login'
     },
     {

@@ -14,7 +14,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ViewHome',
@@ -28,24 +28,23 @@ export default {
   props: {
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.getUserData;
+    userData () {
+      return this.$store.getters.getUserData
     }
   },
   methods: {
-    loggedIn: function () {
-      if(this.userData.userid){
-        this.$router.push({ name: 'Walls'})
-      }
-      else{
-        this.$router.push({ name: 'Login'})
+    loggedIn () {
+      if (this.userData.userid) {
+        this.$router.push({name: 'Walls'})
+      } else {
+        this.$router.push({name: 'Login'})
       }
     }
   },
-  created: function () {
-    this.loggedIn();
+  created () {
+    this.loggedIn()
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

@@ -8,8 +8,8 @@
 
 <script>
 
-import KedjaHeader from '@/components/layout/KedjaHeader';
-import KedjaFooter from '@/components/layout/KedjaFooter';
+import KedjaHeader from '@/components/layout/KedjaHeader'
+import KedjaFooter from '@/components/layout/KedjaFooter'
 
 export default {
   name: 'App',
@@ -22,11 +22,10 @@ export default {
       env: process.env
     }
   },
-  created: function () {
-    this.$store.commit('init', {env: this.env});
-
+  created () {
+    this.$store.commit('init', {env: this.env})
   },
-  mounted: function () {
+  mounted () {
     document.activeElement.blur()
   }
 }

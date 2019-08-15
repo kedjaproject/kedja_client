@@ -1,14 +1,13 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import axios from 'axios';
-
-Vue.use(Vuex);
-
-//import { walls } from '@/assets/walls.json';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
 import wallModule from './modules/wallModule'
+// import { walls } from '@/assets/walls.json'
+
+Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  //strict: process.env.NODE_ENV !== 'production',
+  // strict: process.env.NODE_ENV !== 'production',
   modules: {
     walls: wallModule
   },
@@ -16,35 +15,38 @@ export const store = new Vuex.Store({
     env: {},
     walls: [],
     activeWallId: 0,
-    activeWall: "",
+    activeWall: '',
     connections: [],
     tabIndexCounter: 0,
-    connectionBounds: "",
-    userState: "",
-    auth: "",
-    userid: "",
+    connectionBounds: '',
+    userState: '',
+    auth: '',
+    userid: '',
     userData: {},
     dirtyDraw: true
-    //schema: Schema
+    // schema: Schema
   },
   mutations: {
 
-    /*myMutation: (state, {param}) => {
-    },*/
+    /*
+    myMutation: (state, {param}) => {
+    },
+    */
 
     init: (state, {env}) => {
-      Vue.set(state,'env',env);
-      //state.walls = walls.slice();
-      //store.commit('initWallsFromAPI',{});
-      //store.commit('prepareData',{});
-      //store.commit('resetUserState');
-      //store.commit('setAuthFromLocalStorage');
-      //store.commit('setUserIdFromLocalStorage');
-      store.commit('setUserDataFromLocalStorage');
-      store.commit('setDirtyDraw');
+      Vue.set(state, 'env', env)
+      // state.walls = walls.slice()
+      // store.commit('initWallsFromAPI',{})
+      // store.commit('prepareData',{})
+      // store.commit('resetUserState')
+      // store.commit('setAuthFromLocalStorage')
+      // store.commit('setUserIdFromLocalStorage')
+      store.commit('setUserDataFromLocalStorage')
+      store.commit('setDirtyDraw')
     },
 
-    /*initWallsFromAPI: (state, {}) => {
+    /*
+    initWallsFromAPI: (state, {}) => {
 
       let params = {
         endpoint: "walls",
@@ -55,9 +57,11 @@ export const store = new Vuex.Store({
 
       store.commit('makeAPICall',params);
 
-    },*/
+    },
+    */
 
-    /*setAuthFromLocalStorage: (state) => {
+    /*
+    setAuthFromLocalStorage: (state) => {
       if (typeof(Storage) !== "undefined") {
         state.auth = localStorage.getItem("auth");
       } else {
@@ -71,52 +75,53 @@ export const store = new Vuex.Store({
       } else {
         console.log("No local storage support")
       }
-    },*/
+    },
+    */
 
     setUserDataFromLocalStorage: (state) => {
-      if (typeof(Storage) !== "undefined") {
-        Vue.set(state.userData,'auth',localStorage.getItem("auth"))
-        Vue.set(state.userData,'userid',localStorage.getItem("userid"))
-        Vue.set(state.userData,'first_name',localStorage.getItem("first_name"))
-        Vue.set(state.userData,'last_name',localStorage.getItem("last_name"))
+      if (typeof (Storage) !== 'undefined') {
+        Vue.set(state.userData, 'auth', localStorage.getItem('auth'))
+        Vue.set(state.userData, 'userid', localStorage.getItem('userid'))
+        Vue.set(state.userData, 'first_name', localStorage.getItem('first_name'))
+        Vue.set(state.userData, 'last_name', localStorage.getItem('last_name'))
       } else {
-        console.log("No local storage support")
+        console.log('No local storage support')
       }
     },
 
     resetUserState: (state) => {
-      store.commit('setUserState',{name: 'default'});
+      store.commit('setUserState', {name: 'default'})
     },
 
     setUserState: (state, {name, data}) => {
-      store.commit('setDirtyDraw');
-      state.userState = {name: name, data: data ? data : {}, rand: Math.random()}
-      //console.log(state.userState)
+      store.commit('setDirtyDraw')
+      state.userState = {name: name, data: data || {}, rand: Math.random()}
+      // console.log(state.userState)
     },
 
     forceUserStateUpdate: (state) => {
-      store.commit('setDirtyDraw');
+      store.commit('setDirtyDraw')
       state.userState.rand = Math.random()
     },
 
     setActiveWall: (state, {wall}) => {
-      state.activeWall = wall;
+      state.activeWall = wall
     },
 
     setWallCollections: (state, {wall, collections}) => {
-      Vue.set(wall,'collections',collections);
+      Vue.set(wall, 'collections', collections)
     },
 
     setWallConnections: (state, {wall, connections}) => {
-      Vue.set(wall,'connections',connections);
+      Vue.set(wall, 'connections', connections)
     },
 
     setCollectionCards: (state, {collection, cards}) => {
-      Vue.set(collection,'cards',cards);
+      Vue.set(collection, 'cards', cards)
     },
 
     setConnections: (state, {connections}) => {
-      state.connections = connections;
+      state.connections = connections
     },
 
     initWall: (state, wall) => {
@@ -137,7 +142,8 @@ export const store = new Vuex.Store({
       Vue.set(connection, 'dirtyDraw', false)
     },
 
-    /*setCardsState: (state, {cards, cardIds, stateName, stateFlag, invertCollection}) => {
+    /*
+    setCardsState: (state, {cards, cardIds, stateName, stateFlag, invertCollection}) => {
 
       console.log("Set cards state: " + stateName);
       console.log(cardIds);
@@ -182,63 +188,59 @@ export const store = new Vuex.Store({
 
     setCardState: (state, {card, stateName, stateFlag}) => {
       Vue.set(card.states, stateName, stateFlag)
-    },*/
+    },
+    */
 
     setDirtyDraw: (state) => {
-
-      Vue.set(state,'dirtyDraw',true)
+      Vue.set(state, 'dirtyDraw', true)
 
       Vue.nextTick().then(function () {
-        Vue.set(state,'dirtyDraw',false)
+        Vue.set(state, 'dirtyDraw', false)
       })
-
     },
 
     setDeepConnectionsByCardId: (state, {id}) => {
-      console.log("Set deep connections")
-      //state.connections = []
-      state.connections = store.getters.getDeepConnectionsByCardId(id);
+      console.log('Set deep connections')
+      // state.connections = []
+      state.connections = store.getters.getDeepConnectionsByCardId(id)
     },
 
     resetConnections: (state) => {
-      console.log("Reset connections")
-      state.connections = [];
+      console.log('Reset connections')
+      state.connections = []
 
-      //state.connections = store.getters.getActiveWall().connections.slice();
+      // state.connections = store.getters.getActiveWall().connections.slice()
       console.log(state.connections.length)
     },
 
     setCanConnectByCardId: (state, {id}) => {
-      let collection = store.getters.getCollectionByCardId(id);
+      let collection = store.getters.getCollectionByCardId(id)
       console.log(collection)
-      let wall = store.getters.getActiveWall();
-      let siblings = store.getters.getClosestArraySiblings(wall.collections,collection)
+      let wall = store.getters.getActiveWall()
+      let siblings = store.getters.getClosestArraySiblings(wall.collections, collection)
       console.log(siblings)
 
-      siblings.forEach((sibling,iSibling) => {
-        if(sibling){
-          sibling.cards.forEach((card,iCard) => {
-            store.commit('setCardState',{card: card, stateName: 'connectingCanConnect', stateFlag: true});
+      siblings.forEach((sibling, iSibling) => {
+        if (sibling) {
+          sibling.cards.forEach((card, iCard) => {
+            store.commit('setCardState', {card: card, stateName: 'connectingCanConnect', stateFlag: true})
           })
         }
       })
-
     },
 
     removeConnectionsByCardId: (state, cardId) => {
-
-      let wall = store.getters.getActiveWall();
+      let wall = store.getters.getActiveWall()
       console.log(wall.connections)
-      Vue.set(wall,'connections',wall.connections.filter(c => c.members.indexOf(cardId) == -1));
+      Vue.set(wall, 'connections', wall.connections.filter(c => c.members.indexOf(cardId) === -1))
       console.log(wall.connections)
-      store.commit('forceUserStateUpdate');
+      store.commit('forceUserStateUpdate')
     },
 
-    //API
+    // API
 
     makeAPICall: (state, payload) => {
-
-      let method = payload.method ? payload.method : "get";
+      let method = payload.method ? payload.method : 'get'
 
       let errorCallback = payload.errorCallback ? payload.errorCallback : function (response) {
         console.log(response)
@@ -253,91 +255,87 @@ export const store = new Vuex.Store({
         params: payload.params,
         data: payload.data
       })
-      .then(
-        payload.successCallback,
-        errorCallback
-      )
-      .catch(error => {
-        console.log(error);
-      })
-
+        .then(
+          payload.successCallback,
+          errorCallback
+        )
+        .catch(error => {
+          console.log(error)
+        })
     },
 
     errorCallback: (state, data) => {
-      console.log("Error")
+      console.log('Error')
       console.log(data)
     }
 
   },
   actions: {
 
-    setUserData: (context, {field,value}) => {
-      if (typeof(Storage) !== "undefined") {
-        localStorage.setItem(field, value);
+    setUserData: (context, {field, value}) => {
+      if (typeof (Storage) !== 'undefined') {
+        localStorage.setItem(field, value)
       } else {
-        console.log("No local storage support")
+        console.log('No local storage support')
       }
-      context.commit('setUserDataFromLocalStorage');
+      context.commit('setUserDataFromLocalStorage')
     },
 
-    login: (context, {auth,userid,first_name,last_name}) => {
-      if (typeof(Storage) !== "undefined") {
-        context.dispatch('setUserData', {field: "auth", value: auth});
-        context.dispatch('setUserData', {field: "userid", value: userid});
-        context.dispatch('setUserData', {field: "first_name", value: first_name});
-        context.dispatch('setUserData', {field: "last_name", value: last_name});
+    // eslint-disable-next-line camelcase
+    login: (context, {auth, userid, first_name, last_name}) => {
+      if (typeof (Storage) !== 'undefined') {
+        context.dispatch('setUserData', {field: 'auth', value: auth})
+        context.dispatch('setUserData', {field: 'userid', value: userid})
+        context.dispatch('setUserData', {field: 'first_name', value: first_name})
+        context.dispatch('setUserData', {field: 'last_name', value: last_name})
       } else {
-        console.log("No local storage support")
+        console.log('No local storage support')
       }
-      context.commit('setUserDataFromLocalStorage');
-      //context.dispatch('setUserProfileFromAPI')
+      context.commit('setUserDataFromLocalStorage')
+      // context.dispatch('setUserProfileFromAPI')
     },
 
     logout: (context) => {
-      if (typeof(Storage) !== "undefined") {
-        localStorage.removeItem("auth");
-        localStorage.removeItem("userid");
-        localStorage.removeItem("first_name");
-        localStorage.removeItem("last_name");
+      if (typeof (Storage) !== 'undefined') {
+        localStorage.removeItem('auth')
+        localStorage.removeItem('userid')
+        localStorage.removeItem('first_name')
+        localStorage.removeItem('last_name')
       } else {
-        console.log("No local storage support")
+        console.log('No local storage support')
       }
-      context.commit('setUserDataFromLocalStorage');
+      context.commit('setUserDataFromLocalStorage')
     },
 
     setUserProfileFromAPI: (context) => {
-
-      let userData = store.getters.getUserData
+      // let userData = store.getters.getUserData
 
       let params = {
-        endpoint: "users/" + this.userData.userid,
+        endpoint: 'users/' + this.userData.userid,
         successCallback: (response) => {
-
-          if (typeof(Storage) !== "undefined") {
-            this.$store.dispatch('setUserData', {field: "first_name", value: response.data.data.first_name});
-            this.$store.dispatch('setUserData', {field: "last_name", value: response.data.data.last_name});
+          if (typeof (Storage) !== 'undefined') {
+            this.$store.dispatch('setUserData', {field: 'first_name', value: response.data.data.first_name})
+            this.$store.dispatch('setUserData', {field: 'last_name', value: response.data.data.last_name})
           } else {
-            console.log("No local storage support")
+            console.log('No local storage support')
           }
 
-          context.commit('setUserDataFromLocalStorage');
-
+          context.commit('setUserDataFromLocalStorage')
         }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
 
     checkAuth: (context) => {
-      if(!context.getters.getAuth){
-
+      if (!context.getters.getAuth) {
       }
     },
 
     makeAPICall: (state, payload) => {
       // FIXME: This whole method  shouldn't be here!
 
-      let method = payload.method ? payload.method : "get";
+      let method = payload.method ? payload.method : 'get'
 
       return axios({
         method: method,
@@ -348,40 +346,41 @@ export const store = new Vuex.Store({
         params: payload.params,
         data: payload.data
       })
-
-    },
+    }
 
   },
   getters: {
 
-    /*myGetter: state => (param) => {
+    /*
+    myGetter: state => (param) => {
       return true
-    },*/
+    },
+    */
 
     getUserData: state => {
-      return state.userData;
+      return state.userData
     },
 
     getUserState: state => {
-      return state.userState;
+      return state.userState
     },
 
     getUserInitials: state => {
     },
 
     getActiveWall: state => () => {
-      //return state.walls[state.activeWallId];
-      return state.activeWall;
+      // return state.walls[state.activeWallId]
+      return state.activeWall
     },
 
     getCardById: state => (id) => {
-      let cardFound = undefined;
+      let cardFound // = undefined
       let wall = store.getters.getActiveWall()
       wall.collections.forEach((collection, iCollection) => {
-        if(collection.cards){
-          let card = collection.cards.find(c => c.rid == id);
-          if(card){
-            cardFound = card;
+        if (collection.cards) {
+          let card = collection.cards.find(c => c.rid === id)
+          if (card) {
+            cardFound = card
           }
         }
       })
@@ -389,61 +388,60 @@ export const store = new Vuex.Store({
     },
 
     getCardsByIds: state => (ids) => {
-      let wall = store.getters.getActiveWall();
+      let wall = store.getters.getActiveWall()
       let cards = []
       wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) != -1))
+        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) !== -1))
       })
       return cards
     },
 
     getCardsByIdsInverted: state => (ids) => {
-      let wall = store.getters.getActiveWall();
+      let wall = store.getters.getActiveWall()
       let cards = []
       wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) == -1))
+        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) === -1))
       })
       return cards
     },
 
     getCardsInverted: state => (cardsInput) => {
-      let wall = store.getters.getActiveWall();
+      let wall = store.getters.getActiveWall()
       let cards = []
       wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => cardsInput.indexOf(card) == -1))
+        cards = cards.concat(collection.cards.filter(card => cardsInput.indexOf(card) === -1))
       })
       return cards
     },
 
     getClosestCardCousins: state => (card) => {
-      let collection = store.getters.getCollectionByCard(card);
-      let wall = store.getters.getActiveWall();
-      let siblings = store.getters.getClosestArraySiblings(wall.collections,collection)
+      let collection = store.getters.getCollectionByCard(card)
+      let wall = store.getters.getActiveWall()
+      let siblings = store.getters.getClosestArraySiblings(wall.collections, collection)
 
       let cousins = []
 
-      siblings.forEach((sibling,iSibling) => {
-        if(sibling){
+      siblings.forEach((sibling, iSibling) => {
+        if (sibling) {
           cousins = cousins.concat(sibling.cards)
         }
       })
 
       return cousins
-
     },
 
     getCollectionByCard: state => (card) => {
       let wall = store.getters.getActiveWall()
-      return wall.collections.find(collection => collection.cards.indexOf(card) != -1)
+      return wall.collections.find(collection => collection.cards.indexOf(card) !== -1)
     },
 
     getCollectionArrayIdByCardId: state => (id) => {
       let wall = store.getters.getActiveWall()
-      return wall.collections.findIndex(collection => collection.cards.find(card => card.rid == id ))
+      return wall.collections.findIndex(collection => collection.cards.find(card => card.rid === id))
     },
 
     getCardsByState: state => (stateName) => {
-      let wall = store.getters.getActiveWall();
+      let wall = store.getters.getActiveWall()
       let cards = []
       wall.collections.forEach((collection, iCollection) => {
         cards = cards.concat(collection.cards.filter(card => card.states[stateName]))
@@ -452,27 +450,26 @@ export const store = new Vuex.Store({
     },
 
     getDirectConnectionsByCardId: state => (id) => {
-      let wall = store.getters.getActiveWall();
-      return wall.connections ? wall.connections.filter(c => c.members.indexOf(id) != -1) : []
+      let wall = store.getters.getActiveWall()
+      return wall.connections ? wall.connections.filter(c => c.members.indexOf(id) !== -1) : []
     },
 
     getDeepConnectionsByCardId: state => (id) => {
-      let allConnections = store.getters.getActiveWall().connections;
-      let connections = store.getters.getRecursiveConnectionsByCardId(allConnections,id,true)
-      connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,id,false))
-      //connections = [...new Set(connections)] //remove duplicates
-      return connections;
+      let allConnections = store.getters.getActiveWall().connections
+      let connections = store.getters.getRecursiveConnectionsByCardId(allConnections, id, true)
+      connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections, id, false))
+      // connections = [...new Set(connections)] // remove duplicates
+      return connections
     },
 
-    //Not optimized: might go down the same connections multiple times and create duplicates
-    getRecursiveConnectionsByCardId: state => (allConnections,id,forward) => {
-
-      if(!allConnections){
+    // Not optimized: might go down the same connections multiple times and create duplicates
+    getRecursiveConnectionsByCardId: state => (allConnections, id, forward) => {
+      if (!allConnections) {
         return []
       }
 
-      //let connections = allConnections.filter(c => c.members[+!forward] == id)
-      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) != -1)
+      // let connections = allConnections.filter(c => c.members[+!forward] == id)
+      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) !== -1)
 
       let nextCardIds = []
       let connectionsRightDirection = []
@@ -481,20 +478,21 @@ export const store = new Vuex.Store({
         let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
         let indexForward = col1 > col0 ? 1 : 0
         let indexSelf = c.members.indexOf(id)
-        let indexOther = +!indexSelf //turns 1 to 0, and 0 to 1
-        if(forward == (indexForward == indexOther)){
-          nextCardIds.push(c.members[indexOther]);
+        let indexOther = +!indexSelf // turns 1 to 0, and 0 to 1
+        if (forward === (indexForward === indexOther)) {
+          nextCardIds.push(c.members[indexOther])
           connectionsRightDirection.push(c)
         }
       })
 
-      let cc = [];
+      let cc = []
       nextCardIds.forEach((cardId) => {
-        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,cardId,forward));
+        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections, cardId, forward))
       })
-      connectionsRightDirection = connectionsRightDirection.concat(cc);
+      connectionsRightDirection = connectionsRightDirection.concat(cc)
 
-      /*connections = connections.filter(c => {
+      /*
+      connections = connections.filter(c => {
         let col0 = store.getters.getCollectionArrayIdByCardId(c.members[0])
         let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
         let indexForward = col1 > col0 ? 1 : 0
@@ -503,30 +501,32 @@ export const store = new Vuex.Store({
         let retVal = forward == (indexForward != indexSelf)
         console.log(retVal)
         return false
-      })*/
+      })
+      */
 
-      /*let cc = [];
+      /*
+      let cc = [];
       connections.forEach((connection, iConnection) => {
         cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,connection.members[+forward],forward));
       })
-      connections = connections.concat(cc);*/
+      connections = connections.concat(cc);
+      */
 
-      return connectionsRightDirection;
+      return connectionsRightDirection
     },
 
-    getClosestArraySiblings: state => (array,item) => {
-
-      if(!array){
+    getClosestArraySiblings: state => (array, item) => {
+      if (!array) {
         return []
       }
 
-      let siblings = [undefined,undefined];
-      let i = array.indexOf(item);
-      if(i > 0){
-        siblings[0] = array[i-1]
+      let siblings = [undefined, undefined]
+      let i = array.indexOf(item)
+      if (i > 0) {
+        siblings[0] = array[i - 1]
       }
-      if(i < array.length-1){
-        siblings[1] = array[i+1]
+      if (i < array.length - 1) {
+        siblings[1] = array[i + 1]
       }
       return siblings
     },
@@ -534,11 +534,11 @@ export const store = new Vuex.Store({
     getTreeById: state => (id) => {
     },
 
-    //API
+    // API
 
     getWalls: state => () => {
-      return state.walls;
-    },
+      return state.walls
+    }
 
-  },
-});
+  }
+})

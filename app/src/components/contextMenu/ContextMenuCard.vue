@@ -46,7 +46,7 @@
 <script>
 
 import CardButton from '@/components/kedja/CardButton'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ContextMenuCard',
@@ -58,7 +58,7 @@ export default {
     }
   },
   props: {
-    card: ""
+    card: ''
   },
   computed: {
     collection: function () {
@@ -66,37 +66,36 @@ export default {
     }
   },
   methods: {
-    updateTitle: function (title) {
+    updateTitle (title) {
       let params = {
-        endpoint: "collections/" + this.collection.rid + "/cards/" + this.card.rid,
+        endpoint: 'collections/' + this.collection.rid + '/cards/' + this.card.rid,
         data: {title: this.card.data.title},
-        method: "put",
+        method: 'put',
         successCallback: (data) => {
           console.log(data.data)
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    removeCard: function () {
-      //this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+    removeCard () {
+      // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card});
       let params = {
-        endpoint: "collections/" + this.collection.rid + "/cards/" + this.card.rid,
-        method: "delete",
+        endpoint: 'collections/' + this.collection.rid + '/cards/' + this.card.rid,
+        method: 'delete',
         successCallback: (data) => {
           let index = this.collection.cards.indexOf(this.card)
-          if(index != -1){
-            this.$store.commit('removeConnectionsByCardId',this.card.rid)
-            this.collection.cards.splice(index,1)
+          if (index !== -1) {
+            this.$store.commit('removeConnectionsByCardId', this.card.rid)
+            this.collection.cards.splice(index, 1)
           }
-
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
-    },
+      this.$store.commit('makeAPICall', params)
+    }
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

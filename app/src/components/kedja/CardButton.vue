@@ -9,7 +9,7 @@
 
 <script>
 
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'CardButton',
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
   },
-  mounted() {
+  mounted () {
   }
 }
 </script>
