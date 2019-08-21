@@ -24,67 +24,66 @@
 
 <script>
 
-import Vue from 'vue'
-import WrapperComponent from './WrapperComponent';
+// import Vue from 'vue'
+import WrapperComponent from './WrapperComponent'
 
 export default {
   name: 'EditableInput',
   components: {
     WrapperComponent
   },
-  props:{
+  props: {
     value: String,
-    tag: "",
-    placeholder: {default: "Ange text"},
-    type: {default: "input"}
+    tag: '',
+    placeholder: {default: 'Ange text'},
+    type: {default: 'input'}
   },
   data () {
     return {
       editing: false,
       textTemp: String,
-      width: "",
-      height: ""
+      width: '',
+      height: ''
     }
   },
-  computed:{
-    inputVisible: function () {
-      return this.editing || this.value == "";
+  computed: {
+    inputVisible () {
+      return this.editing || this.value === ''
     }
   },
   watch: {
   },
   methods: {
-    openEdit: function (){
-      this.calcWidth();
-      this.editing = true;
-      this.textTemp = this.value;
+    openEdit () {
+      this.calcWidth()
+      this.editing = true
+      this.textTemp = this.value
 
-      //Next tick: needs to be performed after re-rendering, due to hidden input field
+      // Next tick: needs to be performed after re-rendering, due to hidden input field
       this.$nextTick(function (input) {
-        this.$refs.input.focus();
-        this.$refs.input.select();
+        this.$refs.input.focus()
+        this.$refs.input.select()
       })
-
     },
-    finishEdit(emit){
-      if(this.editing && emit){
-        this.emitToParent();
+    finishEdit (emit) {
+      if (this.editing && emit) {
+        this.emitToParent()
       }
-      this.editing = false;
+      this.editing = false
     },
-    calcWidth: function () {
+    calcWidth () {
       this.$nextTick(function () {
-        let el = this.$el.getElementsByClassName("textSpan")[0];
-        if(el){
-          this.width = el.offsetWidth;
-          this.height = el.offsetHeight;
+        let el = this.$el.getElementsByClassName('textSpan')[0]
+        if (el) {
+          this.width = el.offsetWidth
+          this.height = el.offsetHeight
         }
       })
     },
-    emitToParent: function () {
-      var val = this.textTemp.trim() !== "" ? this.textTemp : this.placeholder;
-      this.$emit('input',val);
-      this.$emit('change',val);
+    emitToParent () {
+      var val = this.textTemp.trim() !== '' ? this.textTemp : this.placeholder
+      this.$emit('input', val)
+      this.$emit('change', val)
     }
   }
 }

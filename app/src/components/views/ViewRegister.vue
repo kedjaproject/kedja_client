@@ -31,7 +31,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ViewRegister',
@@ -46,29 +46,29 @@ export default {
   },
   computed: {
     registerToken: function () {
-      return this.$route.query.t;
+      return this.$route.query.t
     }
   },
   methods: {
     register: function () {
       let params = {
-        endpoint: "auth/register/" + this.registerToken,
-        method: "post",
+        endpoint: 'auth/register/' + this.registerToken,
+        method: 'post',
         successCallback: (response) => {
           console.log(response)
-          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name});
-          //this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
-          //this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
-          this.$router.push({name: "Home"})
+          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name})
+          // this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
+          // this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          this.$router.push({name: 'Home'})
         }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     }
   },
-  created: function () {
+  created () {
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

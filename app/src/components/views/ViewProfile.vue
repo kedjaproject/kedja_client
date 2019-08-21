@@ -31,7 +31,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ViewProfile',
@@ -40,49 +40,49 @@ export default {
   },
   data () {
     return {
-      userDataEditable: ""
+      userDataEditable: ''
     }
   },
   props: {
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.getUserData;
+    userData () {
+      return this.$store.getters.getUserData
     }
   },
   methods: {
-    getUserProfile: function () {
+    getUserProfile () {
       let params = {
-        endpoint: "users/" + this.userData.userid,
+        endpoint: 'users/' + this.userData.userid,
         successCallback: (response) => {
-          this.userDataEditable = response.data.data;
+          this.userDataEditable = response.data.data
         }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    updateProfile: function () {
+    updateProfile () {
       let params = {
-        endpoint: "users/" + this.userData.userid,
-        method: "put",
+        endpoint: 'users/' + this.userData.userid,
+        method: 'put',
         data: {
           first_name: this.userDataEditable.first_name,
           last_name: this.userDataEditable.last_name
         },
         successCallback: (response) => {
-          this.$store.dispatch('setUserData', {field: "first_name", value: response.data.data.first_name});
-          this.$store.dispatch('setUserData', {field: "last_name", value: response.data.data.last_name});
+          this.$store.dispatch('setUserData', {field: 'first_name', value: response.data.data.first_name})
+          this.$store.dispatch('setUserData', {field: 'last_name', value: response.data.data.last_name})
         }
       }
 
-      this.$store.commit('makeAPICall',params);
-    },
+      this.$store.commit('makeAPICall', params)
+    }
   },
   created: function () {
 
   },
   mounted: function () {
-    this.getUserProfile();
+    this.getUserProfile()
   }
 }
 </script>

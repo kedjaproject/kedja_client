@@ -18,14 +18,13 @@
 
     <div class="collectionContent" ref="collectionContent">
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="(card,index) in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
+        <card v-for="card in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
       </transition-group>
     </div>
 
     <div class="collectionFooter z1">
       <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">+ Nytt kort</button>
     </div>
-
 
   </div>
 </template>
@@ -45,106 +44,107 @@ export default {
   },
   data () {
     return {
-      hovering: false,
-      //cards: ""
+      hovering: false
+      // cards: ''
     }
   },
   computed: {
-    cards: function () {
-      return this.collection.cards;
+    cards () {
+      return this.collection.cards
     },
     cardsFiltered: function () {
-      return this.cards//.filter(card => card.states.selected != false || card.states.selectedConnected != false)
+      return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
     }
   },
   props: {
-    collection: "",
-    prid: ""
+    collection: '',
+    prid: ''
   },
+  /*
   watch: {
-    /*collection: function () {
+    collection: function () {
       this.getCardsFromAPI()
-    }*/
+    }
   },
+  */
   methods: {
-    setHovering: function (status){
-      this.hovering = status;
+    setHovering (status) {
+      this.hovering = status
     },
     removeCollection: function () {
-      this.$emit('removeCollection',this.collection)
+      this.$emit('removeCollection', this.collection)
     },
-    getCardsFromAPI: function () {
+    getCardsFromAPI () {
       let params = {
-        //endpoint: wallId + "/wall",
-        endpoint: 'collections/' + this.collection.rid + "/cards",
+        // endpoint: wallId + "/wall",
+        endpoint: 'collections/' + this.collection.rid + '/cards',
         successCallback: (data) => {
-          //this.cards = data.data;
-          this.$store.commit('setCollectionCards', {collection: this.collection, cards: data.data});
-        },
+          // this.cards = data.data;
+          this.$store.commit('setCollectionCards', {collection: this.collection, cards: data.data})
+        }
       }
-      this.$store.commit('makeAPICall', params);
+      this.$store.commit('makeAPICall', params)
     },
-    createCard: function () {
-      //this.$store.commit('createCardInCollection',{collection: this.collection});
+    createCard () {
+      // this.$store.commit('createCardInCollection',{collection: this.collection})
       let params = {
-        endpoint: "collections/" + this.collection.rid + "/cards",
+        endpoint: 'collections/' + this.collection.rid + '/cards',
         data: {title: 'Nytt kort'},
-        method: "post",
+        method: 'post',
         successCallback: (data) => {
           console.log(data)
           this.cards.push(data.data)
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    removeCard: function (card) {
-      //this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card});
+    removeCard (card) {
+      // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
       let params = {
-        endpoint: "collections/" + this.collection.rid + "/cards/" + card.rid,
-        method: "delete",
+        endpoint: 'collections/' + this.collection.rid + '/cards/' + card.rid,
+        method: 'delete',
         successCallback: (data) => {
           console.log(data)
 
           let index = this.collection.cards.indexOf(card)
-          if(index != -1){
-            this.collection.cards.splice(index,1)
+          if (index !== -1) {
+            this.collection.cards.splice(index, 1)
           }
-
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    updateTitle: function (title) {
+    updateTitle (title) {
       let params = {
-        endpoint: "walls/" + this.prid + "/collections/" + this.collection.rid,
+        endpoint: 'walls/' + this.prid + '/collections/' + this.collection.rid,
         data: {title: title},
-        method: "put",
+        method: 'put',
         successCallback: (data) => {
           console.log(data.data)
-        },
+        }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    connect: function (params) {
-      this.$emit('connect',params)
+    connect (params) {
+      this.$emit('connect', params)
     },
-    unconnect: function (params) {
-      this.$emit('unconnect',params)
+    unconnect (params) {
+      this.$emit('unconnect', params)
     },
-    handleScroll: function () {
-      this.$store.commit('setDirtyDraw');
+    handleScroll () {
+      this.$store.commit('setDirtyDraw')
     }
   },
-  created: function () {
-    this.$store.commit('initCollection',this.collection);
+  created () {
+    this.$store.commit('initCollection', this.collection)
   },
-  mounted: function () {
-    this.getCardsFromAPI();
+  mounted () {
+    this.getCardsFromAPI()
 
-    this.$refs.collectionContent.addEventListener('scroll', this.handleScroll);
+    this.$refs.collectionContent.addEventListener('scroll', this.handleScroll)
   }
 }
 </script>

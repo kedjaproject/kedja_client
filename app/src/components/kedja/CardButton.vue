@@ -9,13 +9,15 @@
 
 <script>
 
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'CardButton',
-  /*components: {
+  /*
+  components: {
     Component
-  },*/
+  },
+  */
   data () {
     return {
     }
@@ -27,7 +29,7 @@ export default {
   },
   methods: {
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

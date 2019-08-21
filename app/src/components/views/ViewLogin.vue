@@ -17,7 +17,7 @@
 
       <h3>Logga in / Registrera nytt konto med</h3>
 
-        <h2 v-for="method in methods">
+        <h2 v-for="(method, k) in methods" :key="k">
           <a :href="loginUrl(method)">{{method.title}}</a>
         </h2>
 
@@ -29,7 +29,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ViewLogin',
@@ -38,47 +38,49 @@ export default {
   },
   data () {
     return {
-      email: "",
-      pass: "",
-      methods: ""
+      email: '',
+      pass: '',
+      methods: ''
     }
   },
   props: {
   },
   computed: {
     userData: function () {
-      return this.$store.getters.getUserData;
+      return this.$store.getters.getUserData
     }
   },
   methods: {
     loginUrl: function (method) {
       return method.url + '?came_from=' + window.location.origin
     },
-    getLoginMethods: function () {
+    getLoginMethods () {
       let params = {
-        endpoint: "auth/methods",
+        endpoint: 'auth/methods',
         successCallback: (response) => {
-          this.methods = response.data;
+          this.methods = response.data
         }
       }
 
-      this.$store.commit('makeAPICall',params);
+      this.$store.commit('makeAPICall', params)
     },
-    /*login: function (e) {
+    /*
+    login: function (e) {
       this.$store.dispatch('setAuth', {auth: this.email});
       this.$router.push({ name: 'LoggedIn'})
-    },*/
-    loggedIn: function () {
-      if(this.userData.userid){
-        this.$router.push({ name: 'Home'})
+    },
+    */
+    loggedIn () {
+      if (this.userData.userid) {
+        this.$router.push({name: 'Home'})
       }
     }
   },
-  created: function () {
-    this.loggedIn();
+  created () {
+    this.loggedIn()
   },
-  mounted: function () {
-    this.getLoginMethods();
+  mounted () {
+    this.getLoginMethods()
   }
 }
 </script>

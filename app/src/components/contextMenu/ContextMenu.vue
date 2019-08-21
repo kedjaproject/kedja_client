@@ -18,7 +18,7 @@
 <script>
 
 import ContextMenuCard from '@/components/contextMenu/ContextMenuCard'
-//import Component from '@/components/Component'
+// import Component from '@/components/Component'
 
 export default {
   name: 'ContextMenu',
@@ -31,37 +31,37 @@ export default {
     }
   },
   props: {
-    value: ""
+    value: ''
   },
   computed: {
-    userState: function () {
+    userState () {
       return this.$store.state.userState
     },
-    card: function () {
-      if(this.userState.name == "selectCard"){
+    card () {
+      if (this.userState.name === 'selectCard') {
         return this.$store.getters.getCardById(this.userState.data.rid)
       }
       return undefined
     },
-    hasContent: function () {
-      return this.card;
+    hasContent () {
+      return this.card
     }
   },
-  watch:{
+  watch: {
     hasContent: function (val) {
       this.emitData(val)
     }
   },
   methods: {
-    emitData(data) {
-      let d = this.forceClose ? false : data;
-      this.$emit('input',d)
+    emitData (data) {
+      let d = this.forceClose ? false : data
+      this.$emit('input', d)
     },
-    toggleForceClose: function () {
-      this.forceClose = !this.forceClose;
+    toggleForceClose () {
+      this.forceClose = !this.forceClose
     }
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

@@ -6,44 +6,44 @@
 
     <div class="listContainer">
       <div class="list">
-        <div v-for="item in items" class="listItem" @click="performFunction(item.f)">
+        <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)">
           {{item.label}}
         </div>
       </div>
     </div>
-
-
 
   </div>
 </template>
 
 <script>
 
-//import { store } from '@/store';
-//import Component from '@/components/Component'
+// import { store } from '@/store'
+// import Component from '@/components/Component'
 
 export default {
   name: 'DropDown',
-  /*components: {
+  /*
+  components: {
     Component
-  },*/
+  },
+  */
   data () {
     return {
       open: false
     }
   },
   props: {
-    items: ""
+    items: ''
   },
   computed: {
   },
   methods: {
-    toggleList: function () {
-      this.open = !this.open;
+    toggleList () {
+      this.open = !this.open
     },
-    performFunction: function (f) {
-      if(f){
-        f();
+    performFunction (f) {
+      if (f) {
+        f()
       }
     }
   },
