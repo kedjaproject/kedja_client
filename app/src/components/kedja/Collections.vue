@@ -77,15 +77,13 @@ export default {
   /*position: relative;*/
 }
 
-.wrapper{
+/*.wrapper{
   flex: 1;
-
-  /* LAYOUT */
   display: flex;
   flex-direction: row;
   position: relative;
   width: 100%;
-}
+}*/
 
 .collection{
   /*flex: 0 0 300px;*/

@@ -12,10 +12,13 @@
     <div class="wallContent" ref="wallContent">
       <div id="collections" ref="colls">
 
+        <!--div class="high">
+          High element
+        </div-->
+
         <div class="wrapper">
 
           <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-          <!--connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection-->
 
           <connections :connections="connections" boundsElementId="collections" class="connections"></connections>
 
@@ -292,6 +295,11 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.high{
+  background: red;
+  height: 1000px;
 }
 
 </style>

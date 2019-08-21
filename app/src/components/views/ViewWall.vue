@@ -2,9 +2,6 @@
   <div class="ViewWall" @click="resetUserState">
 
     <kedja-header>
-      <button @click="createCollection">
-        + Ny samling
-      </button>
     </kedja-header>
 
     <div class="content">
