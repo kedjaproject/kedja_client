@@ -12,11 +12,7 @@
     <div class="wallContent" ref="wallContent">
       <div id="collections" ref="colls">
 
-        <!--div class="high">
-          High element
-        </div-->
-
-        <div class="wrapper">
+        <div class="horisontal-scroll-wrapper">
 
           <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
 
@@ -280,10 +276,11 @@ export default {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+  overflow-y: hidden;
   flex: 1;
 }
 
-.wrapper{
+.horisontal-scroll-wrapper{
   display: flex;
   flex-direction: row;
   position: relative;
@@ -295,11 +292,6 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.high{
-  background: red;
-  height: 1000px;
 }
 
 </style>

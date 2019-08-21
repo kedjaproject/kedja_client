@@ -67,6 +67,7 @@ export default {
 .Collections{
 
   flex: 1 0;
+  overflow: hidden;
 
   /* LAYOUT */
   display: inline-flex;
