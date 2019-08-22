@@ -173,9 +173,6 @@ export default {
     }
   },
   methods: {
-    removeCard: function () {
-      this.$emit('removeCard', this.card)
-    },
     setState (name, flag) {
       this.card.states[name] = flag
     },
