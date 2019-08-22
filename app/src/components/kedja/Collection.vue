@@ -17,13 +17,19 @@
     </div>
 
     <div class="collectionContent" ref="collectionContent">
+
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="card in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid"  :prid="collection.rid" tabindex="0"></card>
+        <card v-for="card in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
       </transition-group>
+
+      <transition name="fade"  mode="out-in">
+        <card-seed @create="createCard" @cancel="cancelCardSeed" ref="cardSeed" tabindex="0" v-if="showCardSeed"></card-seed>
+      </transition>
+
     </div>
 
     <div class="collectionFooter z1">
-      <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">+ Nytt kort</button>
+      <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort">+ Nytt kort</button>
     </div>
 
   </div>
@@ -33,6 +39,7 @@
 
 import DropDown from '@/components/DropDown'
 import Card from './Card'
+import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
 
 export default {
@@ -40,11 +47,13 @@ export default {
   components: {
     DropDown,
     Card,
+    CardSeed,
     EditableInput
   },
   data () {
     return {
-      hovering: false
+      hovering: false,
+      showCardSeed: false
       // cards: ''
     }
   },
@@ -82,19 +91,30 @@ export default {
       }
       this.$store.commit('makeAPICall', params)
     },
-    createCard () {
+    initCreateCard () {
+      this.showCardSeed = true;
+      // Next tick: needs to be performed after re-rendering, due to hidden element
+      this.$nextTick(function (input) {
+        this.$refs.cardSeed.setFocus();//$el.getElementsByTagName('input')[0].focus()
+      })
+
+    },
+    createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
       let params = {
         endpoint: 'collections/' + this.collection.rid + '/cards',
-        data: {title: 'Nytt kort'},
+        data: {title: title},
         method: 'post',
         successCallback: (data) => {
-          console.log(data)
           this.cards.push(data.data)
+          document.activeElement.blur();
+          this.initCreateCard ()
         }
       }
-
       this.$store.commit('makeAPICall', params)
+    },
+    cancelCardSeed () {
+      this.showCardSeed = false;
     },
     removeCard (card) {
       // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
@@ -177,6 +197,7 @@ export default {
   padding: 30px;
   flex: 1;
   overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 .collectionFooter{

@@ -1,6 +1,9 @@
-.fade-enter-active, .fade-leave-active {
-  /*transition: all 1s ease;*/
+.fade-enter-active {
+  transition: all 1s ease-out;
+}
 
+.fade-leave-active {
+transition: all 0.5s;
 }
 
 .fade-enter, .fade-leave-to
@@ -10,7 +13,7 @@
 }
 
 .fade-leave-active {
-  position: absolute !important;
-  width: 100%;
-  box-sizing: border-box;
+  /*position: absolute !important;
+  display: inline;
+  box-sizing: border-box;*/
 }

@@ -23,7 +23,7 @@
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
-      <EditableInput v-model="card.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
+      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Ange namn för kortet'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.native.stop></EditableInput>
       <!--h3>
         {{card.data.title}}
       </h3-->
@@ -59,7 +59,7 @@ export default {
   },
   data () {
     return {
-      hovering: false
+      initiated: false
     }
   },
   props: {
@@ -199,6 +199,7 @@ export default {
     },
 
     setSelected (e) {
+      console.log("Select card")
       if (!this.card.states.selected) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
@@ -226,6 +227,10 @@ export default {
       this.$store.commit('removeConnectionsByCardId', this.card.rid)
       this.$emit('removeCard', this.card)
     },
+    initUpdateTitle () {
+      console.log("Börja byt namn på kort")
+      this.$store.commit('setUserState', {name: 'renameCard', data: {rid: this.card.rid}})
+    },
     updateTitle (title) {
       let params = {
         endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
@@ -235,14 +240,17 @@ export default {
           console.log(data.data)
         }
       }
-
       this.$store.commit('makeAPICall', params)
+    },
+    setFocus () {
+      this.$el.focus()
     }
   },
   created: function () {
     this.$store.commit('initCard', this.card)
   },
   mounted: function () {
+    //this.setFocus()
   }
 }
 </script>

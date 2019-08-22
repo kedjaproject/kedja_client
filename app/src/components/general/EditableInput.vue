@@ -1,5 +1,5 @@
 <template>
-  <div class="EditableInput" :class="{'fullWidth': inputVisible}">
+  <div class="EditableInput" :class="{'fullWidth': inputVisible}" @click="openEdit">
 
     <wrapper-component :tag="tag" id="eiTemp" class="text">
 
@@ -11,9 +11,9 @@
 
       <div v-if="inputVisible">
 
-        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="finishEdit(false)" @keyup.enter="finishEdit(true)" @blur="finishEdit(true)" :placeholder="placeholder" />
+        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="cancel" @keyup.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
 
-        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" @change="calcWidth"></textarea>
+        <!--textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" @change="calcWidth"></textarea-->
 
       </div>
 
@@ -33,15 +33,16 @@ export default {
     WrapperComponent
   },
   props: {
-    value: String,
+    value: '',
     tag: '',
     placeholder: {default: 'Ange text'},
-    type: {default: 'input'}
+    type: {default: 'input'},
+    focus: false
   },
   data () {
     return {
       editing: false,
-      textTemp: String,
+      textTemp: "",
       width: '',
       height: ''
     }
@@ -49,13 +50,16 @@ export default {
   computed: {
     inputVisible () {
       return this.editing || this.value === ''
+      //return this.$refs.input.hasFocus();
     }
   },
   watch: {
   },
   methods: {
     openEdit () {
+      console.log("Open edit")
       this.calcWidth()
+      //this.initEdit();
       this.editing = true
       this.textTemp = this.value
 
@@ -65,11 +69,32 @@ export default {
         this.$refs.input.select()
       })
     },
+    initEdit () {
+
+    },
+    clearTemp () {
+      this.textTemp = ""
+    },
+    onInitEdit () {
+      this.$emit('init-edit')
+    },
+    cancel () {
+      this.editing = false
+      this.$emit('cancel')
+    },
+    onBlur () {
+      if(this.editing){
+        this.finishEdit(true)
+      }
+    },
     finishEdit (emit) {
+
+      console.log("Färdigskriven: " +  this.editing + " " + emit)
       if (this.editing && emit) {
+        this.editing = false
         this.emitToParent()
       }
-      this.editing = false
+
     },
     calcWidth () {
       this.$nextTick(function () {
@@ -81,9 +106,14 @@ export default {
       })
     },
     emitToParent () {
-      var val = this.textTemp.trim() !== '' ? this.textTemp : this.placeholder
-      this.$emit('input', val)
-      this.$emit('change', val)
+      //var val = this.textTemp.trim() !== '' ? this.textTemp : this.placeholder
+      this.$emit('input', this.textTemp)
+      this.$emit('change', this.textTemp)
+    }
+  },
+  mounted: function () {
+    if(this.focus){
+      this.openEdit();
     }
   }
 }
