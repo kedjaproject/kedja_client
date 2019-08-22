@@ -1,5 +1,5 @@
 <template>
-  <div class="Collection" @mouseenter="setHovering(true)" @mouseleave="setHovering(false)">
+  <div class="Collection">
 
     <div class="collectionHeader z1">
 
@@ -68,9 +68,6 @@ export default {
   },
   */
   methods: {
-    setHovering (status) {
-      this.hovering = status
-    },
     removeCollection: function () {
       this.$emit('removeCollection', this.collection)
     },

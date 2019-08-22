@@ -67,6 +67,7 @@ export default {
 .Collections{
 
   flex: 1 0;
+  overflow: hidden;
 
   /* LAYOUT */
   display: inline-flex;
@@ -77,15 +78,13 @@ export default {
   /*position: relative;*/
 }
 
-.wrapper{
+/*.wrapper{
   flex: 1;
-
-  /* LAYOUT */
   display: flex;
   flex-direction: row;
   position: relative;
   width: 100%;
-}
+}*/
 
 .collection{
   /*flex: 0 0 300px;*/

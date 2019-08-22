@@ -2,19 +2,11 @@
   <div class="ViewWall" @click="resetUserState">
 
     <kedja-header>
-      <button @click="createCollection">
-        + Ny samling
-      </button>
     </kedja-header>
 
     <div class="content">
       <wall :wall="wall" class="mywall"></wall>
       <context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu>
-      <!--context-menu class="cxtMenu" v-model="menuOpen"></context-menu-->
-      <!--div class="wlls">
-      </div-->
-      <!--div class="menu">
-      </div-->
     </div>
 
   </div>
@@ -121,11 +113,6 @@ export default {
   border: 1px solid lightgray;
   overflow-y: scroll;
   transition: all 0.5s;
-}
-
-.wlls{
-  flex: 1;
-  background: green;
 }
 
 .menu{

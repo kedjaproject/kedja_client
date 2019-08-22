@@ -12,10 +12,9 @@
     <div class="wallContent" ref="wallContent">
       <div id="collections" ref="colls">
 
-        <div class="wrapper">
+        <div class="horisontal-scroll-wrapper">
 
           <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-          <!--connection :connection="connection" :dirtyDraw="wall.dirtyDraw" v-for="connection in connections"></connection-->
 
           <connections :connections="connections" boundsElementId="collections" class="connections"></connections>
 
@@ -277,10 +276,11 @@ export default {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+  overflow-y: hidden;
   flex: 1;
 }
 
-.wrapper{
+.horisontal-scroll-wrapper{
   display: flex;
   flex-direction: row;
   position: relative;

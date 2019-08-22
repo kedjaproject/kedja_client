@@ -24,6 +24,7 @@ body{
 
 #router{
   flex: 1;
+  overflow: hidden; 
 }
 
 .fullWidth{
