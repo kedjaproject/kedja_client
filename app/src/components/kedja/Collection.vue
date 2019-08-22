@@ -1,7 +1,7 @@
 <template>
   <div class="Collection">
 
-    <div class="collectionHeader">
+    <div class="collectionHeader z1">
 
       <drop-down :items="[{label: 'Radera samling', f: removeCollection}]">
         <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
@@ -22,7 +22,7 @@
       </transition-group>
     </div>
 
-    <div class="collectionFooter">
+    <div class="collectionFooter z1">
       <button class="fullWidth" @click="createCard" title="Lägg till nytt kort">+ Nytt kort</button>
     </div>
 
