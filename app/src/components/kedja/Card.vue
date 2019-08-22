@@ -14,15 +14,20 @@
 
     <div class="top">
       <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
+      <drop-down :items="[{label: 'Radera kort', f: removeCard}]">
+        &#9663;
+      </drop-down>
     </div>
 
     <div class="main">
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
-      <h3>
+      <EditableInput v-model="card.data.title" tag="h3" @change="updateTitle($event)"></EditableInput>
+      <!--h3>
         {{card.data.title}}
-      </h3>
+      </h3-->
+
       <!--h4>{{card.rid}}</h4-->
       <!--div>
         {{deepConnectedCardIds}}
@@ -43,12 +48,14 @@
 
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
+import DropDown from '@/components/DropDown'
 
 export default {
   name: 'Card',
   components: {
     EditableInput,
-    CardButton
+    CardButton,
+    DropDown
   },
   data () {
     return {
@@ -166,6 +173,9 @@ export default {
     }
   },
   methods: {
+    removeCard: function () {
+      this.$emit('removeCard', this.card)
+    },
     setState (name, flag) {
       this.card.states[name] = flag
     },

@@ -6,7 +6,7 @@
 
     <div class="content">
       <wall :wall="wall" class="mywall"></wall>
-      <context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu>
+      <!--context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu-->
     </div>
 
   </div>
@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      menuOpen: ''
+      //menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
     }
   },
   props: {

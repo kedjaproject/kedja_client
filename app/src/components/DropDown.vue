@@ -1,11 +1,13 @@
 <template>
   <div class="DropDown">
-    
-    <slot class="slot">
-    </slot>
+
+    <div class="toggle" @click="toggleList">
+      <slot class="slot">
+      </slot>
+    </div>
 
     <div class="listContainer">
-      <div class="list">
+      <div class="list" :class="{'open': open}">
         <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)">
           {{item.label}}
         </div>
@@ -58,7 +60,11 @@ export default {
 }
 
 .DropDown:hover .list{
-  display: inline;
+  /*display: inline;*/
+}
+
+.toggle{
+  cursor: pointer;
 }
 
 .listContainer{
@@ -74,6 +80,10 @@ export default {
   border: 1px solid lightgray;
   border-top: 0;
   z-index: 1;
+}
+
+.list.open{
+  display: inline;
 }
 
 .listItem{
