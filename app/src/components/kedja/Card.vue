@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" @click.stop="clicked" :class="{
+  <div class="Card" @click.stop="clicked" @keyup.self.delete="removeCard" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
