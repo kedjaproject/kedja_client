@@ -59,6 +59,7 @@ export default {
 
 .placeholder{
   border-color: transparent;
+  background: transparent;
 }
 
 </style>

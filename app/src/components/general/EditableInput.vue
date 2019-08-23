@@ -123,6 +123,8 @@ export default {
   .EditableInput{
     cursor: text;
     display: inline-block;
+    overflow-x: scroll;
+    max-width: 100%;
   }
 
   #eiTemp {
@@ -130,8 +132,6 @@ export default {
   }
 
   .textSpan{
-    margin: 0;
-    word-break: break-all;
   }
 
   .textSpan:hover{

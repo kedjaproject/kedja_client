@@ -193,7 +193,7 @@ export default {
 }
 
 .collectionContent{
-  padding: 30px;
+  padding: 40px;
   flex: 1;
   overflow-y: scroll;
   scroll-behavior: smooth;
