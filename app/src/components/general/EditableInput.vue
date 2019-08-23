@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       editing: false,
-      textTemp: "",
+      textTemp: '',
       width: '',
       height: ''
     }
@@ -50,16 +50,16 @@ export default {
   computed: {
     inputVisible () {
       return this.editing || this.value === ''
-      //return this.$refs.input.hasFocus();
+      // return this.$refs.input.hasFocus();
     }
   },
   watch: {
   },
   methods: {
     openEdit () {
-      console.log("Open edit")
+      console.log('Open edit')
       this.calcWidth()
-      //this.initEdit();
+      // this.initEdit();
       this.editing = true
       this.textTemp = this.value
 
@@ -73,7 +73,7 @@ export default {
 
     },
     clearTemp () {
-      this.textTemp = ""
+      this.textTemp = ''
     },
     onInitEdit () {
       this.$emit('init-edit')
@@ -83,18 +83,16 @@ export default {
       this.$emit('cancel')
     },
     onBlur () {
-      if(this.editing){
+      if (this.editing) {
         this.finishEdit(true)
       }
     },
     finishEdit (emit) {
-
-      console.log("Färdigskriven: " +  this.editing + " " + emit)
+      console.log('Färdigskriven: ' + this.editing + ' ' + emit)
       if (this.editing && emit) {
         this.editing = false
         this.emitToParent()
       }
-
     },
     calcWidth () {
       this.$nextTick(function () {
@@ -106,14 +104,14 @@ export default {
       })
     },
     emitToParent () {
-      //var val = this.textTemp.trim() !== '' ? this.textTemp : this.placeholder
+      // var val = this.textTemp.trim() !== '' ? this.textTemp : this.placeholder
       this.$emit('input', this.textTemp)
       this.$emit('change', this.textTemp)
     }
   },
   mounted: function () {
-    if(this.focus){
-      this.openEdit();
+    if (this.focus) {
+      this.openEdit()
     }
   }
 }

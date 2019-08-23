@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import KedjaFooter from '@/components/layout/KedjaFooter'
@@ -24,9 +25,13 @@ export default {
   },
   created () {
     this.$store.commit('init', {env: this.env})
+    this.authenticate()
   },
   mounted () {
     document.activeElement.blur()
+  },
+  methods: {
+    ...mapActions(['authenticate'])
   }
 }
 </script>

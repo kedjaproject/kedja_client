@@ -27,7 +27,7 @@ export default {
   },
   data () {
     return {
-      //menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
+      // menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
     }
   },
   props: {

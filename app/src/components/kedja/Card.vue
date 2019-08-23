@@ -131,7 +131,7 @@ export default {
       return this.card.data.int_indicator
     },
     indicatorVisible () {
-      return this.card.states.selected || this.card.data.int_indicator != -1
+      return this.card.states.selected || this.card.data.int_indicator !== -1
     },
     removeVisible () {
       return this.card.states.selected
@@ -210,7 +210,7 @@ export default {
     },
 
     setSelected (e) {
-      console.log("Select card")
+      console.log('Select card')
       if (!this.card.states.selected) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
@@ -239,7 +239,7 @@ export default {
       this.$emit('removeCard', this.card)
     },
     initUpdateTitle () {
-      console.log("Börja byt namn på kort")
+      console.log('Börja byt namn på kort')
       this.$store.commit('setUserState', {name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
@@ -263,7 +263,7 @@ export default {
         }
       }
       this.$store.commit('makeAPICall', params)
-      //console.log(value)
+      // console.log(value)
     },
     setFocus () {
       this.$el.focus()
@@ -273,7 +273,7 @@ export default {
     this.$store.commit('initCard', this.card)
   },
   mounted: function () {
-    //this.setFocus()
+    // this.setFocus()
   }
 }
 </script>

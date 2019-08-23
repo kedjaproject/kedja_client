@@ -1,5 +1,5 @@
 <template>
-  <div class="Wall">
+  <div class="Wall" v-if="data">
 
     <div class="wallHeader">
 
@@ -26,6 +26,9 @@
     <div class="wallFooter">
     </div>
 
+  </div>
+  <div v-else>
+    Loading....
   </div>
 </template>
 

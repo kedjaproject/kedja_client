@@ -15,7 +15,7 @@ import EditableInput from '@/components/general/EditableInput'
 export default {
   name: 'CardSeed',
   components: {
-    EditableInput,
+    EditableInput
   },
   data () {
     return {
@@ -27,34 +27,32 @@ export default {
   computed: {
     userState () {
       return this.$store.getters.getUserState
-    },
+    }
   },
   watch: {
   },
   methods: {
     updateTitle (title) {
-      this.title = ""
-      if(title != ""){
-
+      this.title = ''
+      if (title !== '') {
         this.$emit('create', title)
-      //  this.$refs.editinput.openEdit();
-      }
-      else{
-        this.cancel();
+        // this.$refs.editinput.openEdit()
+      } else {
+        this.cancel()
       }
     },
     cancel () {
-      this.$refs.editinput.clearTemp();
+      this.$refs.editinput.clearTemp()
       this.$emit('cancel')
     },
     setFocus () {
-      this.$refs.editinput.openEdit();
-    },
+      this.$refs.editinput.openEdit()
+    }
   },
   created: function () {
   },
   mounted: function () {
-    //this.setFocus()
+    // this.setFocus()
   }
 }
 </script>

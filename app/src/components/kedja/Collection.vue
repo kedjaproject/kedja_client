@@ -92,12 +92,11 @@ export default {
       this.$store.commit('makeAPICall', params)
     },
     initCreateCard () {
-      this.showCardSeed = true;
+      this.showCardSeed = true
       // Next tick: needs to be performed after re-rendering, due to hidden element
       this.$nextTick(function (input) {
-        this.$refs.cardSeed.setFocus();//$el.getElementsByTagName('input')[0].focus()
+        this.$refs.cardSeed.setFocus() // $el.getElementsByTagName('input')[0].focus()
       })
-
     },
     createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
@@ -107,14 +106,14 @@ export default {
         method: 'post',
         successCallback: (data) => {
           this.cards.push(data.data)
-          document.activeElement.blur();
-          this.initCreateCard ()
+          document.activeElement.blur()
+          this.initCreateCard()
         }
       }
       this.$store.commit('makeAPICall', params)
     },
     cancelCardSeed () {
-      this.showCardSeed = false;
+      this.showCardSeed = false
     },
     removeCard (card) {
       // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
