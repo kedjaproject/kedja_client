@@ -6,26 +6,28 @@
 
 <script>
 
-//import { store } from '@/store';
-//import Component from '@/components/Component'
+// import { store } from '@/store';
+// import Component from '@/components/Component'
 
 export default {
   name: 'ComponentTemplate',
-  /*components: {
+  /*
+  components: {
     Component
-  },*/
+  },
+  */
   data () {
     return {
     }
   },
   props: {
-    value: ""
+    value: ''
   },
   computed: {
   },
   methods: {
-    updateValue() {
-      this.$emit('change',this.$refs.valuePicker.value)
+    updateValue () {
+      this.$emit('change', this.$refs.valuePicker.value)
     }
   },
   mounted: function () {
