@@ -285,6 +285,7 @@ export default {
   /*border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;*/
   background: #FFFFFF;
+  border: 5px solid transparent;
   /*transition: all 0.1s;*/
   display: flex;
   flex-direction: column;
@@ -313,6 +314,7 @@ h3{
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  min-height: 30px;
 }
 
 .selectedButtons * {
