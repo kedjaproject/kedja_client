@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import wallModule from './modules/wallModule'
+import { makeAPICall, setAuthToken } from '../utils'
 // import { walls } from '@/assets/walls.json'
 
 Vue.use(Vuex)
@@ -272,6 +273,16 @@ export const store = new Vuex.Store({
   },
   actions: {
 
+    authenticate ({dispatch}) {
+      makeAPICall('auth/valid')
+        .then(({data}) => {
+          if (data.userid === null) {
+            dispatch('logout')
+          }
+        })
+        .catch(err => console.log(err))
+    },
+
     setUserData: (context, {field, value}) => {
       if (typeof (Storage) !== 'undefined') {
         localStorage.setItem(field, value)
@@ -283,6 +294,7 @@ export const store = new Vuex.Store({
 
     // eslint-disable-next-line camelcase
     login: (context, {auth, userid, first_name, last_name}) => {
+      setAuthToken(auth)
       if (typeof (Storage) !== 'undefined') {
         context.dispatch('setUserData', {field: 'auth', value: auth})
         context.dispatch('setUserData', {field: 'userid', value: userid})
@@ -335,7 +347,7 @@ export const store = new Vuex.Store({
     makeAPICall: (state, payload) => {
       // FIXME: This whole method  shouldn't be here!
 
-      let method = payload.method ? payload.method : 'get'
+      let method = payload.method || 'get'
 
       return axios({
         method: method,
