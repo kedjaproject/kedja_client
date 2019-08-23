@@ -13,10 +13,10 @@
     }">
 
     <div class="top">
+      <div>
+      </div>
+      <indicator :value="card.data.int_indicator" @change="updateIndicatorValue" v-if="indicatorVisible" @click.native.stop></indicator>
       <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
-      <drop-down :items="[{label: 'Radera kort', f: removeCard}]">
-        &#9663;
-      </drop-down>
     </div>
 
     <div class="main">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="bottom">
-
+      <card-button @click.native.stop="removeCard">🗑️</card-button>
     </div>
 
   </div>
@@ -48,6 +48,7 @@
 
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
+import Indicator from './widgets/Indicator'
 import DropDown from '@/components/DropDown'
 
 export default {
@@ -55,6 +56,7 @@ export default {
   components: {
     EditableInput,
     CardButton,
+    Indicator,
     DropDown
   },
   data () {
@@ -124,6 +126,12 @@ export default {
     },
     canConnect () {
       return this.card.states.canConnect
+    },
+    indicatorValue () {
+      return this.card.data.int_indicator
+    },
+    indicatorVisible () {
+      return this.card.states.selected || this.card.data.int_indicator != -1
     }
   },
   watch: {
@@ -242,6 +250,18 @@ export default {
       }
       this.$store.commit('makeAPICall', params)
     },
+    updateIndicatorValue (value) {
+      let params = {
+        endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
+        data: {int_indicator: value},
+        method: 'put',
+        successCallback: (data) => {
+          this.card.data.int_indicator = value;
+        }
+      }
+      this.$store.commit('makeAPICall', params)
+      //console.log(value)
+    },
     setFocus () {
       this.$el.focus()
     }
@@ -277,7 +297,7 @@ h3{
   flex: 1 0 20px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .main{
@@ -287,6 +307,9 @@ h3{
 
 .bottom{
   flex: 1 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .selectedButtons * {

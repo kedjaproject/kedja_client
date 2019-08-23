@@ -1,13 +1,6 @@
 <template>
   <div class="Indicator">
-
-    <select ref="valuePicker" v-model="value">
-      <option>
-        1
-      </option>
-    </select>
-
-
+    <input type="number" min="-1" max="2" ref="valuePicker" :value="value" @change="updateValue()"/>
   </div>
 </template>
 
@@ -26,16 +19,13 @@ export default {
     }
   },
   props: {
-    value: -1
+    value: ""
   },
   computed: {
   },
   methods: {
     updateValue() {
-      this.$emit('input',
-        month: +this.$refs.monthPicker.value,
-        year: +this.$refs.yearPicker.value
-      })
+      this.$emit('change',this.$refs.valuePicker.value)
     }
   },
   mounted: function () {
