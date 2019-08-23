@@ -1,5 +1,5 @@
 <template>
-  <div class="CardButton" :class="{'active': active}">
+  <div class="CardButton" :class="{'active': active, 'placeholder': placeholder}">
 
     <slot>
     </slot>
@@ -23,7 +23,8 @@ export default {
     }
   },
   props: {
-    active: false
+    active: false,
+    placeholder: false
   },
   computed: {
   },
@@ -48,12 +49,16 @@ export default {
   cursor: pointer;
 }
 
-.CardButton:hover:not(.active){
+.CardButton:hover:not(.active):not(.placeholder){
   background: lightgray;
 }
 
 .active{
   background: #ffdc27;
+}
+
+.placeholder{
+  border-color: transparent;
 }
 
 </style>
