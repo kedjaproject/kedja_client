@@ -261,6 +261,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  padding: 1em 0 1em 0;
 }
 
 .wallContent{

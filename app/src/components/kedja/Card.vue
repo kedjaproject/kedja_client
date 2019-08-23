@@ -15,7 +15,7 @@
     <div class="top">
       <div>
       </div>
-      <indicator :value="card.data.int_indicator" @change="updateIndicatorValue" v-if="indicatorVisible" @click.native.stop></indicator>
+      <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" v-if="indicatorVisible" :selected="card.states.selected" @click.native.stop></indicator>
       <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
     </div>
 
@@ -259,7 +259,7 @@ export default {
         data: {int_indicator: value},
         method: 'put',
         successCallback: (data) => {
-          this.card.data.int_indicator = value;
+          //this.card.data.int_indicator = value;
         }
       }
       this.$store.commit('makeAPICall', params)

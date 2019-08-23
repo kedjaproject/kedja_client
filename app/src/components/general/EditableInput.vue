@@ -127,7 +127,13 @@ export default {
     display: inline-block;
   }
 
+  #eiTemp {
+    margin: 0;
+  }
+
   .textSpan{
+    margin: 0;
+    word-break: break-all;
   }
 
   .textSpan:hover{

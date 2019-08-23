@@ -1,6 +1,6 @@
 <template>
-  <div class="Indicator">
-    <input type="number" min="-1" max="2" ref="valuePicker" :value="value" @change="updateValue()"/>
+  <div class="Indicator" @click="increaseValue">
+    <img :src="image" alt="Indikator" />
   </div>
 </template>
 
@@ -19,13 +19,42 @@ export default {
     }
   },
   props: {
-    value: ""
+    value: "",
+    min: {default: -1},
+    max: {default: 2},
+    selected: false
   },
   computed: {
+    image: function () {
+      let filename = ""
+      if(this.value == -1){
+        filename += this.selected ? "KEDJA_Indikator, steg 0, markerat kort" : "KEDJA_Indikator, steg 0, ej markerat kort"
+      }
+      else if(this.value == 0){
+        filename += this.selected ? "KEDJA_Indikator, steg 1, markerat kort" : "KEDJA_Indikator, steg 1, ej markerat kort"
+      }
+      else if(this.value == 1){
+        filename += this.selected ? "KEDJA_Indikator, steg 2, markerat kort" : "KEDJA_Indikator, steg 2, ej markerat kort"
+      }
+      else if(this.value == 2){
+        filename += this.selected ? "KEDJA_Indikator, steg 3, markerat kort" : "KEDJA_Indikator, steg 3, ej markerat kort"
+      }
+      filename += ".png"
+
+      return require("@/assets/graphics/icons/indicator/" + filename);
+    }
   },
   methods: {
-    updateValue() {
-      this.$emit('change',this.$refs.valuePicker.value)
+    emitChangedValue (v) {
+      this.$emit('change',v)
+    },
+    increaseValue () {
+      let valueTemp = this.value + 1;
+      if(valueTemp > this.max){
+        valueTemp = this.min;
+      }
+      this.$emit('input',valueTemp)
+      this.emitChangedValue(valueTemp)
     }
   },
   mounted: function () {
@@ -35,7 +64,12 @@ export default {
 
 <style scoped>
 
-.ComponentTemplate{
+.Indicator{
+  cursor: pointer;
+}
+
+img{
+  width: 50px;
 }
 
 </style>
