@@ -38,7 +38,7 @@
     </div>
 
     <div class="bottom">
-      <card-button @click.native.stop="removeCard">🗑️</card-button>
+      <card-button v-if="removeVisible" @click.native.stop="removeCard">🗑️</card-button>
     </div>
 
   </div>
@@ -132,6 +132,9 @@ export default {
     },
     indicatorVisible () {
       return this.card.states.selected || this.card.data.int_indicator != -1
+    },
+    removeVisible () {
+      return this.card.states.selected
     }
   },
   watch: {
