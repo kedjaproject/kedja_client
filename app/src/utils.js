@@ -12,6 +12,7 @@ function makeAPICall (endpoint, data, method = 'get') {
 }
 
 function setAuthToken (authToken) {
+  localStorage.auth = authToken
   kedjaServer.defaults.headers.common['Authorization'] = authToken
 }
 

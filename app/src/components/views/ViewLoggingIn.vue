@@ -14,6 +14,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
+import { makeAPICall } from '@/utils'
 // import Component from '@/components/Component'
 
 export default {
@@ -40,19 +41,16 @@ export default {
   },
   methods: {
     login () {
-      let params = {
-        endpoint: 'auth/credentials/' + this.userid + '/' + this.token,
-        method: 'post',
-        successCallback: (response) => {
+      makeAPICall('auth/credentials/' + this.userid + '/' + this.token, {}, 'post')
+        .then(response => {
           console.log(response)
-          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name})
+          // Rewritten action takes all data
+          // this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name})
+          this.$store.dispatch('login', response.data)
           // this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization})
           // this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid})
           this.$router.push({name: 'Home'})
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+        })
     }
   },
   created () {

@@ -14,6 +14,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
+import { mapGetters } from 'vuex'
 // import Component from '@/components/Component'
 
 export default {
@@ -28,13 +29,11 @@ export default {
   props: {
   },
   computed: {
-    userData () {
-      return this.$store.getters.getUserData
-    }
+    ...mapGetters(['isAuthenticated'])
   },
   methods: {
     loggedIn () {
-      if (this.userData.userid) {
+      if (this.isAuthenticated) {
         this.$router.push({name: 'Walls'})
       } else {
         this.$router.push({name: 'Login'})

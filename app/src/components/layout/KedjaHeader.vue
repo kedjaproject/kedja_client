@@ -13,11 +13,11 @@
     </div>
 
     <div class="user">
-      <div v-if="userData.userid">
+      <div v-if="isAuthenticated">
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
             <router-link :to="{ name: 'Profile'}">
-              <span v-if="userFullName.length">{{userFullName}}</span>
+              <span v-if="currentUser.first_name || currentUser.last_name">{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
               <span v-else>Inloggad användare</span>
             </router-link>
           </div>
@@ -36,6 +36,8 @@
 
 import KedjaLogo from '@/components/KedjaLogo'
 import DropDown from '@/components/DropDown'
+import { makeAPICall } from '@/utils'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'KedjaHeader',
@@ -50,16 +52,10 @@ export default {
   props: {
   },
   computed: {
+    ...mapGetters(['isAuthenticated']),
+    ...mapGetters('users', ['currentUser']),
     userState () {
       return this.$store.getters.getUserState
-    },
-    userData () {
-      return this.$store.getters.getUserData
-    },
-    userFullName () {
-      if (this.userData.first_name && this.userData.last_name) {
-        return this.userData.first_name + ' ' + this.userData.last_name
-      }
     }
   },
   methods: {
@@ -70,15 +66,11 @@ export default {
       this.$router.push({name: 'Walls'})
     },
     logout (e) {
-      let params = {
-        endpoint: 'auth/logout',
-        method: 'post',
-        successCallback: (response) => {
+      makeAPICall('auth/logout', {}, 'post')
+        .then(response => {
           this.$store.dispatch('logout')
           this.$router.push({name: 'Login'})
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+        })
     }
   },
   mounted () {

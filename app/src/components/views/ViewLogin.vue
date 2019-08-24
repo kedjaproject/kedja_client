@@ -29,6 +29,8 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
+import { mapGetters } from 'vuex'
+import { makeAPICall } from '@/utils'
 // import Component from '@/components/Component'
 
 export default {
@@ -46,23 +48,17 @@ export default {
   props: {
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.getUserData
-    }
+    ...mapGetters(['isAuthenticated'])
   },
   methods: {
     loginUrl: function (method) {
       return method.url + '?came_from=' + window.location.origin
     },
     getLoginMethods () {
-      let params = {
-        endpoint: 'auth/methods',
-        successCallback: (response) => {
+      makeAPICall('auth/methods')
+        .then(response => {
           this.methods = response.data
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+        })
     },
     /*
     login: function (e) {
@@ -71,7 +67,7 @@ export default {
     },
     */
     loggedIn () {
-      if (this.userData.userid) {
+      if (this.isAuthenticated) {
         this.$router.push({name: 'Home'})
       }
     }

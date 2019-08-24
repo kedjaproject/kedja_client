@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import wallModule from './modules/wallModule'
+import walls from './modules/wallModule'
+import users from './modules/users'
 import { makeAPICall, setAuthToken } from '../utils'
 // import { walls } from '@/assets/walls.json'
 
@@ -10,7 +11,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   modules: {
-    walls: wallModule
+    walls,
+    users
   },
   state: {
     env: {},
@@ -42,7 +44,7 @@ export const store = new Vuex.Store({
       // store.commit('resetUserState')
       // store.commit('setAuthFromLocalStorage')
       // store.commit('setUserIdFromLocalStorage')
-      store.commit('setUserDataFromLocalStorage')
+      store.commit('users/loadUserFromLocalStorage')
       store.commit('setDirtyDraw')
     },
 
@@ -78,8 +80,8 @@ export const store = new Vuex.Store({
       }
     },
     */
-
-    setUserDataFromLocalStorage: (state) => {
+    /* Moving this to 'users' store
+    setUserDataFromLocalStorage (state) {
       if (typeof (Storage) !== 'undefined') {
         Vue.set(state.userData, 'auth', localStorage.getItem('auth'))
         Vue.set(state.userData, 'userid', localStorage.getItem('userid'))
@@ -89,7 +91,7 @@ export const store = new Vuex.Store({
         console.log('No local storage support')
       }
     },
-
+    */
     resetUserState: (state) => {
       store.commit('setUserState', {name: 'default'})
     },
@@ -273,7 +275,8 @@ export const store = new Vuex.Store({
   },
   actions: {
 
-    authenticate ({dispatch}) {
+    authenticate ({dispatch, getters}) {
+      if (!getters.isAuthenticated) return
       makeAPICall('auth/valid')
         .then(({data}) => {
           if (data.userid === null) {
@@ -289,9 +292,10 @@ export const store = new Vuex.Store({
       } else {
         console.log('No local storage support')
       }
-      context.commit('setUserDataFromLocalStorage')
+      context.commit('users/loadUserFromLocalStorage')
     },
 
+    /*
     // eslint-disable-next-line camelcase
     login: (context, {auth, userid, first_name, last_name}) => {
       setAuthToken(auth)
@@ -303,20 +307,20 @@ export const store = new Vuex.Store({
       } else {
         console.log('No local storage support')
       }
-      context.commit('setUserDataFromLocalStorage')
+      context.commit('users/loadUserFromLocalStorage')
       // context.dispatch('setUserProfileFromAPI')
     },
+    */
 
-    logout: (context) => {
-      if (typeof (Storage) !== 'undefined') {
-        localStorage.removeItem('auth')
-        localStorage.removeItem('userid')
-        localStorage.removeItem('first_name')
-        localStorage.removeItem('last_name')
-      } else {
-        console.log('No local storage support')
-      }
-      context.commit('setUserDataFromLocalStorage')
+    login ({commit}, data) {
+      setAuthToken(data.Authorization)
+      commit('users/setCurrentUserId', data.user.rid)
+      commit('users/setUserData', data.user)
+    },
+
+    logout: ({commit}) => {
+      commit('users/setCurrentUserId', NaN)
+      commit('users/loadUserFromLocalStorage')
     },
 
     setUserProfileFromAPI: (context) => {
@@ -332,7 +336,7 @@ export const store = new Vuex.Store({
             console.log('No local storage support')
           }
 
-          context.commit('setUserDataFromLocalStorage')
+          context.commit('users/loadUserFromLocalStorage')
         }
       }
 
@@ -369,8 +373,12 @@ export const store = new Vuex.Store({
     },
     */
 
+    isAuthenticated (state) {
+      return !!state.users.currentUserId
+    },
+
     getUserData: state => {
-      return state.userData
+      return state.users.data[state.users.currentUserId]
     },
 
     getUserState: state => {
