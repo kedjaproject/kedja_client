@@ -41,6 +41,7 @@ import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
+import { makeAPICall } from '@/utils'
 
 export default {
   name: 'Collection',
@@ -81,15 +82,12 @@ export default {
       this.$emit('removeCollection', this.collection)
     },
     getCardsFromAPI () {
-      let params = {
-        // endpoint: wallId + "/wall",
-        endpoint: 'collections/' + this.collection.rid + '/cards',
-        successCallback: (data) => {
-          // this.cards = data.data;
-          this.$store.commit('setCollectionCards', {collection: this.collection, cards: data.data})
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+      makeAPICall('collections/' + this.collection.rid + '/cards')
+        .then(response => {
+          // this.cards = response.data;
+          this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
+        })
+        .catch(err => console.log(err))
     },
     initCreateCard () {
       this.showCardSeed = true
@@ -100,49 +98,36 @@ export default {
     },
     createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
-      let params = {
-        endpoint: 'collections/' + this.collection.rid + '/cards',
-        data: {title: title},
-        method: 'post',
-        successCallback: (data) => {
-          this.cards.push(data.data)
+      makeAPICall('collections/' + this.collection.rid + '/cards', {title}, 'post')
+        .then(response => {
+          this.cards.push(response.data)
           document.activeElement.blur()
           this.initCreateCard()
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+        })
+        .catch(err => console.log(err))
     },
     cancelCardSeed () {
       this.showCardSeed = false
     },
     removeCard (card) {
       // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
-      let params = {
-        endpoint: 'collections/' + this.collection.rid + '/cards/' + card.rid,
-        method: 'delete',
-        successCallback: (data) => {
-          console.log(data)
+      makeAPICall('collections/' + this.collection.rid + '/cards' + card.rid, {}, 'delete')
+        .then(response => {
+          console.log(response)
 
           let index = this.collection.cards.indexOf(card)
           if (index !== -1) {
             this.collection.cards.splice(index, 1)
           }
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+        })
+        .catch(err => console.log(err))
     },
     updateTitle (title) {
-      let params = {
-        endpoint: 'walls/' + this.prid + '/collections/' + this.collection.rid,
-        data: {title: title},
-        method: 'put',
-        successCallback: (data) => {
-          console.log(data.data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+      makeAPICall('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title}, 'put')
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
     },
     connect (params) {
       this.$emit('connect', params)

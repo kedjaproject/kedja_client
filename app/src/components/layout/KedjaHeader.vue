@@ -17,7 +17,7 @@
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
             <router-link :to="{ name: 'Profile'}">
-              <span v-if="currentUser.first_name || currentUser.last_name">{{ currentUser.first_name }} {{ currentUser.last_name }}</span>
+              <span v-if="currentUser.shortName">{{ currentUser.shortName }}</span>
               <span v-else>Inloggad användare</span>
             </router-link>
           </div>

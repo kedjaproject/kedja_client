@@ -26,6 +26,7 @@
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
+import { makeAPICall } from '@/utils'
 
 export default {
   name: 'ViewWallList',
@@ -46,42 +47,32 @@ export default {
     }
   },
   methods: {
-    getWalls: function () {
-      let params = {
-        // endpoint: wallId + "/wall",
-        endpoint: 'walls',
-        successCallback: (data) => {
-          this.walls = data.data
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+    getWalls () {
+      makeAPICall('walls')
+        .then(response => {
+          this.walls = response.data
+        })
     },
-    getWallsStore: function () {
+    getWallsStore () {
       this.$store.dispatch('walls/getWalls')
     },
-    createWall: function () {
+    createWall () {
       // this.$store.commit('createCollectionInWall',{wall: this.wall});
-      let params = {
-        endpoint: 'walls',
-        data: {title: 'Ny vägg'},
-        method: 'post',
-        successCallback: (data) => {
-          console.log(data)
-          this.walls.push(data.data)
-        },
-        errorCallback: (data) => {
+      makeAPICall('walls', {title: 'Ny vägg'}, 'post')
+        .then(response => {
+          console.log(response)
+          this.walls.push(response.data)
+        })
+        .catch(err => {
           console.log('Du är inte inloggad. Logga in för att fortsätta.')
-          console.log(data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+          console.log(err)
+        })
     }
   },
-  created: function () {
+  created () {
 
   },
-  mounted: function () {
+  mounted () {
     this.getWallsStore()
   }
 }

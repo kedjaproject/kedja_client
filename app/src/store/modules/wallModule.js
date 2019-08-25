@@ -1,11 +1,12 @@
 import collectionModule from './collectionModule'
+import { makeAPICall } from '@/utils'
 
 const modules = {
   collections: collectionModule
 }
 
 const state = {
-  walls: ''
+  walls: []
 }
 
 // getters
@@ -17,22 +18,14 @@ const getters = {
 
 // actions
 const actions = {
-  getWalls: (context) => {
-    let payload = {
-      endpoint: 'walls'
-    }
-
-    context.dispatch('makeAPICall', payload, { root: true }).then(
-      function (data) {
-        context.commit('setWalls', data)
-      },
-      function (data) {
-        console.log(data)
-      }
-    )
-      .catch(error => {
-        console.log(error)
-      }) // -> 'foo/someOtherAction'
+  getWalls ({commit}) {
+    makeAPICall('walls')
+      .then(response => {
+        commit('setWalls', response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 

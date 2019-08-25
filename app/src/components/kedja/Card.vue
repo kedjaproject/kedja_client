@@ -46,6 +46,8 @@
 
 <script>
 
+import { kedjaAPI } from '@/utils'
+
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
 import Indicator from './widgets/Indicator'
@@ -243,26 +245,16 @@ export default {
       this.$store.commit('setUserState', {name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
-      let params = {
-        endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
-        data: {title: title},
-        method: 'put',
-        successCallback: (data) => {
-          console.log(data.data)
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {title})
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
     },
     updateIndicatorValue (value) {
-      let params = {
-        endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
-        data: {int_indicator: value},
-        method: 'put',
-        successCallback: (data) => {
+      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {int_indicator: value})
+        .then(response => {
           this.card.data.int_indicator = value
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+        })
+        .catch(err => console.log(err))
       // console.log(value)
     },
     setFocus () {

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { makeAPICall } from '../../utils'
 
 export default {
@@ -16,11 +17,12 @@ export default {
     },
 
     setUserData (state, data) {
-      if (data.rid in state.data) {
-        Object.assign(state.data[data.rid], data.data)
-      } else {
-        state.data[data.rid] = data.data
-      }
+      let userData = data.data
+      // Remember fullName and shortName (initials) for all users.
+      userData.fullName = [userData.first_name, userData.last_name].filter(a => a).join(' ')
+      userData.shortName = [userData.first_name[0], userData.last_name[0]].filter(a => a).join('').toUpperCase()
+      Vue.set(state.data, data.rid, userData)
+      // If it's the logged in user, save to localStorage.
       if (data.rid === state.currentUserId) {
         localStorage.userData = JSON.stringify(data)
       }
@@ -31,11 +33,7 @@ export default {
       try {
         const userData = JSON.parse(localStorage.userData)
         state.currentUserId = userData.rid
-        if (userData.rid in state.data) {
-          Object.assign(state.data[userData.rid], userData.data)
-        } else {
-          state.data[userData.rid] = userData.data
-        }
+        Vue.set(state.data, userData.rid, userData.data)
       } catch (e) {
         console.log('Could not load userData', e)
       }

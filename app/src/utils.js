@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const kedjaServer = axios.create({
+const kedjaAPI = axios.create({
   baseURL: process.env.API_SERVER + process.env.API_PATH,
   headers: {
     Authorization: localStorage.auth
@@ -8,15 +8,16 @@ const kedjaServer = axios.create({
 })
 
 function makeAPICall (endpoint, data, method = 'get') {
-  return kedjaServer[method](endpoint, data)
+  return kedjaAPI[method](endpoint, data)
 }
 
 function setAuthToken (authToken) {
   localStorage.auth = authToken
-  kedjaServer.defaults.headers.common['Authorization'] = authToken
+  kedjaAPI.defaults.headers.common['Authorization'] = authToken
 }
 
 export {
   setAuthToken,
-  makeAPICall
+  makeAPICall,
+  kedjaAPI
 }

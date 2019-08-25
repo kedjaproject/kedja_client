@@ -30,7 +30,7 @@
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import { mapGetters } from 'vuex'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 // import Component from '@/components/Component'
 
 export default {
@@ -55,7 +55,7 @@ export default {
       return method.url + '?came_from=' + window.location.origin
     },
     getLoginMethods () {
-      makeAPICall('auth/methods')
+      kedjaAPI.get('auth/methods')
         .then(response => {
           this.methods = response.data
         })

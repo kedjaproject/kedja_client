@@ -8,7 +8,7 @@
       Du är inloggad som
 
       <h2>
-        {{currentUser.first_name}} {{currentUser.last_name}}
+        {{currentUser.fullName}}
       </h2>
 
       <h3>Uppdatera profil</h3>

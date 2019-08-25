@@ -17,6 +17,7 @@
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
 import ContextMenu from '@/components/contextMenu/ContextMenu'
+import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewWall',
@@ -46,29 +47,21 @@ export default {
     getWallFromParam: function () {
       let wallId = this.$route.params['wallId']
       if (wallId) {
-        let params = {
-          // endpoint: wallId + "/wall",
-          endpoint: 'walls/' + wallId,
-          successCallback: (data) => {
-            this.$store.commit('setActiveWall', {wall: data.data})
-          }
-        }
-        this.$store.commit('makeAPICall', params)
+        kedjaAPI.get('walls/' + wallId)
+          .then(response => {
+            this.$store.commit('setActiveWall', {wall: response.data})
+          })
+          .catch(err => console.log(err))
       }
     },
     createCollection () {
       // this.$store.commit('createCollectionInWall', {wall: this.wall})
-      let params = {
-        endpoint: 'walls/' + this.wall.rid + '/collections',
-        data: {title: 'Ny samling'},
-        method: 'post',
-        successCallback: (data) => {
-          console.log(data)
-          this.wall.collections.push(data.data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.post('walls/' + this.wall.rid + '/collections', {title: 'Ny samling'})
+        .then(response => {
+          console.log(response)
+          this.wall.collections.push(response.data)
+        })
+        .catch(err => console.log(err))
     },
     resetUserState () {
       this.$store.commit('resetUserState')
