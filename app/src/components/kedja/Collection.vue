@@ -111,7 +111,7 @@ export default {
     },
     removeCard (card) {
       // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
-      makeAPICall('collections/' + this.collection.rid + '/cards' + card.rid, {}, 'delete')
+      makeAPICall('collections/' + this.collection.rid + '/cards/' + card.rid, {}, 'delete')
         .then(response => {
           console.log(response)
 
