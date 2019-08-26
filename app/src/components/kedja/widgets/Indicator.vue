@@ -43,7 +43,7 @@ export default {
       }
       filename += ".png"
 
-      return require("@/assets/graphics/icons/indicator/" + filename);
+      return "/static/graphics/icons/indicator/" + filename;
     }
   },
   methods: {
