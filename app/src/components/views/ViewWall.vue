@@ -51,7 +51,6 @@ export default {
           .then(response => {
             this.$store.commit('setActiveWall', {wall: response.data})
           })
-          .catch(err => console.log(err))
       }
     },
     createCollection () {
@@ -61,7 +60,6 @@ export default {
           console.log(response)
           this.wall.collections.push(response.data)
         })
-        .catch(err => console.log(err))
     },
     resetUserState () {
       this.$store.commit('resetUserState')

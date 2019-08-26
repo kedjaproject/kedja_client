@@ -87,7 +87,6 @@ export default {
           // this.cards = response.data;
           this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
         })
-        .catch(err => console.log(err))
     },
     initCreateCard () {
       this.showCardSeed = true
@@ -104,7 +103,6 @@ export default {
           document.activeElement.blur()
           this.initCreateCard()
         })
-        .catch(err => console.log(err))
     },
     cancelCardSeed () {
       this.showCardSeed = false
@@ -120,14 +118,12 @@ export default {
             this.collection.cards.splice(index, 1)
           }
         })
-        .catch(err => console.log(err))
     },
     updateTitle (title) {
       makeAPICall('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title}, 'put')
         .then(response => {
           console.log(response)
         })
-        .catch(err => console.log(err))
     },
     connect (params) {
       this.$emit('connect', params)

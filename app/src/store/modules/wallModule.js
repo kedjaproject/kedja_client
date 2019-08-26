@@ -23,9 +23,6 @@ const actions = {
       .then(response => {
         commit('setWalls', response)
       })
-      .catch(err => {
-        console.log(err)
-      })
   }
 }
 

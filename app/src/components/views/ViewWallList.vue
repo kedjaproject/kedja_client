@@ -63,9 +63,8 @@ export default {
           console.log(response)
           this.walls.push(response.data)
         })
-        .catch(err => {
+        .catch(() => {
           console.log('Du är inte inloggad. Logga in för att fortsätta.')
-          console.log(err)
         })
     }
   },

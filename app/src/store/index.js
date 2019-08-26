@@ -283,7 +283,6 @@ export const store = new Vuex.Store({
             dispatch('logout')
           }
         })
-        .catch(err => console.log(err))
     },
 
     login ({commit}, data) {

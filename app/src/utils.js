@@ -7,6 +7,14 @@ const kedjaAPI = axios.create({
   }
 })
 
+// Default error handler here.
+kedjaAPI.interceptors.response.use(response => response, error => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(error)
+  }
+  return Promise.reject(error)
+})
+
 function makeAPICall (endpoint, data, method = 'get') {
   return kedjaAPI[method](endpoint, data)
 }

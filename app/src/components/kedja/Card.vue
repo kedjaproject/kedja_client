@@ -247,14 +247,12 @@ export default {
     updateTitle (title) {
       kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {title})
         .then(response => console.log(response))
-        .catch(err => console.log(err))
     },
     updateIndicatorValue (value) {
       kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {int_indicator: value})
         .then(response => {
           this.card.data.int_indicator = value
         })
-        .catch(err => console.log(err))
       // console.log(value)
     },
     setFocus () {

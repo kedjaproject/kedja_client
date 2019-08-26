@@ -104,7 +104,6 @@ export default {
           .then(response => {
             this.$store.commit('setWallCollections', {wall: this.wall, collections: response.data})
           })
-          .catch(err => console.log(err))
       }
     },
     getConnectionsFromAPI () {
@@ -114,7 +113,6 @@ export default {
           .then(response => {
             this.$store.commit('setWallConnections', {wall: this.wall, connections: response.data})
           })
-          .catch(err => console.log(err))
       }
     },
     getWallLocal () {
@@ -126,7 +124,6 @@ export default {
         .then(response => {
           this.collections.push(response.data)
         })
-        .catch(err => console.log(err))
     },
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })
@@ -134,7 +131,6 @@ export default {
         .then(response => {
           this.$router.push({name: 'Walls'})
         })
-        .catch(err => console.log(err))
     },
     removeCollection (collection) {
       // this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection})
@@ -147,12 +143,10 @@ export default {
             this.wall.collections.splice(index, 1)
           }
         })
-        .catch(err => console.log(err))
     },
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.wall.rid, {title})
         .then(response => {})
-        .catch(err => console.log(err))
     },
     connect (p) {
       // this.$store.commit('createConnection',params);
@@ -165,7 +159,6 @@ export default {
           this.wall.connections.push(response.data)
           this.$store.commit('forceUserStateUpdate')
         })
-        .catch(err => console.log(err))
     },
 
     unconnect (p) {
@@ -186,7 +179,6 @@ export default {
           }
           console.log(this.wall.connections)
         })
-        .catch(err => console.log(err))
     },
 
     handleScroll () {

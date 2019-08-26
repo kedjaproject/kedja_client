@@ -66,9 +66,6 @@ export default {
           this.setUserData(response.data)
           this.setDataEditable(response.data.data)
         })
-        .catch(err => {
-          console.log(err)
-        })
     }
   },
   created () {
