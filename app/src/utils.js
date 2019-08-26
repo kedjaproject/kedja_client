@@ -17,7 +17,7 @@ kedjaAPI.interceptors.response.use(response => response, error => {
 
 function setAuthToken (authToken) {
   localStorage.auth = authToken
-  kedjaAPI.defaults.headers.common['Authorization'] = authToken
+  kedjaAPI.defaults.headers['Authorization'] = authToken
 }
 
 export {
