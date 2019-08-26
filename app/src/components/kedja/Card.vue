@@ -7,9 +7,9 @@
     'connectingConnected': card.states.connectingConnected,
     'connectingNotConnected': card.states.connectingNotConnected,
     'connectingCantConnect': card.states.connectingCantConnect,
-    'cannotConnect': canConnect == false && !connecting,
+    'cannotConnect': !this.card.states.canConnect && !this.card.states.connecting,
     'connectedOther': card.states.connected == false,
-    'connecting': connecting
+    'connecting': this.card.states.connecting
     }">
 
     <div class="top">
@@ -81,13 +81,6 @@ export default {
     userState () {
       return this.$store.getters.getUserState
     },
-    selected () {
-      // return this.card.states.selected == true;
-      return this.userState.name === 'selectCard' && this.userState.data.rid === this.card.rid
-    },
-    selectedConnected () {
-      return this.card.states.selectedConnected === true
-    },
     connectionsDirect () {
       return this.$store.getters.getDirectConnectionsByCardId(this.card.rid)
     },
@@ -125,16 +118,6 @@ export default {
         }
       })
       return arr
-    },
-    connecting () {
-      return this.card.states.connecting === true
-      // return this.userState.name == 'connectCard' && this.userState.data.rid == this.card.rid
-    },
-    connected () {
-      return false // this.card.states.canConnect && this.card.states.connected;
-    },
-    canConnect () {
-      return this.card.states.canConnect
     },
     indicatorValue () {
       return this.card.data.int_indicator
@@ -220,7 +203,9 @@ export default {
 
     setSelected (e) {
       console.log('Select card')
-      if (!this.card.states.selected) {
+      console.log(this.userState.name)
+      console.log(this.card.states)
+      if (!(this.userState.name == "selectCard" && this.userState.data.rid == this.card.rid)) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
         this.$store.commit('resetUserState')
