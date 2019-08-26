@@ -7,6 +7,7 @@
 <script>
 
 // import Component from '@/components/Component'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Connections',
@@ -23,7 +24,7 @@ export default {
     }
   },
   props: {
-    connections: '',
+    connections: Array,
     boundsElementId: ''
   },
   computed: {
@@ -34,17 +35,17 @@ export default {
       return this.$store.state.dirtyDraw
     },
     connectionCards: function () {
-      let connectionCards = []
-      this.connections.forEach((conn) => {
-        connectionCards.push({
+      console.log(this.connections)
+      return this.connections.map(conn => {
+        return {
           members: [
-            this.$store.getters.getCardById(conn.members[0]),
-            this.$store.getters.getCardById(conn.members[1])
+            this.cardById[conn.members[0]],
+            this.cardById[conn.members[1]]
           ]
-        })
+        }
       })
-      return connectionCards
-    }
+    },
+    ...mapState('walls', ['cardById'])
   },
   watch: {
     /*
@@ -99,7 +100,7 @@ export default {
       ctx.stroke();
       */
 
-      this.connectionCards.forEach((connection) => {
+      this.connectionCards.forEach(connection => {
         this.drawConnection(ctx, connection)
       })
     },
@@ -165,7 +166,7 @@ export default {
       }
     },
     getCardById: function (id) {
-      return this.$store.getters.getCardById(id)
+      return this.cardById[id]
     }
   },
   created () {

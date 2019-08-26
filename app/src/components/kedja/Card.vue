@@ -212,7 +212,7 @@ export default {
     },
 
     setSelected (e) {
-      console.log('Select card')
+      console.log('Select card', this.card)
       if (!this.card.states.selected) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {

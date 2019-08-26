@@ -5,7 +5,7 @@
     </kedja-header>
 
     <div class="content">
-      <wall :wall="wall" class="mywall"></wall>
+      <wall v-if="rid" :rid="rid" class="mywall"></wall>
       <!--context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu-->
     </div>
 
@@ -28,6 +28,7 @@ export default {
   },
   data () {
     return {
+      rid: NaN
       // menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
     }
   },
@@ -45,12 +46,17 @@ export default {
   },
   methods: {
     getWallFromParam: function () {
-      let wallId = this.$route.params['wallId']
-      if (wallId) {
+      this.rid = Number(this.$route.params['wallId'])
+      if (this.rid) {
+        // Test
+        this.$store.dispatch('walls/fetchWall', this.rid)
+        // End test
+        /*
         kedjaAPI.get('walls/' + wallId)
           .then(response => {
             this.$store.commit('setActiveWall', {wall: response.data})
           })
+        */
       }
     },
     createCollection () {

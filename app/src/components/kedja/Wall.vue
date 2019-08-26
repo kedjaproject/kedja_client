@@ -1,10 +1,10 @@
 <template>
-  <div class="Wall" v-if="data">
+  <div class="Wall" v-if="wall">
 
     <div class="wallHeader">
 
       <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
-        <EditableInput v-model="data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
+        <EditableInput v-model="wall.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
     </div>
@@ -13,11 +13,8 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-
           <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-
-          <connections :connections="connections" boundsElementId="collections" class="connections"></connections>
-
+          <connections :connections="relations" boundsElementId="collections" class="connections"></connections>
         </div>
 
       </div>
@@ -34,6 +31,7 @@
 
 <script>
 
+import { mapState } from 'vuex'
 import { kedjaAPI } from '@/utils'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
@@ -61,33 +59,29 @@ export default {
     }
   },
   props: {
-    wall: ''
+    // wall: Object,
+    rid: Number
   },
   computed: {
     userState () {
       return this.$store.getters.getUserState
     },
-    /*
     wall () {
-      return this.$store.getters.getActiveWall();
-    },
-    */
-    data () {
-      return this.wall.data
+      return this.wallData[this.rid]
     },
     collections () {
       return this.wall.collections
     },
-    connections () {
-      return this.wall.connections
-    }
-    /*
+    relations () {
+      return this.wall.relations
+    },
     title: function () {
-      return this.data.title
-    }
-    */
+      return this.wall.title
+    },
+    ...mapState('walls', ['wallData'])
   },
   watch: {
+    /*
     wall () {
       this.$store.commit('initWall', this.wall)
       this.getCollectionsFromAPI()
@@ -95,6 +89,7 @@ export default {
     },
     collections: function () {
     }
+    */
   },
   methods: {
     getCollectionsFromAPI () {
@@ -206,8 +201,7 @@ export default {
     // this.$refs.collections.addEventListener('scroll', this.handleScroll);
 
   },
-  updated: function () {
-
+  updated () {
   }
 }
 </script>

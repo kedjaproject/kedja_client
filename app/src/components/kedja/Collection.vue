@@ -81,6 +81,7 @@ export default {
     removeCollection: function () {
       this.$emit('removeCollection', this.collection)
     },
+    /*
     getCardsFromAPI () {
       kedjaAPI.get('collections/' + this.collection.rid + '/cards')
         .then(response => {
@@ -88,6 +89,7 @@ export default {
           this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
         })
     },
+    */
     initCreateCard () {
       this.showCardSeed = true
       // Next tick: needs to be performed after re-rendering, due to hidden element
@@ -139,7 +141,7 @@ export default {
     this.$store.commit('initCollection', this.collection)
   },
   mounted () {
-    this.getCardsFromAPI()
+    // this.getCardsFromAPI()
 
     this.$refs.collectionContent.addEventListener('scroll', this.handleScroll)
   }
