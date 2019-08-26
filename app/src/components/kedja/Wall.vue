@@ -4,7 +4,7 @@
     <div class="wallHeader">
 
       <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
-        <EditableInput v-model="wall.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
+        <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
     </div>
@@ -13,7 +13,7 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-          <collections :collections="collections" :prid="wall.rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+          <collections :collections="collections" :prid="rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
           <connections :connections="relations" boundsElementId="collections" class="connections"></connections>
         </div>
 
@@ -75,9 +75,6 @@ export default {
     relations () {
       return this.wall.relations
     },
-    title: function () {
-      return this.wall.title
-    },
     ...mapState('walls', ['wallData'])
   },
   watch: {
@@ -115,21 +112,21 @@ export default {
     },
     createCollection () {
       // this.$store.commit('createCollectionInWall',{wall: this.wall})
-      kedjaAPI.post('walls/' + this.wall.rid + '/collections', {title: 'Ny samling'})
+      kedjaAPI.post('walls/' + this.rid + '/collections', {title: 'Ny samling'})
         .then(response => {
           this.collections.push(response.data)
         })
     },
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })
-      kedjaAPI.delete('walls/' + this.wall.rid)
+      kedjaAPI.delete('walls/' + this.rid)
         .then(response => {
           this.$router.push({name: 'Walls'})
         })
     },
     removeCollection (collection) {
       // this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection})
-      kedjaAPI.delete('walls/' + this.wall.rid + '/collections/' + collection.rid)
+      kedjaAPI.delete('walls/' + this.rid + '/collections/' + collection.rid)
         .then(response => {
           console.log(response)
 
@@ -140,18 +137,17 @@ export default {
         })
     },
     updateTitle (title) {
-      kedjaAPI.put('walls/' + this.wall.rid, {title})
-        .then(response => {})
+      kedjaAPI.put('walls/' + this.rid, {title})
     },
     connect (p) {
       // this.$store.commit('createConnection',params);
-      console.log(p.members)
+      console.log(p.members, this.wall)
 
-      kedjaAPI.post('walls/' + this.wall.rid + '/relations', p)
+      kedjaAPI.post('walls/' + this.rid + '/relations', p)
         .then(response => {
           console.log(response)
           // this.$store.commit('addConnectionToWall',{wall: this.wall, connection: data.data})
-          this.wall.connections.push(response.data)
+          this.wall.relations.push(response.data)
           this.$store.commit('forceUserStateUpdate')
         })
     },
@@ -159,20 +155,20 @@ export default {
     unconnect (p) {
       // this.$store.commit('createConnection',params)
       console.log(p.members)
-      let connection = this.wall.connections.filter(c => c.members.indexOf(p.members[0]) !== -1 && c.members.indexOf(p.members[1]) !== -1)[0]
+      let relation = this.wall.relations.find(c => c.members.includes(p.members[0]) && c.members.includes(p.members[1]))
 
-      kedjaAPI.delete('walls/' + this.wall.rid + '/relations/' + connection.relation_id)
+      kedjaAPI.delete('walls/' + this.rid + '/relations/' + relation.relation_id)
         .then(response => {
-          let index = this.wall.connections.indexOf(connection)
+          let index = this.wall.relations.indexOf(relation)
           console.log(index)
-          console.log(connection.relation_id)
-          console.log(this.wall.connections)
+          console.log(relation.relation_id)
+          console.log(this.wall.relations)
           if (index !== -1) {
-            this.wall.connections.splice(index, 1)
+            this.wall.relations.splice(index, 1)
             // this.$store.commit('setDirtyDraw');
             this.$store.commit('forceUserStateUpdate')
           }
-          console.log(this.wall.connections)
+          console.log(this.wall.relations)
         })
     },
 

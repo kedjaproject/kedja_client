@@ -28,15 +28,30 @@ const getters = {
     return id => getters.currentWall.collections.findIndex(collection => collection.cards.find(card => card.rid === id))
   },
 
+  getCollectionByCard: (state, getters) => card => {
+    return getters.currentWall.collections.find(collection => collection.cards.includes(card))
+  },
+
+  getClosestCardCousins: (state, getters) => card => {
+    let collection = getters.getCollectionByCard(card)
+    let siblings = getters.getClosestArraySiblings(getters.currentWall.collections, collection)
+    return siblings
+      .reduce((cousins, sibling) => cousins.concat(sibling.cards), [])
+  },
+
+  getClosestArraySiblings: state => (collections, item) => {
+    const i = collections.indexOf(item)
+    return [collections[i - 1], collections[i + 1]]
+      .filter(sibling => sibling !== undefined)
+  },
+
   // Not optimized: might go down the same connections multiple times and create duplicates
   getRecursiveConnectionsByCardId (state, getters) {
     return (allConnections, id, forward) => {
-      if (!allConnections) {
-        return []
-      }
+      if (!allConnections) return []
 
       // let connections = allConnections.filter(c => c.members[+!forward] == id)
-      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) !== -1)
+      let connectionsBothDirections = allConnections.filter(c => c.members.includes(id))
 
       let nextCardIds = []
       let connectionsRightDirection = []
@@ -109,6 +124,13 @@ const actions = {
             commit('setRelationsData', {wall: wallResponse.data, relations: relationsResponse.data})
           }))
       }))
+  },
+
+  createRelation ({commit, state}, {wall, cards}) {
+    kedjaAPI.post('walls/' + state.currentWallId + '/relations', {members: cards.map(card => card.rid)})
+      .then(response => {
+        commit('addRelation', { wallId: state.currentWallId, relation: response.data })
+      })
   }
 }
 
@@ -124,7 +146,7 @@ const mutations = {
   },
 
   setWallData (state, wall) {
-    Vue.set(state.wallData, wall.rid, wall.data)
+    Vue.set(state.wallData, wall.rid, wall)
   },
 
   setCollectionsData (state, {wall, collections}) {
@@ -139,6 +161,12 @@ const mutations = {
     })
   },
 
+  // Use this instead?
+  addRelation (state, {wall, relation}) {
+    state.wallData[wall.rid].relations.push(relation)
+  },
+
+  // And this...
   setRelationsData (state, {wall, relations}) {
     Vue.set(state.wallData[wall.rid], 'relations', relations)
   }

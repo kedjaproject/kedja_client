@@ -6,16 +6,10 @@
 
 <script>
 
-// import Component from '@/components/Component'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Connections',
-  /*
-  components: {
-    Component
-  },
-  */
   data () {
     return {
       loaded: false,
@@ -25,7 +19,7 @@ export default {
   },
   props: {
     connections: Array,
-    boundsElementId: ''
+    boundsElementId: String
   },
   computed: {
     userState: function () {

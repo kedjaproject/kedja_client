@@ -46,7 +46,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import { kedjaAPI } from '@/utils'
 
@@ -69,8 +69,8 @@ export default {
     }
   },
   props: {
-    card: '',
-    prid: ''
+    card: Object,
+    prid: Number
   },
   computed: {
     userState () {
@@ -140,7 +140,8 @@ export default {
     removeVisible () {
       return this.card.states.selected
     },
-    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId'])
+    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
+    ...mapState('walls', ['cardById'])
   },
   watch: {
     userState: {
@@ -173,10 +174,10 @@ export default {
             this.setState('selected', true)
             this.setState('connecting', true)
           } else { // Unless this is the card the user is interacting with
-            if (this.directConnectedCardIds.indexOf(s.data.rid) !== -1) { // if card is connected
+            if (this.directConnectedCardIds.includes(s.data.rid)) { // if card is connected
               this.setState('connectingConnected', true)
             } else { // if card is not connected
-              let cousins = this.$store.getters.getClosestCardCousins(this.card)
+              let cousins = this.getClosestCardCousins(this.card)
               if (cousins.find(c => c.rid === s.data.rid)) { // If not connected and the cards are closest cousins
                 this.setState('connectingNotConnected', true)
               } else {
@@ -230,13 +231,13 @@ export default {
       }
     },
     connect: function () {
-      console.log('Connect')
-      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
+      let cardOther = this.cardById[this.userState.data.rid]
+      console.log('Connect', cardOther)
       this.$emit('connect', {members: [cardOther.rid, this.card.rid]})
     },
     unconnect () {
-      console.log('Unconnect')
-      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
+      let cardOther = this.cardById[this.userState.data.rid]
+      console.log('Unconnect', cardOther)
       this.$emit('unconnect', {members: [cardOther.rid, this.card.rid]})
     },
     removeCard () {
