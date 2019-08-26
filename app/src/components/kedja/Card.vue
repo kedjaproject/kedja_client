@@ -46,6 +46,8 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
+
 import { kedjaAPI } from '@/utils'
 
 import EditableInput from '@/components/general/EditableInput'
@@ -82,10 +84,10 @@ export default {
       return this.card.states.selectedConnected === true
     },
     connectionsDirect () {
-      return this.$store.getters.getDirectConnectionsByCardId(this.card.rid)
+      return this.getDirectConnectionsByCardId(this.card.rid)
     },
     connectionsDeep () {
-      return this.$store.getters.getDeepConnectionsByCardId(this.card.rid)
+      return this.getDeepConnectionsByCardId(this.card.rid)
     },
     directConnectedCardIds () {
       let arr = []
@@ -103,7 +105,7 @@ export default {
       })
       return arr
     },
-    deepConnectedCardIds: function () {
+    deepConnectedCardIds () {
       let arr = []
       this.connectionsDeep.forEach((conn, iConn) => {
         if (conn.members[0] !== this.card.rid) {
@@ -137,7 +139,8 @@ export default {
     },
     removeVisible () {
       return this.card.states.selected
-    }
+    },
+    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId'])
   },
   watch: {
     userState: {

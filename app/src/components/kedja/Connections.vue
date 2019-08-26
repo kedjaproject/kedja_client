@@ -35,7 +35,6 @@ export default {
       return this.$store.state.dirtyDraw
     },
     connectionCards: function () {
-      console.log(this.connections)
       return this.connections.map(conn => {
         return {
           members: [

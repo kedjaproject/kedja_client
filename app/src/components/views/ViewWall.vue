@@ -14,6 +14,8 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
+
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
 import ContextMenu from '@/components/contextMenu/ContextMenu'
@@ -36,13 +38,14 @@ export default {
   },
   computed: {
     wall () {
-      return this.$store.getters.getActiveWall()
-    }
+      return this.currentWall
+    },
     /*
     sidebarFlex () {
 
     }
     */
+    ...mapGetters('walls', ['currentWall'])
   },
   methods: {
     getWallFromParam: function () {
@@ -50,6 +53,7 @@ export default {
       if (this.rid) {
         // Test
         this.$store.dispatch('walls/fetchWall', this.rid)
+        this.$store.commit('walls/setCurrentWallId', this.rid)
         // End test
         /*
         kedjaAPI.get('walls/' + wallId)

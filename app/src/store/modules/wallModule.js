@@ -10,14 +10,75 @@ const modules = {
 const state = {
   walls: [],
   wallData: {},
-  cardById: {}
+  cardById: {},
+  currentWallId: NaN
 }
 
 // getters
 const getters = {
-  all: state => {
+  all (state) {
     return state.walls
+  },
+
+  currentWall (state) {
+    return state.wallData[state.currentWallId]
+  },
+
+  getCollectionArrayIdByCardId (state, getters) {
+    return id => getters.currentWall.collections.findIndex(collection => collection.cards.find(card => card.rid === id))
+  },
+
+  // Not optimized: might go down the same connections multiple times and create duplicates
+  getRecursiveConnectionsByCardId (state, getters) {
+    return (allConnections, id, forward) => {
+      if (!allConnections) {
+        return []
+      }
+
+      // let connections = allConnections.filter(c => c.members[+!forward] == id)
+      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) !== -1)
+
+      let nextCardIds = []
+      let connectionsRightDirection = []
+      connectionsBothDirections.forEach((c) => {
+        let col0 = getters.getCollectionArrayIdByCardId(c.members[0])
+        let col1 = getters.getCollectionArrayIdByCardId(c.members[1])
+        let indexForward = col1 > col0 ? 1 : 0
+        let indexSelf = c.members.indexOf(id)
+        let indexOther = +!indexSelf // turns 1 to 0, and 0 to 1
+        if (forward === (indexForward === indexOther)) {
+          nextCardIds.push(c.members[indexOther])
+          connectionsRightDirection.push(c)
+        }
+      })
+
+      let cc = []
+      nextCardIds.forEach(cardId => {
+        cc = cc.concat(getters.getRecursiveConnectionsByCardId(allConnections, cardId, forward))
+      })
+      connectionsRightDirection = connectionsRightDirection.concat(cc)
+
+      return connectionsRightDirection
+    }
+  },
+
+  getDeepConnectionsByCardId (state, getters) {
+    return (rid) => {
+      let allConnections = getters.currentWall.relations
+      let connections = getters.getRecursiveConnectionsByCardId(allConnections, rid, true)
+      connections = connections.concat(getters.getRecursiveConnectionsByCardId(allConnections, rid, false))
+      // connections = [...new Set(connections)] // remove duplicates
+      return connections
+    }
+  },
+
+  getDirectConnectionsByCardId (state, getters) {
+    return (id) => {
+      let wall = getters.currentWall
+      return wall.relations.filter(c => c.members.indexOf(id) !== -1)
+    }
   }
+
 }
 
 // actions
@@ -56,6 +117,10 @@ const mutations = {
 
   setWalls (state, payload) {
     state.walls = payload.data
+  },
+
+  setCurrentWallId (state, wallId) {
+    state.currentWallId = wallId
   },
 
   setWallData (state, wall) {
