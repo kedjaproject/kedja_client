@@ -6,7 +6,7 @@
       </slot>
     </div>
 
-    <div class="listContainer">
+    <div class="listContainer z2">
       <div class="list" :class="{'open': open}">
         <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)">
           {{item.label}}

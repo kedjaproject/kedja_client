@@ -41,8 +41,8 @@ export default {
   background: transparent;
   /*border: 1px solid lightgray;*/
   box-sizing: border-box;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   justify-content: center;
   align-items: center;

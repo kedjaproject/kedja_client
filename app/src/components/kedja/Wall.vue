@@ -132,6 +132,9 @@ export default {
         method: 'post',
         successCallback: (data) => {
           this.collections.push(data.data)
+          this.$nextTick(function() {
+            document.activeElement.scrollIntoView()
+          })
         }
       }
       this.$store.commit('makeAPICall', params)
@@ -280,6 +283,7 @@ export default {
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+  scroll-behavior: smooth;
   overflow-y: hidden;
   flex: 1;
 }

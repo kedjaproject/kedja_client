@@ -16,15 +16,10 @@
       <div v-if="userData.userid">
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
-            <router-link :to="{ name: 'Profile'}">
-              <span v-if="userFullName.length">{{userFullName}}</span>
-              <span v-else>Inloggad användare</span>
-            </router-link>
+            <span v-if="userFullName.length">{{userFullName}}</span>
+            <span v-else>Inloggad användare</span>
           </div>
         </drop-down>
-      </div>
-      <div v-else class="right">
-        <router-link :to="{ name: 'Login'}">Logga in</router-link>
       </div>
 
     </div>

@@ -3,16 +3,15 @@
 
     <div class="collectionHeader z1">
 
+      <span></span>
+
+      <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput>
+
       <drop-down :items="[{label: 'Radera samling', f: removeCollection}]">
-        <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
+        <card-button>
+          <widget-icon path="/static/graphics/icons/dropdown/" img="KEDJA-14.png" imgHover="KEDJA-15.png"></widget-icon>
+        </card-button>
       </drop-down>
-
-      <!--EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput-->
-      <!--{{collection.rid}}-->
-
-      <!--button @click="removeCollection" title="Ta bort samling">
-        🗑️
-      </button-->
 
     </div>
 
@@ -41,6 +40,8 @@ import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
+import CardButton from './CardButton'
+import WidgetIcon from './widgets/WidgetIcon'
 
 export default {
   name: 'Collection',
@@ -48,7 +49,9 @@ export default {
     DropDown,
     Card,
     CardSeed,
-    EditableInput
+    EditableInput,
+    CardButton,
+    WidgetIcon
   },
   data () {
     return {
@@ -180,9 +183,13 @@ export default {
 }
 
 .collectionHeader{
-  padding: 10px 20px 10px 20px;
+  padding: 20px 20px 10px 20px;
   border-bottom: 1px solid white;
   background: #CADBDA;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .Collection:nth-child(even),
