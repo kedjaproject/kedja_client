@@ -1,5 +1,5 @@
 <template>
-  <div class="EditableInput" :class="{'fullWidth': inputVisible}" @click="openEdit">
+  <div class="EditableInput" :class="{'fullWidth': inputVisible, 'locked': locked}" @click="openEdit">
 
     <wrapper-component :tag="tag" id="eiTemp" class="text">
 
@@ -37,7 +37,8 @@ export default {
     tag: '',
     placeholder: {default: 'Ange text'},
     type: {default: 'input'},
-    focus: false
+    focus: false,
+    locked: false
   },
   data () {
     return {
@@ -57,17 +58,19 @@ export default {
   },
   methods: {
     openEdit () {
-      console.log('Open edit')
-      this.calcWidth()
-      // this.initEdit();
-      this.editing = true
-      this.textTemp = this.value
+      if(!this.locked){
+        console.log('Open edit')
+        this.calcWidth()
+        // this.initEdit();
+        this.editing = true
+        this.textTemp = this.value
 
-      // Next tick: needs to be performed after re-rendering, due to hidden input field
-      this.$nextTick(function (input) {
-        this.$refs.input.focus()
-        this.$refs.input.select()
-      })
+        // Next tick: needs to be performed after re-rendering, due to hidden input field
+        this.$nextTick(function (input) {
+          this.$refs.input.focus()
+          this.$refs.input.select()
+        })
+      }
     },
     initEdit () {
 
@@ -121,10 +124,13 @@ export default {
 <style scoped>
 
   .EditableInput{
-    cursor: text;
     display: inline-block;
     overflow-x: scroll;
     max-width: 100%;
+  }
+
+  .EditableInput:not(.locked) .textSpan{
+    cursor: text;
   }
 
   #eiTemp {
