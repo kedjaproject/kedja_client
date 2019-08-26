@@ -38,8 +38,8 @@ export default {
 <style scoped>
 
 .CardButton{
-  background: white;
-  border: 1px solid lightgray;
+  background: transparent;
+  /*border: 1px solid lightgray;*/
   box-sizing: border-box;
   width: 30px;
   height: 30px;
@@ -49,13 +49,13 @@ export default {
   cursor: pointer;
 }
 
-.CardButton:hover:not(.active):not(.placeholder){
+/*.CardButton:hover:not(.active):not(.placeholder){
   background: lightgray;
-}
+}*/
 
-.active{
+/*.active{
   background: #ffdc27;
-}
+}*/
 
 .placeholder{
   border-color: transparent;

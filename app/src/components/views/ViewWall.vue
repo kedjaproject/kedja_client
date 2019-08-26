@@ -2,6 +2,7 @@
   <div class="ViewWall" @click="resetUserState">
 
     <kedja-header>
+      <h3></h3>
     </kedja-header>
 
     <div class="content">

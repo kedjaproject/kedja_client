@@ -15,9 +15,12 @@
     <div class="top">
       <card-button :placeholder="true"></card-button>
 
-      <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.native.stop></indicator>
+      <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.stop></indicator>
 
-      <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
+      <card-button @click.native.stop="toggleConnecting">
+        <widget-icon path="/static/graphics/icons/link/" img="KEDJA_Koppling.png" imgHover="KEDJA_Koppling, hover.png" imgActive="KEDJA_Koppling, igang.png" :active="card.states.connecting"></widget-icon>
+      </card-button>
+
     </div>
 
     <div class="main">
@@ -39,7 +42,10 @@
     </div>
 
     <div class="bottom">
-      <card-button v-if="removeVisible" @click.native.stop="removeCard">🗑️</card-button>
+
+      <card-button v-if="removeVisible" @click.native.stop="removeCard">
+        <widget-icon path="/static/graphics/icons/bin/" img="KEDJA_Papperskorg.png" imgHover="KEDJA_Papperskorg, hover.png"></widget-icon>
+      </card-button>
     </div>
 
   </div>
@@ -50,6 +56,7 @@
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
 import Indicator from './widgets/Indicator'
+import WidgetIcon from './widgets/WidgetIcon'
 import DropDown from '@/components/DropDown'
 
 export default {
@@ -58,6 +65,7 @@ export default {
     EditableInput,
     CardButton,
     Indicator,
+    WidgetIcon,
     DropDown
   },
   data () {

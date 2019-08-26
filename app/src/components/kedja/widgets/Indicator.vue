@@ -1,5 +1,5 @@
 <template>
-  <div class="Indicator" @click="increaseValue">
+  <div class="Indicator" @click="onclick($event)">
     <img :src="image" alt="Indikator" />
   </div>
 </template>
@@ -10,7 +10,7 @@
 // import Component from '@/components/Component'
 
 export default {
-  name: 'ComponentTemplate',
+  name: 'Indicator',
   /*
   components: {
     Component
@@ -49,6 +49,12 @@ export default {
   methods: {
     emitChangedValue (v) {
       this.$emit('change',v)
+    },
+    onclick (e) {
+      if(this.selected){
+        e.stopPropagation()
+        this.increaseValue();
+      }
     },
     increaseValue () {
       let valueTemp = this.value + 1;
