@@ -1,14 +1,14 @@
 <template>
-  <div class="DropDown">
+  <div class="DropDown" tabindex="0" @blur="blur($event)">
 
     <div class="toggle" @click="toggleList">
       <slot class="slot">
       </slot>
     </div>
 
-    <div class="listContainer z2">
-      <div class="list" :class="{'open': open}">
-        <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)">
+    <div class="listContainer z2" tabindex="0">
+      <div class="list" :class="{'open': open}" tabindex="0">
+        <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)" tabindex="0">
           {{item.label}}
         </div>
       </div>
@@ -43,6 +43,14 @@ export default {
     toggleList () {
       this.open = !this.open
     },
+    close () {
+      this.open = false;
+    },
+    blur (e) {
+      if(!this.$el.contains(e.relatedTarget)){
+        this.close();
+      }
+    },
     performFunction (f) {
       if (f) {
         f()
@@ -57,10 +65,7 @@ export default {
 <style scoped>
 
 .DropDown{
-}
-
-.DropDown:hover .list{
-  /*display: inline;*/
+  outline: none;
 }
 
 .toggle{
