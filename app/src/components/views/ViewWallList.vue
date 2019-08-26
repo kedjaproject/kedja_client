@@ -26,7 +26,7 @@
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewWallList',
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getWalls () {
-      makeAPICall('walls')
+      kedjaAPI.get('walls')
         .then(response => {
           this.walls = response.data
         })
@@ -58,7 +58,7 @@ export default {
     },
     createWall () {
       // this.$store.commit('createCollectionInWall',{wall: this.wall});
-      makeAPICall('walls', {title: 'Ny vägg'}, 'post')
+      kedjaAPI.post('walls', {title: 'Ny vägg'})
         .then(response => {
           console.log(response)
           this.walls.push(response.data)

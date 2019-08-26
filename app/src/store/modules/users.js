@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { makeAPICall } from '../../utils'
+import { kedjaAPI } from '@/utils'
 
 export default {
   namespaced: true,
@@ -46,7 +46,7 @@ export default {
   },
   actions: {
     fetchUserData ({commit}, userId) {
-      makeAPICall('users/' + userId)
+      kedjaAPI.get('users/' + userId)
         .then(response => {
           commit('setUserData', response.data)
         })

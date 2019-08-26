@@ -31,7 +31,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 // import Component from '@/components/Component'
 
@@ -61,7 +61,7 @@ export default {
       }
     },
     updateProfile () {
-      makeAPICall('users/' + this.currentUserId, this.userDataEditable, 'put')
+      kedjaAPI.put('users/' + this.currentUserId, this.userDataEditable)
         .then(response => {
           this.setUserData(response.data)
           this.setDataEditable(response.data.data)

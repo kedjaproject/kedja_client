@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 // import axios from 'axios'
 import walls from './modules/wallModule'
 import users from './modules/users'
-import { makeAPICall, setAuthToken } from '../utils'
+import { kedjaAPI, setAuthToken } from '../utils'
 // import { walls } from '@/assets/walls.json'
 
 Vue.use(Vuex)
@@ -277,7 +277,7 @@ export const store = new Vuex.Store({
 
     authenticate ({dispatch, getters}) {
       if (!getters.isAuthenticated) return
-      makeAPICall('auth/valid')
+      kedjaAPI.get('auth/valid')
         .then(({data}) => {
           if (!data.userid) {
             dispatch('logout')

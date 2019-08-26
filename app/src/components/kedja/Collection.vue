@@ -41,7 +41,7 @@ import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'Collection',
@@ -82,7 +82,7 @@ export default {
       this.$emit('removeCollection', this.collection)
     },
     getCardsFromAPI () {
-      makeAPICall('collections/' + this.collection.rid + '/cards')
+      kedjaAPI.get('collections/' + this.collection.rid + '/cards')
         .then(response => {
           // this.cards = response.data;
           this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
@@ -97,7 +97,7 @@ export default {
     },
     createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
-      makeAPICall('collections/' + this.collection.rid + '/cards', {title}, 'post')
+      kedjaAPI.post('collections/' + this.collection.rid + '/cards', {title})
         .then(response => {
           this.cards.push(response.data)
           document.activeElement.blur()
@@ -109,7 +109,7 @@ export default {
     },
     removeCard (card) {
       // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
-      makeAPICall('collections/' + this.collection.rid + '/cards/' + card.rid, {}, 'delete')
+      kedjaAPI.delete('collections/' + this.collection.rid + '/cards/' + card.rid)
         .then(response => {
           console.log(response)
 
@@ -120,7 +120,7 @@ export default {
         })
     },
     updateTitle (title) {
-      makeAPICall('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title}, 'put')
+      kedjaAPI.put('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title})
         .then(response => {
           console.log(response)
         })

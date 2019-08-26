@@ -1,5 +1,5 @@
 import collectionModule from './collectionModule'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 
 const modules = {
   collections: collectionModule
@@ -19,7 +19,7 @@ const getters = {
 // actions
 const actions = {
   getWalls ({commit}) {
-    makeAPICall('walls')
+    kedjaAPI.get('walls')
       .then(response => {
         commit('setWalls', response)
       })

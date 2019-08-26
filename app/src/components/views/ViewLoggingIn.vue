@@ -14,7 +14,7 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 // import Component from '@/components/Component'
 
 export default {
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     login () {
-      makeAPICall('auth/credentials/' + this.userid + '/' + this.token, {}, 'post')
+      kedjaAPI.post('auth/credentials/' + this.userid + '/' + this.token)
         .then(response => {
           console.log(response)
           // Rewritten action takes all data

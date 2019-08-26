@@ -36,7 +36,7 @@
 
 import KedjaLogo from '@/components/KedjaLogo'
 import DropDown from '@/components/DropDown'
-import { makeAPICall } from '@/utils'
+import { kedjaAPI } from '@/utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -66,7 +66,7 @@ export default {
       this.$router.push({name: 'Walls'})
     },
     logout (e) {
-      makeAPICall('auth/logout', {}, 'post')
+      kedjaAPI.post('auth/logout')
         .then(response => {
           this.$store.dispatch('logout')
           this.$router.push({name: 'Login'})
