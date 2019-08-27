@@ -80,10 +80,20 @@ export default {
   },
   watch: {
     userState: function (us) {
-      if(us.name == 'selectCard'){
+      if(us.name == 'selectCard' || us.name == 'connectCard'){
         this.$nextTick(function() {
-          let els = this.$el.getElementsByClassName('selectingConnected');
+          let els = this.$el.getElementsByClassName('selected');
+          if(els.length == 0){
+            els = this.$el.getElementsByClassName('selectingConnected');
+          }
+          if(els.length == 0){
+            els = this.$el.getElementsByClassName('connectingConnected');
+          }
           if(els.length > 0){
+            this.$refs.collectionContent.scrollTo({
+              top: els[0].offsetTop,
+              behavior: 'smooth'
+            });
             //els[0].scrollIntoView({behavior: "smooth", block: "center"})
           }
         })

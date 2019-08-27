@@ -201,7 +201,7 @@ export default {
       // this.$store.commit('forceUserStateUpdate')
     },
     scrollIntoView () {
-      this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+      //this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
     },
     setSelected (e) {
       console.log('Select card')
