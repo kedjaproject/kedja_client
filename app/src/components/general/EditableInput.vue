@@ -11,9 +11,9 @@
 
       <div v-if="inputVisible">
 
-        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="cancel" @keyup.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
+        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keydown.esc="cancel" @keydown.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
 
-        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
+        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height + 'px'}" @keydown.prevent.enter="finishEdit(true)" @keydown.esc="cancel" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
 
       </div>
 
@@ -36,7 +36,7 @@ export default {
     value: '',
     tag: '',
     placeholder: {default: 'Ange text'},
-    type: {default: 'input'},
+    type: {default: 'textarea'},
     focus: false,
     locked: false
   },
