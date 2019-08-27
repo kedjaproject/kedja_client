@@ -136,29 +136,32 @@ export default {
         // Default rendering settings
         ctx.lineWidth = 5
         ctx.strokeStyle = '#ffff'
+        ctx.fillStyle = '#ffdc27'
 
+        //User state based rendering settings
         if (this.userState.name === 'selectCard' || this.userState.name === 'connectCard') {
           if (inSelectedChainLeft && inSelectedChainRight) {
           } else {
             ctx.lineWidth = 1
             ctx.strokeStyle = '#fff5'
+            ctx.fillStyle = '#ffdc2722'
           }
         }
 
+        //START DRAW
+        //Line
         ctx.beginPath()
         ctx.moveTo(x0 + 5, y0)
         ctx.lineTo(x1 - 5, y1)
         ctx.stroke()
 
         // Connection points
-        // Left circle
-        ctx.fillStyle = this.userState.name === 'default' || inSelectedChainLeft ? '#ffdc27' : '#ffdc2722'
+        // Left-most half circle
         ctx.beginPath()
         ctx.arc(x0, y0, inSelectedChainLeft ? 15 : 10, -Math.PI / 2, Math.PI / 2)
         ctx.fill()
 
-        // Right circle
-        ctx.fillStyle = this.userState.name === 'default' || inSelectedChainRight ? '#ffdc27' : 'ffdc2722'
+        // Right-most half circle
         ctx.beginPath()
         ctx.arc(x1, y1, inSelectedChainRight ? 15 : 10, Math.PI / 2, -Math.PI / 2)
         ctx.fill()
