@@ -126,6 +126,8 @@ export default {
   .EditableInput{
     display: inline-block;
     word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
     hyphens: auto;
   }
 
