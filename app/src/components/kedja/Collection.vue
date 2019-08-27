@@ -28,7 +28,7 @@
     </div>
 
     <div class="collectionFooter z1">
-      <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort">+ Nytt kort</button>
+      <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort" :disabled="newDisabled">+ Nytt kort</button>
     </div>
 
   </div>
@@ -61,11 +61,17 @@ export default {
     }
   },
   computed: {
+    userState () {
+      return this.$store.getters.getUserState
+    },
     cards () {
       return this.collection.cards
     },
     cardsFiltered: function () {
       return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
+    },
+    newDisabled: function () {
+      return this.userState.name == 'connectCard'
     }
   },
   props: {
