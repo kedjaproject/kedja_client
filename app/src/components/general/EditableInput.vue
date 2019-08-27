@@ -126,6 +126,7 @@ export default {
   .EditableInput{
     display: inline-block;
     word-break: break-word;
+    hyphens: auto;
   }
 
   .EditableInput:not(.locked) .textSpan{
