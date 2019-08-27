@@ -133,7 +133,7 @@ export default {
         successCallback: (data) => {
           this.collections.push(data.data)
           this.$nextTick(function() {
-            document.activeElement.scrollIntoView()
+            document.activeElement.scrollIntoView({behavior: "smooth", inline: "start"})
           })
         }
       }
