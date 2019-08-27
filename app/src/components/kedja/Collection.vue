@@ -80,15 +80,15 @@ export default {
   },
   watch: {
     userState: function (us) {
-      if(us.name == 'selectCard' || us.name == 'connectCard'){
+      if(us.name == 'selectCard' /*|| us.name == 'connectCard'*/){
         this.$nextTick(function() {
           let els = this.$el.getElementsByClassName('selected');
           if(els.length == 0){
             els = this.$el.getElementsByClassName('selectingConnected');
           }
-          if(els.length == 0){
+          /*if(els.length == 0){
             els = this.$el.getElementsByClassName('connectingConnected');
-          }
+          }*/
           if(els.length > 0){
             this.$refs.collectionContent.scrollTo({
               top: els[0].offsetTop,
