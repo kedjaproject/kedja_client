@@ -3,16 +3,15 @@
 
     <div class="collectionHeader z1">
 
+      <span></span>
+
+      <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput>
+
       <drop-down :items="[{label: 'Radera samling', f: removeCollection}]">
-        <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
+        <card-button>
+          <widget-icon path="/static/graphics/icons/dropdown/" img="KEDJA-14.png" imgHover="KEDJA-15.png"></widget-icon>
+        </card-button>
       </drop-down>
-
-      <!--EditableInput v-model="collection.data.title" tag="h3" @change="updateTitle($event)"></EditableInput-->
-      <!--{{collection.rid}}-->
-
-      <!--button @click="removeCollection" title="Ta bort samling">
-        🗑️
-      </button-->
 
     </div>
 
@@ -29,20 +28,22 @@
     </div>
 
     <div class="collectionFooter z1">
-      <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort">+ Nytt kort</button>
+      <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort" :disabled="newDisabled">+ Nytt kort</button>
     </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 import { kedjaAPI } from '@/utils'
 import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
+import CardButton from './CardButton'
+import WidgetIcon from './widgets/WidgetIcon'
 
 export default {
   name: 'Collection',
@@ -50,7 +51,9 @@ export default {
     DropDown,
     Card,
     CardSeed,
-    EditableInput
+    EditableInput,
+    CardButton,
+    WidgetIcon
   },
   data () {
     return {
@@ -63,23 +66,44 @@ export default {
     cards () {
       return this.getList(this.collection.cardList)
     },
-    cardsFiltered: function () {
+    cardsFiltered () {
       return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
     },
-    ...mapGetters('walls/cards', ['getList'])
+    newDisabled () {
+      return this.userState.name === 'connectCard'
+    },
+    ...mapGetters('walls/cards', ['getList']),
+    ...mapState(['userState'])
   },
   props: {
     collection: Object,
     prid: Number,
     wall: Object
   },
-  /*
   watch: {
-    collection: function () {
-      this.getCardsFromAPI()
+    userState: function (us) {
+      if (us.name === 'selectCard' /* || us.name == 'connectCard' */) {
+        this.$nextTick(() => {
+          let els = this.$el.getElementsByClassName('selected')
+          if (els.length === 0) {
+            els = this.$el.getElementsByClassName('selectingConnected')
+          }
+          /*
+          if(els.length == 0){
+            els = this.$el.getElementsByClassName('connectingConnected');
+          }
+          */
+          if (els.length > 0) {
+            this.$refs.collectionContent.scrollTo({
+              top: els[0].offsetTop,
+              behavior: 'smooth'
+            })
+            // els[0].scrollIntoView({behavior: "smooth", block: "center"})
+          }
+        })
+      }
     }
   },
-  */
   methods: {
     removeCollection () {
       this.$store.dispatch('walls/collections/removeCollection', {wall: this.wall, collection: this.collection})
@@ -164,9 +188,13 @@ export default {
 }
 
 .collectionHeader{
-  padding: 10px 20px 10px 20px;
+  padding: 20px 20px 10px 20px;
   border-bottom: 1px solid white;
   background: #CADBDA;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .Collection:nth-child(even),
@@ -177,9 +205,9 @@ export default {
 }
 
 .collectionContent{
-  padding: 30px;
+  padding: 40px;
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   scroll-behavior: smooth;
 }
 

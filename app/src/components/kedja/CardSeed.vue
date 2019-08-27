@@ -2,7 +2,7 @@
   <div class="CardSeed">
 
     <div class="main">
-      <EditableInput v-model="title" tag="h3" :placeholder="'Ange namn för kortet'" @change="updateTitle($event)" @cancel="cancel" ref="editinput"></EditableInput>
+      <EditableInput v-model="title" tag="h3" placeholder="Namnge kort" @change="updateTitle($event)" @cancel="cancel" ref="editinput"></EditableInput>
     </div>
 
   </div>

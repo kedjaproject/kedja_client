@@ -5,10 +5,16 @@ button{
   font-size: 12pt;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.5s;
 }
-button:hover{
+button:hover:not(:disabled){
   border-color: black;
   background: #fcfcfc;
+}
+button:disabled{
+  cursor: default;
+  color: gray;
+  filter: opacity(0.5);
 }
 
 input{

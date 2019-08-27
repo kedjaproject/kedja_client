@@ -25,6 +25,7 @@ export default {
   },
   created () {
     this.$store.commit('init', {env: this.env})
+    this.$store.commit('resetUserState')
     this.authenticate()
   },
   mounted () {

@@ -114,42 +114,47 @@ export default {
           inSelectedChainRight = c0.states.selected || c0.states.selectingConnected || c0.states.connectingConnected
         }
 
-        // Start point
+        // Left point
         let x0 = elLeft.getBoundingClientRect().x + elLeft.getBoundingClientRect().width - this.bounds.x + this.scroll.left
         let y0 = elLeft.getBoundingClientRect().y + elLeft.getBoundingClientRect().height / 2 - this.bounds.y
 
-        // End point
+        // Right point
         let x1 = elRight.getBoundingClientRect().x - this.bounds.x + this.scroll.left
         let y1 = elRight.getBoundingClientRect().y + elRight.getBoundingClientRect().height / 2 - this.bounds.y
 
         // Default rendering settings
         ctx.lineWidth = 5
         ctx.strokeStyle = '#ffff'
+        ctx.fillStyle = '#ffdc27'
+        let radius = 15
 
+        // User state based rendering settings
         if (this.userState.name === 'selectCard' || this.userState.name === 'connectCard') {
           if (inSelectedChainLeft && inSelectedChainRight) {
           } else {
             ctx.lineWidth = 1
             ctx.strokeStyle = '#fff5'
+            ctx.fillStyle = '#ffdc2722'
+            radius = 10
           }
         }
 
+        // START DRAW
+        // Line
         ctx.beginPath()
         ctx.moveTo(x0 + 5, y0)
         ctx.lineTo(x1 - 5, y1)
         ctx.stroke()
 
         // Connection points
-        // Start circle
-        ctx.fillStyle = this.userState.name === 'default' || inSelectedChainLeft ? '#ffdc27' : '#ffdc2722'
+        // Left-most half circle
         ctx.beginPath()
-        ctx.arc(x0, y0, inSelectedChainLeft ? 15 : 10, -Math.PI / 2, Math.PI / 2)
+        ctx.arc(x0, y0, radius, -Math.PI / 2, Math.PI / 2)
         ctx.fill()
 
-        // End circle
-        ctx.fillStyle = this.userState.name === 'default' || inSelectedChainRight ? '#ffdc27' : 'ffdc2722'
+        // Right-most half circle
         ctx.beginPath()
-        ctx.arc(x1, y1, inSelectedChainRight ? 15 : 10, Math.PI / 2, -Math.PI / 2)
+        ctx.arc(x1, y1, radius, Math.PI / 2, -Math.PI / 2)
         ctx.fill()
       }
     }

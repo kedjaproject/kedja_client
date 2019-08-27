@@ -1,5 +1,5 @@
 <template>
-  <div class="EditableInput" :class="{'fullWidth': inputVisible}" @click="openEdit">
+  <div class="EditableInput" :class="{'fullWidth': inputVisible, 'locked': locked}" @click="openEdit">
 
     <wrapper-component :tag="tag" id="eiTemp" class="text">
 
@@ -11,9 +11,9 @@
 
       <div v-if="inputVisible">
 
-        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="cancel" @keyup.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
+        <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keydown.esc="cancel" @keydown.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
 
-        <!--textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" @change="calcWidth"></textarea-->
+        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height}" @keydown.prevent.enter="finishEdit(true)" @keydown.esc="cancel" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
 
       </div>
 
@@ -36,15 +36,16 @@ export default {
     value: '',
     tag: '',
     placeholder: {default: 'Ange text'},
-    type: {default: 'input'},
-    focus: false
+    type: {default: 'textarea'},
+    focus: false,
+    locked: false
   },
   data () {
     return {
       editing: false,
       textTemp: '',
       width: '',
-      height: ''
+      height: 'auto'
     }
   },
   computed: {
@@ -57,17 +58,19 @@ export default {
   },
   methods: {
     openEdit () {
-      console.log('Open edit')
-      this.calcWidth()
-      // this.initEdit();
-      this.editing = true
-      this.textTemp = this.value
+      if (!this.locked) {
+        console.log('Open edit')
+        this.calcWidth()
+        // this.initEdit();
+        this.editing = true
+        this.textTemp = this.value
 
-      // Next tick: needs to be performed after re-rendering, due to hidden input field
-      this.$nextTick(function (input) {
-        this.$refs.input.focus()
-        this.$refs.input.select()
-      })
+        // Next tick: needs to be performed after re-rendering, due to hidden input field
+        this.$nextTick(function (input) {
+          this.$refs.input.focus()
+          this.$refs.input.select()
+        })
+      }
     },
     initEdit () {
 
@@ -98,8 +101,8 @@ export default {
       this.$nextTick(function () {
         let el = this.$el.getElementsByClassName('textSpan')[0]
         if (el) {
-          this.width = el.offsetWidth
-          this.height = el.offsetHeight
+          this.width = el.offsetWidth + 'px'
+          this.height = el.offsetHeight + 'px'
         }
       })
     },
@@ -121,8 +124,19 @@ export default {
 <style scoped>
 
   .EditableInput{
-    cursor: text;
     display: inline-block;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .EditableInput:not(.locked) .textSpan{
+    cursor: text;
+  }
+
+  #eiTemp {
+    margin: 0;
   }
 
   .textSpan{

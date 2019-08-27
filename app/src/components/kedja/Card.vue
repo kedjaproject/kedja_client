@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" @click.stop="clicked" @keyup.self.delete="removeCard" :class="{
+  <div class="Card" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
@@ -7,23 +7,27 @@
     'connectingConnected': card.states.connectingConnected,
     'connectingNotConnected': card.states.connectingNotConnected,
     'connectingCantConnect': card.states.connectingCantConnect,
-    'cannotConnect': canConnect == false && !connecting,
+    'cannotConnect': !this.card.states.canConnect && !this.card.states.connecting,
     'connectedOther': card.states.connected == false,
-    'connecting': connecting
+    'connecting': this.card.states.connecting
     }">
 
     <div class="top">
-      <div>
-      </div>
-      <indicator :value="card.data.int_indicator" @change="updateIndicatorValue" v-if="indicatorVisible" @click.native.stop></indicator>
-      <card-button @click.native.stop="toggleConnecting" :active="card.states.connecting">🔗</card-button>
+      <card-button :placeholder="true"></card-button>
+
+      <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.stop></indicator>
+
+      <card-button @click.native.stop="toggleConnecting(); scrollIntoView();">
+        <widget-icon path="/static/graphics/icons/link/" img="KEDJA_Koppling.png" imgHover="KEDJA_Koppling, hover.png" imgActive="KEDJA_Koppling, igang.png" :active="card.states.connecting"></widget-icon>
+      </card-button>
+
     </div>
 
     <div class="main">
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
-      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Ange namn för kortet'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.native.stop></EditableInput>
+      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Namnge kort'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.stop class="indicator" :locked="titleLocked"></EditableInput>
       <!--h3>
         {{card.data.title}}
       </h3-->
@@ -38,7 +42,9 @@
     </div>
 
     <div class="bottom">
-      <card-button v-if="removeVisible" @click.native.stop="removeCard(card)">🗑️</card-button>
+      <card-button v-if="removeVisible" @click.native.stop="removeCard(card)">
+        <widget-icon path="/static/graphics/icons/bin/" img="KEDJA_Papperskorg.png" imgHover="KEDJA_Papperskorg, hover.png"></widget-icon>
+      </card-button>
     </div>
 
   </div>
@@ -53,6 +59,7 @@ import { kedjaAPI } from '@/utils'
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
 import Indicator from './widgets/Indicator'
+import WidgetIcon from './widgets/WidgetIcon'
 import DropDown from '@/components/DropDown'
 
 export default {
@@ -61,6 +68,7 @@ export default {
     EditableInput,
     CardButton,
     Indicator,
+    WidgetIcon,
     DropDown
   },
   data () {
@@ -73,13 +81,6 @@ export default {
     prid: Number
   },
   computed: {
-    selected () {
-      // return this.card.states.selected == true;
-      return this.userState.name === 'selectCard' && this.userState.data.rid === this.card.rid
-    },
-    selectedConnected () {
-      return this.card.states.selectedConnected === true
-    },
     connectionsDirect () {
       return this.getDirectConnectionsByCardId(this.card.rid)
     },
@@ -118,24 +119,14 @@ export default {
       })
       return arr
     },
-    connecting () {
-      return this.card.states.connecting === true
-      // return this.userState.name == 'connectCard' && this.userState.data.rid == this.card.rid
-    },
-    connected () {
-      return false // this.card.states.canConnect && this.card.states.connected;
-    },
-    canConnect () {
-      return this.card.states.canConnect
-    },
     indicatorValue () {
       return this.card.data.int_indicator
     },
-    indicatorVisible () {
-      return this.card.states.selected || this.card.data.int_indicator !== -1
-    },
     removeVisible () {
       return this.card.states.selected
+    },
+    titleLocked () {
+      return this.userState.name === 'connectCard'
     },
     ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
     ...mapState('walls/cards', ['cards']),
@@ -212,10 +203,14 @@ export default {
       }
       // this.$store.commit('forceUserStateUpdate')
     },
-
+    scrollIntoView () {
+      // this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+    },
     setSelected (e) {
-      console.log('Select card', this.card)
-      if (!this.card.states.selected) {
+      console.log('Select card')
+      console.log(this.userState.name)
+      console.log(this.card.states)
+      if (!(this.userState.name === 'selectCard' && this.userState.data.rid === this.card.rid)) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
         this.$store.commit('resetUserState')
@@ -249,7 +244,7 @@ export default {
     updateIndicatorValue (value) {
       kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {int_indicator: value})
         .then(response => {
-          this.card.data.int_indicator = value
+          // this.card.data.int_indicator = value
         })
       // console.log(value)
     },
@@ -274,6 +269,7 @@ export default {
   /*border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;*/
   background: #FFFFFF;
+  border: 5px solid transparent;
   /*transition: all 0.1s;*/
   display: flex;
   flex-direction: column;
@@ -292,6 +288,21 @@ h3{
   justify-content: space-between;
 }
 
+.top *{
+
+}
+
+.indicatorContainer{
+  text-align: center;
+  flex: 1;
+}
+
+.linkContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
 .main{
   flex: 1;
   padding: 10px;
@@ -302,6 +313,7 @@ h3{
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  min-height: 30px;
 }
 
 .selectedButtons * {

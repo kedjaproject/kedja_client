@@ -3,7 +3,9 @@
 
     <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
 
-    <button @click="createCollection(wall)" title="Lägg till ny samling" class="new">+ Ny samling</button>
+    <div class="newCollection" @click="createCollection(wall)" tabindex="0">
+      <button title="Lägg till ny samling" class="new">+</button>
+    </div>
 
   </div>
 </template>
@@ -69,6 +71,18 @@ export default {
   /*position: relative;*/
 }
 
+.Collections > *{
+  background: #CADBDA;
+}
+
+.collection:nth-child(even),
+.collection:nth-child(even) .collectionHeader,
+.collection:nth-child(even) .collectionFooter,
+.newCollection:nth-child(even)
+{
+  background: #ACCECC;
+}
+
 /*.wrapper{
   flex: 1;
   display: flex;
@@ -79,7 +93,7 @@ export default {
 
 .collection{
   /*flex: 0 0 300px;*/
-  min-width: 300px;
+  width: 300px;
 }
 
 .new{
@@ -87,4 +101,11 @@ export default {
   margin: 10px;
 }
 
+.newCollection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 </style>

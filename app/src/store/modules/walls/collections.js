@@ -34,6 +34,7 @@ export default {
           // Order is important - rid must be in collections first
           commit('addCollection', response.data)
           commit('walls/addCollectionToWall', {wall, collection: response.data}, {root: true})
+          eventBus.$emit('collectionCreated')
         })
     },
     removeCollection ({commit}, {wall, collection}) {
@@ -42,6 +43,7 @@ export default {
           // Order is important - rid must be removed from collections last
           commit('walls/removeCollectionFromWall', {wall, collection}, {root: true})
           commit('removeCollection', collection)
+          eventBus.$emit('collectionRemoved')
         })
     }
   },

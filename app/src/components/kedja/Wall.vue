@@ -32,7 +32,7 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import { kedjaAPI } from '@/utils'
+import { kedjaAPI, eventBus } from '@/utils'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import DropDown from '@/components/DropDown'
@@ -97,12 +97,16 @@ export default {
     getWallLocal () {
       this.wall = this.$store.getters.getActiveWall()
     },
+    // FIXME: Activate scrollIntoView
     /*
     createCollection () {
       // this.$store.commit('createCollectionInWall',{wall: this.wall})
       kedjaAPI.post('walls/' + this.rid + '/collections', {title: 'Ny samling'})
         .then(response => {
           this.collections.push(response.data)
+          this.$nextTick(() => {
+            document.activeElement.scrollIntoView({behavior: "smooth", inline: "start"})
+          })
         })
     },
     */
@@ -172,6 +176,11 @@ export default {
     }
   },
   created () {
+    eventBus.$on('collectionCreated', () => {
+      this.$nextTick(() => {
+        document.activeElement.scrollIntoView({behavior: "smooth", inline: "start"})
+      })
+    })
   },
   mounted () {
     // this.getCollectionsFromAPI();
@@ -211,6 +220,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  padding: 1em 0 1em 0;
 }
 
 .wallContent{
@@ -225,7 +235,8 @@ export default {
 #collections{
   display: flex;
   flex-direction: row;
-  overflow-x: scroll;
+  overflow-x: auto;
+  scroll-behavior: smooth;
   overflow-y: hidden;
   flex: 1;
 }
