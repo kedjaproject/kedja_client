@@ -282,7 +282,7 @@ export default {
 #collections{
   display: flex;
   flex-direction: row;
-  overflow-x: scroll;
+  overflow-x: auto;
   scroll-behavior: smooth;
   overflow-y: hidden;
   flex: 1;

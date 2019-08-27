@@ -198,6 +198,7 @@ export default {
       if (this.card.states.connectingConnected) {
         this.unconnect()
       }
+      this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
       // this.$store.commit('forceUserStateUpdate')
     },
 
