@@ -13,7 +13,7 @@
 
         <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keyup.esc="cancel" @keyup.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
 
-        <!--textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: width + 'px', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="finishEdit(true)" :placeholder="placeholder" @change="calcWidth"></textarea-->
+        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height + 'px'}" @keyup.esc="finishEdit(false)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
 
       </div>
 
@@ -125,8 +125,7 @@ export default {
 
   .EditableInput{
     display: inline-block;
-    overflow-x: auto;
-    max-width: 100%;
+    word-break: break-word;
   }
 
   .EditableInput:not(.locked) .textSpan{
