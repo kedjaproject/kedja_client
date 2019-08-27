@@ -125,7 +125,7 @@ export default {
 
   .EditableInput{
     display: inline-block;
-    overflow-x: scroll;
+    overflow-x: auto;
     max-width: 100%;
   }
 
