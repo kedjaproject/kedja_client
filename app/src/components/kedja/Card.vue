@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" @click.stop="clicked" @keyup.self.delete="removeCard" :class="{
+  <div class="Card" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
@@ -17,7 +17,7 @@
 
       <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.stop></indicator>
 
-      <card-button @click.native.stop="toggleConnecting">
+      <card-button @click.native.stop="toggleConnecting(); scrollIntoView();">
         <widget-icon path="/static/graphics/icons/link/" img="KEDJA_Koppling.png" imgHover="KEDJA_Koppling, hover.png" imgActive="KEDJA_Koppling, igang.png" :active="card.states.connecting"></widget-icon>
       </card-button>
 
@@ -198,10 +198,11 @@ export default {
       if (this.card.states.connectingConnected) {
         this.unconnect()
       }
-      this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
       // this.$store.commit('forceUserStateUpdate')
     },
-
+    scrollIntoView () {
+      this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+    },
     setSelected (e) {
       console.log('Select card')
       console.log(this.userState.name)
