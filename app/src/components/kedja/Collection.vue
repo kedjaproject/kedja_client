@@ -78,13 +78,18 @@ export default {
     collection: '',
     prid: ''
   },
-  /*
   watch: {
-    collection: function () {
-      this.getCardsFromAPI()
+    userState: function (us) {
+      if(us.name == 'selectCard'){
+        this.$nextTick(function() {
+          let els = this.$el.getElementsByClassName('selectingConnected');
+          if(els.length > 0){
+            //els[0].scrollIntoView({behavior: "smooth", block: "center"})
+          }
+        })
+      }
     }
   },
-  */
   methods: {
     removeCollection: function () {
       this.$emit('removeCollection', this.collection)
