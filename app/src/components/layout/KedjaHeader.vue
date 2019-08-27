@@ -37,7 +37,7 @@
 import KedjaLogo from '@/components/KedjaLogo'
 import DropDown from '@/components/DropDown'
 import { kedjaAPI } from '@/utils'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'KedjaHeader',
@@ -54,9 +54,7 @@ export default {
   computed: {
     ...mapGetters(['isAuthenticated']),
     ...mapGetters('users', ['currentUser']),
-    userState () {
-      return this.$store.getters.getUserState
-    }
+    ...mapState(['userState'])
   },
   methods: {
     goToProfile (e) {

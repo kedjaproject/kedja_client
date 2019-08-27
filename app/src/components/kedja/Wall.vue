@@ -13,8 +13,8 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-          <collections :collections="collections" :prid="rid" @createCollection="createCollection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-          <connections :connections="relations" boundsElementId="collections" class="connections"></connections>
+          <collections :collections="collections" :wall="wall" :prid="rid" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+          <connections v-if="relations" :connections="relations" boundsElementId="collections" class="connections"></connections>
         </div>
 
       </div>
@@ -31,14 +31,12 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { kedjaAPI } from '@/utils'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import DropDown from '@/components/DropDown'
 import Collections from './Collections'
-import Collection from './Collection'
-import Connection from './Connection'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
@@ -48,34 +46,23 @@ export default {
     KedjaHeader,
     DropDown,
     Collections,
-    Collection,
-    Connection,
     Connections,
     EditableInput
   },
-  data () {
-    return {
-      // collections: ""
-    }
-  },
   props: {
-    // wall: Object,
-    rid: Number
+    rid: Number,
+    wall: Object
   },
   computed: {
-    userState () {
-      return this.$store.getters.getUserState
-    },
-    wall () {
-      return this.wallData[this.rid]
-    },
     collections () {
-      return this.wall.collections
+      return this.getWallCollections(this.wall)
     },
     relations () {
       return this.wall.relations
     },
-    ...mapState('walls', ['wallData'])
+    ...mapState('walls', ['walls']),
+    ...mapState(['userState']),
+    ...mapGetters('walls', ['getWallCollections'])
   },
   watch: {
     /*
@@ -110,6 +97,7 @@ export default {
     getWallLocal () {
       this.wall = this.$store.getters.getActiveWall()
     },
+    /*
     createCollection () {
       // this.$store.commit('createCollectionInWall',{wall: this.wall})
       kedjaAPI.post('walls/' + this.rid + '/collections', {title: 'Ny samling'})
@@ -117,6 +105,7 @@ export default {
           this.collections.push(response.data)
         })
     },
+    */
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })
       kedjaAPI.delete('walls/' + this.rid)
@@ -124,6 +113,7 @@ export default {
           this.$router.push({name: 'Walls'})
         })
     },
+    /*
     removeCollection (collection) {
       // this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection})
       kedjaAPI.delete('walls/' + this.rid + '/collections/' + collection.rid)
@@ -136,6 +126,7 @@ export default {
           }
         })
     },
+    */
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
     },

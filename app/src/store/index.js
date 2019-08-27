@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 // import axios from 'axios'
-import walls from './modules/wallModule'
+import walls from './modules/walls'
 import users from './modules/users'
 import { kedjaAPI, setAuthToken } from '../utils'
 // import { walls } from '@/assets/walls.json'
@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
     connections: [],
     tabIndexCounter: 0,
     connectionBounds: '',
-    userState: '',
+    userState: {},
     auth: '',
     userid: '',
     userData: {},
@@ -233,7 +233,7 @@ export const store = new Vuex.Store({
     },
 
     removeConnectionsByCardId: (state, cardId) => {
-      let wall = store.getters['walls/currentWall']
+      let wall = store.getters['walls/activeWall']
       console.log(wall.relations)
       Vue.set(wall, 'relations', wall.relations.filter(c => !c.members.includes(cardId)))
       console.log(wall.relations)
@@ -300,22 +300,16 @@ export const store = new Vuex.Store({
       return !!state.users.currentUserId
     },
 
-    getUserData: state => {
+    userData: state => {
       return state.users.data[state.users.currentUserId]
     },
 
-    getUserState: state => {
-      return state.userState
-    },
-
-    getUserInitials: state => {
-    },
-
+    /*
     getActiveWall: state => () => {
       // return state.walls[state.activeWallId]
       return state.activeWall
     },
-
+    */
     getCardById: state => (id) => {
       let cardFound // = undefined
       let wall = store.getters.getActiveWall()

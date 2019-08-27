@@ -5,7 +5,7 @@
     </kedja-header>
 
     <div class="content">
-      <wall v-if="rid" :rid="rid" class="mywall"></wall>
+      <wall v-if="rid" :rid="rid" :wall="wall" class="mywall"></wall>
       <!--context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu-->
     </div>
 
@@ -14,7 +14,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
@@ -38,22 +38,22 @@ export default {
   },
   computed: {
     wall () {
-      return this.currentWall
+      return this.rid && this.walls[this.rid]
     },
     /*
     sidebarFlex () {
 
     }
     */
-    ...mapGetters('walls', ['currentWall'])
+    ...mapState('walls', ['walls'])
   },
   methods: {
     getWallFromParam: function () {
       this.rid = Number(this.$route.params['wallId'])
       if (this.rid) {
         // Test
-        this.$store.dispatch('walls/fetchWall', this.rid)
-        this.$store.commit('walls/setCurrentWallId', this.rid)
+        this.fetchWall(this.rid)
+        this.setActiveWallId(this.rid)
         // End test
         /*
         kedjaAPI.get('walls/' + wallId)
@@ -73,7 +73,9 @@ export default {
     },
     resetUserState () {
       this.$store.commit('resetUserState')
-    }
+    },
+    ...mapMutations('walls', ['setActiveWallId']),
+    ...mapActions('walls', ['fetchWall'])
   },
   mounted () {
     this.getWallFromParam()

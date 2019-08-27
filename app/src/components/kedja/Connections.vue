@@ -7,6 +7,7 @@
 <script>
 
 import { mapState } from 'vuex'
+import { eventBus } from '@/utils'
 
 export default {
   name: 'Connections',
@@ -22,23 +23,18 @@ export default {
     boundsElementId: String
   },
   computed: {
-    userState: function () {
-      return this.$store.getters.getUserState
-    },
-    dirtyDraw: function () {
-      return this.$store.state.dirtyDraw
-    },
     connectionCards: function () {
       return this.connections.map(conn => {
         return {
           members: [
-            this.cardById[conn.members[0]],
-            this.cardById[conn.members[1]]
+            this.cards[conn.members[0]],
+            this.cards[conn.members[1]]
           ]
         }
       })
     },
-    ...mapState('walls', ['cardById'])
+    ...mapState('walls/cards', ['cards']),
+    ...mapState(['userState', 'dirtyDraw'])
   },
   watch: {
     /*
@@ -63,7 +59,7 @@ export default {
       if (document.getElementById(this.boundsElementId)) {
         this.$store.commit('setDirtyDraw')
       } else {
-        setTimeout(this.firstDraw, 100)
+        this.$nextTick(this.firstDraw)
       }
     },
     redraw () {
@@ -92,7 +88,6 @@ export default {
       ctx.lineTo(c.width, c.height);
       ctx.stroke();
       */
-
       this.connectionCards.forEach(connection => {
         this.drawConnection(ctx, connection)
       })
@@ -157,17 +152,18 @@ export default {
         ctx.arc(x1, y1, inSelectedChainRight ? 15 : 10, Math.PI / 2, -Math.PI / 2)
         ctx.fill()
       }
-    },
-    getCardById: function (id) {
-      return this.cardById[id]
     }
   },
   created () {
     // this.$store.commit('initConnection',this.connection);
+    eventBus.$on('relationsUpdated', () => {
+      console.log('relations updated')
+      this.$nextTick(this.redraw)
+    })
   },
   mounted () {
     // this.setBounds();
-    setTimeout(this.firstDraw, 1000)
+    this.$nextTick(this.firstDraw)
     // this.drawCanvas();
   },
   updated () {

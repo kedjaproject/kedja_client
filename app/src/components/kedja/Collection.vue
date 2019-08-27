@@ -19,7 +19,7 @@
     <div class="collectionContent" ref="collectionContent">
 
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="card in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
+        <card v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
       </transition-group>
 
       <transition name="fade"  mode="out-in">
@@ -36,12 +36,13 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 
+import { kedjaAPI } from '@/utils'
 import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
 import EditableInput from '@/components/general/EditableInput'
-import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'Collection',
@@ -60,15 +61,17 @@ export default {
   },
   computed: {
     cards () {
-      return this.collection.cards
+      return this.getList(this.collection.cardList)
     },
     cardsFiltered: function () {
       return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
-    }
+    },
+    ...mapGetters('walls/cards', ['getList'])
   },
   props: {
-    collection: '',
-    prid: ''
+    collection: Object,
+    prid: Number,
+    wall: Object
   },
   /*
   watch: {
@@ -78,8 +81,8 @@ export default {
   },
   */
   methods: {
-    removeCollection: function () {
-      this.$emit('removeCollection', this.collection)
+    removeCollection () {
+      this.$store.dispatch('walls/collections/removeCollection', {wall: this.wall, collection: this.collection})
     },
     /*
     getCardsFromAPI () {
@@ -97,29 +100,26 @@ export default {
         this.$refs.cardSeed.setFocus() // $el.getElementsByTagName('input')[0].focus()
       })
     },
+    /*
     createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
       kedjaAPI.post('collections/' + this.collection.rid + '/cards', {title})
         .then(response => {
-          this.cards.push(response.data)
+          this.addCard({collection: this.collection, card: response.data}) // Walls/collections
+          document.activeElement.blur()
+          this.initCreateCard()
+        })
+    },
+    */
+    createCard (title) {
+      this.createCardInCollection({collection: this.collection, title})
+        .then(() => {
           document.activeElement.blur()
           this.initCreateCard()
         })
     },
     cancelCardSeed () {
       this.showCardSeed = false
-    },
-    removeCard (card) {
-      // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
-      kedjaAPI.delete('collections/' + this.collection.rid + '/cards/' + card.rid)
-        .then(response => {
-          console.log(response)
-
-          let index = this.collection.cards.indexOf(card)
-          if (index !== -1) {
-            this.collection.cards.splice(index, 1)
-          }
-        })
     },
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title})
@@ -135,7 +135,8 @@ export default {
     },
     handleScroll () {
       this.$store.commit('setDirtyDraw')
-    }
+    },
+    ...mapActions('walls/collections', ['createCardInCollection'])
   },
   created () {
     this.$store.commit('initCollection', this.collection)

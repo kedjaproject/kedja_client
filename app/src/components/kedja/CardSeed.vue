@@ -11,6 +11,7 @@
 <script>
 
 import EditableInput from '@/components/general/EditableInput'
+import { mapState } from 'vuex'
 
 export default {
   name: 'CardSeed',
@@ -25,16 +26,14 @@ export default {
   props: {
   },
   computed: {
-    userState () {
-      return this.$store.getters.getUserState
-    }
+    ...mapState(['userState'])
   },
   watch: {
   },
   methods: {
     updateTitle (title) {
       this.title = ''
-      if (title !== '') {
+      if (title) {
         this.$emit('create', title)
         // this.$refs.editinput.openEdit()
       } else {

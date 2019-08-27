@@ -1,15 +1,15 @@
 <template>
   <div class="Collections" ref="collections">
 
-    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" class="collection" @removeCollection="removeCollection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
+    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
 
-    <button @click="createCollection" title="Lägg till ny samling" class="new">+ Ny samling</button>
+    <button @click="createCollection(wall)" title="Lägg till ny samling" class="new">+ Ny samling</button>
 
   </div>
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 import Collection from './Collection'
 
 export default {
@@ -17,14 +17,10 @@ export default {
   components: {
     Collection
   },
-  data () {
-    return {
-      // collections: ""
-    }
-  },
   props: {
-    collections: '',
-    prid: ''
+    collections: Array,
+    prid: Number,
+    wall: Object
   },
   computed: {
     dirtyDraw: function () {
@@ -34,23 +30,18 @@ export default {
   watch: {
   },
   methods: {
-    createCollection: function () {
-      this.$emit('createCollection')
-    },
-    removeCollection: function (collection) {
-      this.$emit('removeCollection', collection)
-    },
     connect: function (p) {
       this.$emit('connect', p)
     },
     unconnect: function (p) {
       this.$emit('unconnect', p)
-    }
+    },
     /*
     handleScroll: function () {
       this.$store.commit('setDirtyDraw');
     }
     */
+    ...mapActions('walls/collections', ['createCollection', 'removeCollection'])
   },
   created: function () {
   },

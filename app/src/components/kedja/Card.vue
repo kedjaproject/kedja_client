@@ -38,7 +38,7 @@
     </div>
 
     <div class="bottom">
-      <card-button v-if="removeVisible" @click.native.stop="removeCard">🗑️</card-button>
+      <card-button v-if="removeVisible" @click.native.stop="removeCard(card)">🗑️</card-button>
     </div>
 
   </div>
@@ -46,7 +46,7 @@
 
 <script>
 
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 import { kedjaAPI } from '@/utils'
 
@@ -73,9 +73,6 @@ export default {
     prid: Number
   },
   computed: {
-    userState () {
-      return this.$store.getters.getUserState
-    },
     selected () {
       // return this.card.states.selected == true;
       return this.userState.name === 'selectCard' && this.userState.data.rid === this.card.rid
@@ -141,7 +138,8 @@ export default {
       return this.card.states.selected
     },
     ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
-    ...mapState('walls', ['cardById'])
+    ...mapState('walls/cards', ['cards']),
+    ...mapState(['userState'])
   },
   watch: {
     userState: {
@@ -231,18 +229,14 @@ export default {
       }
     },
     connect: function () {
-      let cardOther = this.cardById[this.userState.data.rid]
+      let cardOther = this.cards[this.userState.data.rid]
       console.log('Connect', cardOther)
       this.$emit('connect', {members: [cardOther.rid, this.card.rid]})
     },
     unconnect () {
-      let cardOther = this.cardById[this.userState.data.rid]
+      let cardOther = this.cards[this.userState.data.rid]
       console.log('Unconnect', cardOther)
       this.$emit('unconnect', {members: [cardOther.rid, this.card.rid]})
-    },
-    removeCard () {
-      this.$store.commit('removeConnectionsByCardId', this.card.rid)
-      this.$emit('removeCard', this.card)
     },
     initUpdateTitle () {
       console.log('Börja byt namn på kort')
@@ -261,7 +255,8 @@ export default {
     },
     setFocus () {
       this.$el.focus()
-    }
+    },
+    ...mapActions('walls/collections', ['removeCard'])
   },
   created: function () {
     this.$store.commit('initCard', this.card)

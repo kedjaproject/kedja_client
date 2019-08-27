@@ -1,4 +1,7 @@
 import axios from 'axios'
+import Vue from 'vue'
+
+const eventBus = new Vue()
 
 const kedjaAPI = axios.create({
   baseURL: process.env.API_SERVER + process.env.API_PATH,
@@ -22,5 +25,6 @@ function setAuthToken (authToken) {
 
 export {
   setAuthToken,
-  kedjaAPI
+  kedjaAPI,
+  eventBus
 }
