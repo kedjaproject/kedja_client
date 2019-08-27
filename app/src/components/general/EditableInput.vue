@@ -13,7 +13,7 @@
 
         <input ref="input" v-model="textTemp" v-if="type == 'input'" :style="{height: height + 'px'}" @keydown.esc="cancel" @keydown.enter="finishEdit(true)" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder"/>
 
-        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height + 'px'}" @keydown.prevent.enter="finishEdit(true)" @keydown.esc="cancel" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
+        <textarea ref="input" v-model="textTemp" v-if="type == 'textarea'" :style="{width: '100%', height: height}" @keydown.prevent.enter="finishEdit(true)" @keydown.esc="cancel" @blur="onBlur" @focus="onInitEdit()" :placeholder="placeholder" @change="calcWidth"></textarea>
 
       </div>
 
@@ -45,7 +45,7 @@ export default {
       editing: false,
       textTemp: '',
       width: '',
-      height: ''
+      height: 'auto'
     }
   },
   computed: {
@@ -101,8 +101,8 @@ export default {
       this.$nextTick(function () {
         let el = this.$el.getElementsByClassName('textSpan')[0]
         if (el) {
-          this.width = el.offsetWidth
-          this.height = el.offsetHeight
+          this.width = el.offsetWidth + 'px'
+          this.height = el.offsetHeight + 'px'
         }
       })
     },

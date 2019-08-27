@@ -27,7 +27,7 @@
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
-      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Ange namn för kortet'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.stop class="indicator" :locked="titleLocked"></EditableInput>
+      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Namnge kort'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.stop class="indicator" :locked="titleLocked"></EditableInput>
       <!--h3>
         {{card.data.title}}
       </h3-->
