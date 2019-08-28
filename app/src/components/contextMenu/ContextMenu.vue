@@ -17,6 +17,7 @@
 
 <script>
 
+import { mapState } from 'vuex'
 import ContextMenuCard from '@/components/contextMenu/ContextMenuCard'
 // import Component from '@/components/Component'
 
@@ -34,18 +35,16 @@ export default {
     value: ''
   },
   computed: {
-    userState () {
-      return this.$store.state.userState
-    },
     card () {
       if (this.userState.name === 'selectCard') {
-        return this.$store.getters.getCardById(this.userState.data.rid)
+        return this.cards(this.userState.data.rid)
       }
-      return undefined
     },
     hasContent () {
       return this.card
-    }
+    },
+    ...mapState(['userState']),
+    ...mapState('walls/cards', ['cards'])
   },
   watch: {
     hasContent: function (val) {

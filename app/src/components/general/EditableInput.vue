@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     openEdit () {
-      if(!this.locked){
+      if (!this.locked) {
         console.log('Open edit')
         this.calcWidth()
         // this.initEdit();

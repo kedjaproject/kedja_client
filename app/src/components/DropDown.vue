@@ -44,11 +44,11 @@ export default {
       this.open = !this.open
     },
     close () {
-      this.open = false;
+      this.open = false
     },
     blur (e) {
-      if(!this.$el.contains(e.relatedTarget)){
-        this.close();
+      if (!this.$el.contains(e.relatedTarget)) {
+        this.close()
       }
     },
     performFunction (f) {

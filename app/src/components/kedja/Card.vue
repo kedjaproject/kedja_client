@@ -42,8 +42,7 @@
     </div>
 
     <div class="bottom">
-
-      <card-button v-if="removeVisible" @click.native.stop="removeCard">
+      <card-button v-if="removeVisible" @click.native.stop="removeCard(card)">
         <widget-icon path="/static/graphics/icons/bin/" img="KEDJA_Papperskorg.png" imgHover="KEDJA_Papperskorg, hover.png"></widget-icon>
       </card-button>
     </div>
@@ -52,6 +51,10 @@
 </template>
 
 <script>
+
+import { mapGetters, mapState, mapActions } from 'vuex'
+
+import { kedjaAPI } from '@/utils'
 
 import EditableInput from '@/components/general/EditableInput'
 import CardButton from './CardButton'
@@ -74,18 +77,15 @@ export default {
     }
   },
   props: {
-    card: '',
-    prid: ''
+    card: Object,
+    prid: Number
   },
   computed: {
-    userState () {
-      return this.$store.getters.getUserState
-    },
     connectionsDirect () {
-      return this.$store.getters.getDirectConnectionsByCardId(this.card.rid)
+      return this.getDirectConnectionsByCardId(this.card.rid)
     },
     connectionsDeep () {
-      return this.$store.getters.getDeepConnectionsByCardId(this.card.rid)
+      return this.getDeepConnectionsByCardId(this.card.rid)
     },
     directConnectedCardIds () {
       let arr = []
@@ -103,7 +103,7 @@ export default {
       })
       return arr
     },
-    deepConnectedCardIds: function () {
+    deepConnectedCardIds () {
       let arr = []
       this.connectionsDeep.forEach((conn, iConn) => {
         if (conn.members[0] !== this.card.rid) {
@@ -126,8 +126,11 @@ export default {
       return this.card.states.selected
     },
     titleLocked () {
-      return this.userState.name == "connectCard"
-    }
+      return this.userState.name === 'connectCard'
+    },
+    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
+    ...mapState('walls/cards', ['cards']),
+    ...mapState(['userState'])
   },
   watch: {
     userState: {
@@ -160,10 +163,10 @@ export default {
             this.setState('selected', true)
             this.setState('connecting', true)
           } else { // Unless this is the card the user is interacting with
-            if (this.directConnectedCardIds.indexOf(s.data.rid) !== -1) { // if card is connected
+            if (this.directConnectedCardIds.includes(s.data.rid)) { // if card is connected
               this.setState('connectingConnected', true)
             } else { // if card is not connected
-              let cousins = this.$store.getters.getClosestCardCousins(this.card)
+              let cousins = this.getClosestCardCousins(this.card)
               if (cousins.find(c => c.rid === s.data.rid)) { // If not connected and the cards are closest cousins
                 this.setState('connectingNotConnected', true)
               } else {
@@ -201,10 +204,10 @@ export default {
       // this.$store.commit('forceUserStateUpdate')
     },
     scrollIntoView () {
-      //this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+      // this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
     },
     setSelected (e) {
-      if (!(this.userState.name == "selectCard" && this.userState.data.rid == this.card.rid)) {
+      if (!(this.userState.name === "selectCard" && this.userState.data.rid == this.card.rid)) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
         this.$store.commit('resetUserState')
@@ -218,52 +221,38 @@ export default {
       }
     },
     connect: function () {
-      console.log('Connect')
-      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
+      let cardOther = this.cards[this.userState.data.rid]
+      console.log('Connect', cardOther)
       this.$emit('connect', {members: [cardOther.rid, this.card.rid]})
     },
     unconnect () {
-      console.log('Unconnect')
-      let cardOther = this.$store.getters.getCardById(this.userState.data.rid)
+      let cardOther = this.cards[this.userState.data.rid]
+      console.log('Unconnect', cardOther)
       this.$emit('unconnect', {members: [cardOther.rid, this.card.rid]})
-    },
-    removeCard () {
-      this.$store.commit('removeConnectionsByCardId', this.card.rid)
-      this.$emit('removeCard', this.card)
     },
     initUpdateTitle () {
       console.log('Börja byt namn på kort')
       this.$store.commit('setUserState', {name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
-      let params = {
-        endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
-        data: {title: title},
-        method: 'put',
-        successCallback: (data) => {
-          console.log(data.data)
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {title})
+        .then(response => console.log(response))
     },
     updateIndicatorValue (value) {
-      let params = {
-        endpoint: 'collections/' + this.prid + '/cards/' + this.card.rid,
-        data: {int_indicator: value},
-        method: 'put',
-        successCallback: (data) => {
-          //this.card.data.int_indicator = value;
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {int_indicator: value})
+        .then(response => {
+          // this.card.data.int_indicator = value
+        })
       // console.log(value)
     },
     setFocus () {
       this.$el.focus()
-    }
+    },
+    ...mapActions('walls/collections', ['removeCard'])
   },
   created: function () {
-    this.$store.commit('initCard', this.card)
+    // Do when loading data instead.
+    // this.$store.commit('initCard', this.card)
   },
   mounted: function () {
     // this.setFocus()

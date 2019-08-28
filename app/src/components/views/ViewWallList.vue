@@ -12,7 +12,7 @@
     <h3>Mina väggar</h3>
 
     <div class="wallBoxes">
-      <router-link-box :to="{ name: 'ViewWall', params: {wallId: wall.rid} }" color="lightsteelblue" v-for="wall in walls" :key="wall.rid" class="wallBox">
+      <router-link-box :to="{ name: 'ViewWall', params: {wallId: wall.rid} }" color="lightsteelblue" v-for="wall in all" :key="wall.rid" class="wallBox">
         <h3>
           {{wall.data.title}}
         </h3>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex'
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
 
@@ -33,56 +33,14 @@ export default {
     KedjaHeader,
     RouterLinkBox
   },
-  data () {
-    return {
-      // walls: ""
-    }
-  },
-  props: {
-  },
   computed: {
-    walls: function () {
-      return this.$store.getters['walls/all']
-    }
+    ...mapGetters('walls', ['all'])
   },
   methods: {
-    getWalls: function () {
-      let params = {
-        // endpoint: wallId + "/wall",
-        endpoint: 'walls',
-        successCallback: (data) => {
-          this.walls = data.data
-        }
-      }
-      this.$store.commit('makeAPICall', params)
-    },
-    getWallsStore: function () {
-      this.$store.dispatch('walls/getWalls')
-    },
-    createWall: function () {
-      // this.$store.commit('createCollectionInWall',{wall: this.wall});
-      let params = {
-        endpoint: 'walls',
-        data: {title: 'Ny vägg'},
-        method: 'post',
-        successCallback: (data) => {
-          console.log(data)
-          this.walls.push(data.data)
-        },
-        errorCallback: (data) => {
-          console.log('Du är inte inloggad. Logga in för att fortsätta.')
-          console.log(data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
-    }
+    ...mapActions('walls', ['fetchWalls', 'createWall'])
   },
-  created: function () {
-
-  },
-  mounted: function () {
-    this.getWallsStore()
+  mounted () {
+    this.fetchWalls()
   }
 }
 </script>

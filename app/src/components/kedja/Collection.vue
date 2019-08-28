@@ -18,7 +18,7 @@
     <div class="collectionContent" ref="collectionContent">
 
       <transition-group name="fade" mode="out-in" class="cards">
-        <card v-for="card in cards" :card="card" @removeCard="removeCard" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
+        <card v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
       </transition-group>
 
       <transition name="fade"  mode="out-in">
@@ -35,7 +35,9 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
 
+import { kedjaAPI } from '@/utils'
 import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
@@ -61,60 +63,60 @@ export default {
     }
   },
   computed: {
-    userState () {
-      return this.$store.getters.getUserState
-    },
     cards () {
-      return this.collection.cards
+      return this.getList(this.collection.cardList)
     },
-    cardsFiltered: function () {
+    cardsFiltered () {
       return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
     },
-    newDisabled: function () {
-      return this.userState.name == 'connectCard'
-    }
+    newDisabled () {
+      return this.userState.name === 'connectCard'
+    },
+    ...mapGetters('walls/cards', ['getList']),
+    ...mapState(['userState'])
   },
   props: {
-    collection: '',
-    prid: ''
+    collection: Object,
+    prid: Number,
+    wall: Object
   },
   watch: {
     userState: function (us) {
-      if(us.name == 'selectCard' /*|| us.name == 'connectCard'*/){
-        this.$nextTick(function() {
-          let els = this.$el.getElementsByClassName('selected');
-          if(els.length == 0){
-            els = this.$el.getElementsByClassName('selectingConnected');
+      if (us.name === 'selectCard' /* || us.name == 'connectCard' */) {
+        this.$nextTick(() => {
+          let els = this.$el.getElementsByClassName('selected')
+          if (els.length === 0) {
+            els = this.$el.getElementsByClassName('selectingConnected')
           }
-          /*if(els.length == 0){
+          /*
+          if(els.length == 0){
             els = this.$el.getElementsByClassName('connectingConnected');
-          }*/
-          if(els.length > 0){
+          }
+          */
+          if (els.length > 0) {
             this.$refs.collectionContent.scrollTo({
               top: els[0].offsetTop,
               behavior: 'smooth'
-            });
-            //els[0].scrollIntoView({behavior: "smooth", block: "center"})
+            })
+            // els[0].scrollIntoView({behavior: "smooth", block: "center"})
           }
         })
       }
     }
   },
   methods: {
-    removeCollection: function () {
-      this.$emit('removeCollection', this.collection)
+    removeCollection () {
+      this.$store.dispatch('walls/collections/removeCollection', {wall: this.wall, collection: this.collection})
     },
+    /*
     getCardsFromAPI () {
-      let params = {
-        // endpoint: wallId + "/wall",
-        endpoint: 'collections/' + this.collection.rid + '/cards',
-        successCallback: (data) => {
-          // this.cards = data.data;
-          this.$store.commit('setCollectionCards', {collection: this.collection, cards: data.data})
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.get('collections/' + this.collection.rid + '/cards')
+        .then(response => {
+          // this.cards = response.data;
+          this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
+        })
     },
+    */
     initCreateCard () {
       this.showCardSeed = true
       // Next tick: needs to be performed after re-rendering, due to hidden element
@@ -122,51 +124,32 @@ export default {
         this.$refs.cardSeed.setFocus() // $el.getElementsByTagName('input')[0].focus()
       })
     },
+    /*
     createCard (title) {
       // this.$store.commit('createCardInCollection',{collection: this.collection})
-      let params = {
-        endpoint: 'collections/' + this.collection.rid + '/cards',
-        data: {title: title},
-        method: 'post',
-        successCallback: (data) => {
-          this.cards.push(data.data)
+      kedjaAPI.post('collections/' + this.collection.rid + '/cards', {title})
+        .then(response => {
+          this.addCard({collection: this.collection, card: response.data}) // Walls/collections
           document.activeElement.blur()
           this.initCreateCard()
-        }
-      }
-      this.$store.commit('makeAPICall', params)
+        })
+    },
+    */
+    createCard (title) {
+      this.createCardInCollection({collection: this.collection, title})
+        .then(() => {
+          document.activeElement.blur()
+          this.initCreateCard()
+        })
     },
     cancelCardSeed () {
       this.showCardSeed = false
     },
-    removeCard (card) {
-      // this.$store.commit('removeCardFromCollection',{collection: this.collection, card: card})
-      let params = {
-        endpoint: 'collections/' + this.collection.rid + '/cards/' + card.rid,
-        method: 'delete',
-        successCallback: (data) => {
-          console.log(data)
-
-          let index = this.collection.cards.indexOf(card)
-          if (index !== -1) {
-            this.collection.cards.splice(index, 1)
-          }
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
-    },
     updateTitle (title) {
-      let params = {
-        endpoint: 'walls/' + this.prid + '/collections/' + this.collection.rid,
-        data: {title: title},
-        method: 'put',
-        successCallback: (data) => {
-          console.log(data.data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.put('walls/' + this.collection.rid + '/collections/' + this.collection.rid, {title})
+        .then(response => {
+          console.log(response)
+        })
     },
     connect (params) {
       this.$emit('connect', params)
@@ -176,13 +159,14 @@ export default {
     },
     handleScroll () {
       this.$store.commit('setDirtyDraw')
-    }
+    },
+    ...mapActions('walls/collections', ['createCardInCollection'])
   },
   created () {
     this.$store.commit('initCollection', this.collection)
   },
   mounted () {
-    this.getCardsFromAPI()
+    // this.getCardsFromAPI()
 
     this.$refs.collectionContent.addEventListener('scroll', this.handleScroll)
   }

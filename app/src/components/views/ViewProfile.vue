@@ -8,7 +8,7 @@
       Du är inloggad som
 
       <h2>
-        {{userData.first_name}} {{userData.last_name}}
+        {{currentUser.fullName}}
       </h2>
 
       <h3>Uppdatera profil</h3>
@@ -31,6 +31,8 @@
 <script>
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
+import { kedjaAPI } from '@/utils'
+import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 // import Component from '@/components/Component'
 
 export default {
@@ -40,49 +42,39 @@ export default {
   },
   data () {
     return {
-      userDataEditable: ''
+      userDataEditable: {}
     }
   },
   props: {
   },
   computed: {
-    userData () {
-      return this.$store.getters.getUserData
-    }
+    ...mapGetters('users', ['currentUser']),
+    ...mapState('users', ['currentUserId'])
   },
   methods: {
-    getUserProfile () {
-      let params = {
-        endpoint: 'users/' + this.userData.userid,
-        successCallback: (response) => {
-          this.userDataEditable = response.data.data
-        }
+    ...mapMutations('users', ['setUserData']),
+    ...mapActions('users', ['fetchUserData']),
+    setDataEditable (data) {
+      this.userDataEditable = {
+        first_name: data.first_name,
+        last_name: data.last_name
       }
-
-      this.$store.commit('makeAPICall', params)
     },
     updateProfile () {
-      let params = {
-        endpoint: 'users/' + this.userData.userid,
-        method: 'put',
-        data: {
-          first_name: this.userDataEditable.first_name,
-          last_name: this.userDataEditable.last_name
-        },
-        successCallback: (response) => {
-          this.$store.dispatch('setUserData', {field: 'first_name', value: response.data.data.first_name})
-          this.$store.dispatch('setUserData', {field: 'last_name', value: response.data.data.last_name})
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.put('users/' + this.currentUserId, this.userDataEditable)
+        .then(response => {
+          this.setUserData(response.data)
+          this.setDataEditable(response.data.data)
+        })
     }
   },
-  created: function () {
-
+  created () {
+    // This does not work from data() for some reason...
+    this.setDataEditable(this.currentUser)
   },
-  mounted: function () {
-    this.getUserProfile()
+  mounted () {
+    // API does not work, currently
+    // this.getUserProfile()
   }
 }
 </script>

@@ -6,15 +6,11 @@
 
 <script>
 
-// import Component from '@/components/Component'
+import { mapState } from 'vuex'
+import { eventBus } from '@/utils'
 
 export default {
   name: 'Connections',
-  /*
-  components: {
-    Component
-  },
-  */
   data () {
     return {
       loaded: false,
@@ -23,28 +19,22 @@ export default {
     }
   },
   props: {
-    connections: '',
-    boundsElementId: ''
+    connections: Array,
+    boundsElementId: String
   },
   computed: {
-    userState: function () {
-      return this.$store.getters.getUserState
-    },
-    dirtyDraw: function () {
-      return this.$store.state.dirtyDraw
-    },
     connectionCards: function () {
-      let connectionCards = []
-      this.connections.forEach((conn) => {
-        connectionCards.push({
+      return this.connections.map(conn => {
+        return {
           members: [
-            this.$store.getters.getCardById(conn.members[0]),
-            this.$store.getters.getCardById(conn.members[1])
+            this.cards[conn.members[0]],
+            this.cards[conn.members[1]]
           ]
-        })
+        }
       })
-      return connectionCards
-    }
+    },
+    ...mapState('walls/cards', ['cards']),
+    ...mapState(['userState', 'dirtyDraw'])
   },
   watch: {
     /*
@@ -69,7 +59,7 @@ export default {
       if (document.getElementById(this.boundsElementId)) {
         this.$store.commit('setDirtyDraw')
       } else {
-        setTimeout(this.firstDraw, 100)
+        this.$nextTick(this.firstDraw)
       }
     },
     redraw () {
@@ -98,8 +88,7 @@ export default {
       ctx.lineTo(c.width, c.height);
       ctx.stroke();
       */
-
-      this.connectionCards.forEach((connection) => {
+      this.connectionCards.forEach(connection => {
         this.drawConnection(ctx, connection)
       })
     },
@@ -137,21 +126,21 @@ export default {
         ctx.lineWidth = 5
         ctx.strokeStyle = '#ffff'
         ctx.fillStyle = '#ffdc27'
-        let radius = 15;
+        let radius = 15
 
-        //User state based rendering settings
+        // User state based rendering settings
         if (this.userState.name === 'selectCard' || this.userState.name === 'connectCard') {
           if (inSelectedChainLeft && inSelectedChainRight) {
           } else {
             ctx.lineWidth = 1
             ctx.strokeStyle = '#fff5'
             ctx.fillStyle = '#ffdc2722'
-            radius = 10;
+            radius = 10
           }
         }
 
-        //START DRAW
-        //Line
+        // START DRAW
+        // Line
         ctx.beginPath()
         ctx.moveTo(x0 + 5, y0)
         ctx.lineTo(x1 - 5, y1)
@@ -168,17 +157,18 @@ export default {
         ctx.arc(x1, y1, radius, Math.PI / 2, -Math.PI / 2)
         ctx.fill()
       }
-    },
-    getCardById: function (id) {
-      return this.$store.getters.getCardById(id)
     }
   },
   created () {
     // this.$store.commit('initConnection',this.connection);
+    eventBus.$on('relationsUpdated', () => {
+      console.log('relations updated')
+      this.$nextTick(this.redraw)
+    })
   },
   mounted () {
     // this.setBounds();
-    setTimeout(this.firstDraw, 1000)
+    this.$nextTick(this.firstDraw)
     // this.drawCanvas();
   },
   updated () {

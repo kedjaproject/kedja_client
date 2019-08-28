@@ -23,35 +23,33 @@ export default {
   },
   props: {
     active: false,
-    path: "",
-    img: "",
-    imgHover: "",
-    imgActive: ""
+    path: '',
+    img: '',
+    imgHover: '',
+    imgActive: ''
   },
   computed: {
-    image: function () {
-      let filename = ""
-      if(this.active){
+    image () {
+      let filename = ''
+      if (this.active) {
         filename = this.imgActive
-      }
-      else if(this.hovering){
+      } else if (this.hovering) {
         filename = this.imgHover
-      }
-      else {
+      } else {
         filename = this.img
       }
 
-      //return this.path + filename;
-      return this.path + filename;
-      //return require("@/assets/graphics/icons/link/" + filename);
+      // return this.path + filename;
+      return this.path + filename
+      // return require("@/assets/graphics/icons/link/" + filename);
     }
   },
   methods: {
-    setHovering: function (val) {
-      this.hovering = val;
+    setHovering (val) {
+      this.hovering = val
     }
   },
-  mounted: function () {
+  mounted () {
   }
 }
 </script>

@@ -1,21 +1,30 @@
 import axios from 'axios'
+import Vue from 'vue'
 
-const kedjaServer = axios.create({
+const eventBus = new Vue()
+
+const kedjaAPI = axios.create({
   baseURL: process.env.API_SERVER + process.env.API_PATH,
   headers: {
     Authorization: localStorage.auth
   }
 })
 
-function makeAPICall (endpoint, data, method = 'get') {
-  return kedjaServer[method](endpoint, data)
-}
+// Default error handler here.
+kedjaAPI.interceptors.response.use(response => response, error => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(error)
+  }
+  return Promise.reject(error)
+})
 
 function setAuthToken (authToken) {
-  kedjaServer.defaults.headers.common['Authorization'] = authToken
+  localStorage.auth = authToken
+  kedjaAPI.defaults.headers['Authorization'] = authToken
 }
 
 export {
   setAuthToken,
-  makeAPICall
+  kedjaAPI,
+  eventBus
 }

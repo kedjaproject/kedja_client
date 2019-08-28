@@ -6,7 +6,7 @@
     </kedja-header>
 
     <div class="content">
-      <wall :wall="wall" class="mywall"></wall>
+      <wall v-if="rid" :rid="rid" :wall="wall" class="mywall"></wall>
       <!--context-menu class="cxtMenu" v-model="menuOpen" :style="{'flex-basis': menuOpen ? '300px' : '0px'}"></context-menu-->
     </div>
 
@@ -15,9 +15,12 @@
 
 <script>
 
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall'
 import ContextMenu from '@/components/contextMenu/ContextMenu'
+import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewWall',
@@ -28,6 +31,7 @@ export default {
   },
   data () {
     return {
+      rid: NaN
       // menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
     }
   },
@@ -35,45 +39,44 @@ export default {
   },
   computed: {
     wall () {
-      return this.$store.getters.getActiveWall()
-    }
+      return this.rid && this.walls[this.rid]
+    },
     /*
     sidebarFlex () {
 
     }
     */
+    ...mapState('walls', ['walls'])
   },
   methods: {
     getWallFromParam: function () {
-      let wallId = this.$route.params['wallId']
-      if (wallId) {
-        let params = {
-          // endpoint: wallId + "/wall",
-          endpoint: 'walls/' + wallId,
-          successCallback: (data) => {
-            this.$store.commit('setActiveWall', {wall: data.data})
-          }
-        }
-        this.$store.commit('makeAPICall', params)
+      this.rid = Number(this.$route.params['wallId'])
+      if (this.rid) {
+        // Test
+        this.fetchWall(this.rid)
+        this.setActiveWallId(this.rid)
+        // End test
+        /*
+        kedjaAPI.get('walls/' + wallId)
+          .then(response => {
+            this.$store.commit('setActiveWall', {wall: response.data})
+          })
+        */
       }
     },
     createCollection () {
       // this.$store.commit('createCollectionInWall', {wall: this.wall})
-      let params = {
-        endpoint: 'walls/' + this.wall.rid + '/collections',
-        data: {title: 'Ny samling'},
-        method: 'post',
-        successCallback: (data) => {
-          console.log(data)
-          this.wall.collections.push(data.data)
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+      kedjaAPI.post('walls/' + this.wall.rid + '/collections', {title: 'Ny samling'})
+        .then(response => {
+          console.log(response)
+          this.wall.collections.push(response.data)
+        })
     },
     resetUserState () {
       this.$store.commit('resetUserState')
-    }
+    },
+    ...mapMutations('walls', ['setActiveWallId']),
+    ...mapActions('walls', ['fetchWall'])
   },
   mounted () {
     this.getWallFromParam()

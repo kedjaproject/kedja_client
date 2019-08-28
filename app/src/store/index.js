@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
-import wallModule from './modules/wallModule'
-import { makeAPICall, setAuthToken } from '../utils'
+// import axios from 'axios'
+import walls from './modules/walls'
+import users from './modules/users'
+import { kedjaAPI, setAuthToken } from '../utils'
 // import { walls } from '@/assets/walls.json'
 
 Vue.use(Vuex)
@@ -10,7 +11,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   modules: {
-    walls: wallModule
+    walls,
+    users
   },
   state: {
     env: {},
@@ -20,7 +22,7 @@ export const store = new Vuex.Store({
     connections: [],
     tabIndexCounter: 0,
     connectionBounds: '',
-    userState: '',
+    userState: {},
     auth: '',
     userid: '',
     userData: {},
@@ -42,7 +44,7 @@ export const store = new Vuex.Store({
       // store.commit('resetUserState')
       // store.commit('setAuthFromLocalStorage')
       // store.commit('setUserIdFromLocalStorage')
-      store.commit('setUserDataFromLocalStorage')
+      store.commit('users/loadUserFromLocalStorage')
       store.commit('setDirtyDraw')
     },
 
@@ -78,8 +80,8 @@ export const store = new Vuex.Store({
       }
     },
     */
-
-    setUserDataFromLocalStorage: (state) => {
+    /* Moving this to 'users' store
+    setUserDataFromLocalStorage (state) {
       if (typeof (Storage) !== 'undefined') {
         Vue.set(state.userData, 'auth', localStorage.getItem('auth'))
         Vue.set(state.userData, 'userid', localStorage.getItem('userid'))
@@ -89,7 +91,7 @@ export const store = new Vuex.Store({
         console.log('No local storage support')
       }
     },
-
+    */
     resetUserState: (state) => {
       store.commit('setUserState', {name: 'default'})
     },
@@ -134,11 +136,11 @@ export const store = new Vuex.Store({
     initCollection: (state, collection) => {
       Vue.set(collection, 'cards', [])
     },
-
+    /*
     initCard: (state, card) => {
       Vue.set(card, 'states', {})
     },
-
+    */
     initConnection: (state, connection) => {
       Vue.set(connection, 'dirtyDraw', false)
     },
@@ -231,15 +233,15 @@ export const store = new Vuex.Store({
     },
 
     removeConnectionsByCardId: (state, cardId) => {
-      let wall = store.getters.getActiveWall()
-      console.log(wall.connections)
-      Vue.set(wall, 'connections', wall.connections.filter(c => c.members.indexOf(cardId) === -1))
-      console.log(wall.connections)
+      let wall = store.getters['walls/activeWall']
+      console.log(wall.relations)
+      Vue.set(wall, 'relations', wall.relations.filter(c => !c.members.includes(cardId)))
+      console.log(wall.relations)
       store.commit('forceUserStateUpdate')
-    },
+    }
 
     // API
-
+    /*
     makeAPICall: (state, payload) => {
       let method = payload.method || 'get'
 
@@ -269,122 +271,45 @@ export const store = new Vuex.Store({
       console.log('Error')
       console.log(data)
     }
-
+    */
   },
   actions: {
 
-    authenticate ({dispatch}) {
-      makeAPICall('auth/valid')
+    authenticate ({dispatch, getters}) {
+      if (!getters.isAuthenticated) return
+      kedjaAPI.get('auth/valid')
         .then(({data}) => {
-          if (data.userid === null) {
+          if (!data.userid) {
             dispatch('logout')
           }
         })
-        .catch(err => console.log(err))
     },
 
-    setUserData: (context, {field, value}) => {
-      if (typeof (Storage) !== 'undefined') {
-        localStorage.setItem(field, value)
-      } else {
-        console.log('No local storage support')
-      }
-      context.commit('setUserDataFromLocalStorage')
+    login ({commit}, data) {
+      setAuthToken(data.Authorization)
+      commit('users/setCurrentUserId', data.user.rid)
+      commit('users/setUserData', data.user)
     },
 
-    // eslint-disable-next-line camelcase
-    login: (context, {auth, userid, first_name, last_name}) => {
-      setAuthToken(auth)
-      if (typeof (Storage) !== 'undefined') {
-        context.dispatch('setUserData', {field: 'auth', value: auth})
-        context.dispatch('setUserData', {field: 'userid', value: userid})
-        context.dispatch('setUserData', {field: 'first_name', value: first_name})
-        context.dispatch('setUserData', {field: 'last_name', value: last_name})
-      } else {
-        console.log('No local storage support')
-      }
-      context.commit('setUserDataFromLocalStorage')
-      // context.dispatch('setUserProfileFromAPI')
-    },
-
-    logout: (context) => {
-      if (typeof (Storage) !== 'undefined') {
-        localStorage.removeItem('auth')
-        localStorage.removeItem('userid')
-        localStorage.removeItem('first_name')
-        localStorage.removeItem('last_name')
-      } else {
-        console.log('No local storage support')
-      }
-      context.commit('setUserDataFromLocalStorage')
-    },
-
-    setUserProfileFromAPI: (context) => {
-      // let userData = store.getters.getUserData
-
-      let params = {
-        endpoint: 'users/' + this.userData.userid,
-        successCallback: (response) => {
-          if (typeof (Storage) !== 'undefined') {
-            this.$store.dispatch('setUserData', {field: 'first_name', value: response.data.data.first_name})
-            this.$store.dispatch('setUserData', {field: 'last_name', value: response.data.data.last_name})
-          } else {
-            console.log('No local storage support')
-          }
-
-          context.commit('setUserDataFromLocalStorage')
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
-    },
-
-    checkAuth: (context) => {
-      if (!context.getters.getAuth) {
-      }
-    },
-
-    makeAPICall: (state, payload) => {
-      // FIXME: This whole method  shouldn't be here!
-
-      let method = payload.method || 'get'
-
-      return axios({
-        method: method,
-        url: state.state.env.API_SERVER + state.state.env.API_PATH + payload.endpoint,
-        headers: {
-          Authorization: store.getters.getUserData.auth
-        },
-        params: payload.params,
-        data: payload.data
-      })
+    logout: ({commit}) => {
+      commit('users/setCurrentUserId', NaN)
     }
-
   },
   getters: {
+    isAuthenticated (state) {
+      return !!state.users.currentUserId
+    },
+
+    userData: state => {
+      return state.users.data[state.users.currentUserId]
+    },
 
     /*
-    myGetter: state => (param) => {
-      return true
-    },
-    */
-
-    getUserData: state => {
-      return state.userData
-    },
-
-    getUserState: state => {
-      return state.userState
-    },
-
-    getUserInitials: state => {
-    },
-
     getActiveWall: state => () => {
       // return state.walls[state.activeWallId]
       return state.activeWall
     },
-
+    */
     getCardById: state => (id) => {
       let cardFound // = undefined
       let wall = store.getters.getActiveWall()
