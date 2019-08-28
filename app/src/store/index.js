@@ -136,11 +136,11 @@ export const store = new Vuex.Store({
     initCollection: (state, collection) => {
       Vue.set(collection, 'cards', [])
     },
-
+    /*
     initCard: (state, card) => {
       Vue.set(card, 'states', {})
     },
-
+    */
     initConnection: (state, connection) => {
       Vue.set(connection, 'dirtyDraw', false)
     },

@@ -254,7 +254,8 @@ export default {
     ...mapActions('walls/collections', ['removeCard'])
   },
   created: function () {
-    this.$store.commit('initCard', this.card)
+    // Do when loading data instead.
+    // this.$store.commit('initCard', this.card)
   },
   mounted: function () {
     // this.setFocus()

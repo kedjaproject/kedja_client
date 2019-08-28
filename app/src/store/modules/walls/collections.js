@@ -50,14 +50,24 @@ export default {
   mutations: {
     setCollections (state, collections) {
       collections.forEach(collection => {
-        Vue.set(state.collections, collection.rid, collection)
+        if (state.collections[collection.rid]) {
+          // Update only data if already exists
+          Vue.set(state.collections[collection.rid], 'data', collection.data)
+        } else {
+          Vue.set(state.collections, collection.rid, collection)
+        }
       })
     },
     addCard (state, {collection, card}) {
       collection.cardList.push(card.rid)
     },
     setCollection (state, collection) {
-      Vue.set(state.collections, collection.rid, collection)
+      if (state.collections[collection.rid]) {
+        // Update only data if already exists
+        Vue.set(state.collections[collection.rid], 'data', collection.data)
+      } else {
+        Vue.set(state.collections, collection.rid, collection)
+      }
     },
     setCollectionIdCardList (state, {collectionId, cardList}) {
       Vue.set(state.collections[collectionId], 'cardList', cardList)
