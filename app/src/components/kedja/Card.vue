@@ -204,9 +204,6 @@ export default {
       //this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
     },
     setSelected (e) {
-      console.log('Select card')
-      console.log(this.userState.name)
-      console.log(this.card.states)
       if (!(this.userState.name == "selectCard" && this.userState.data.rid == this.card.rid)) {
         this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
       } else {
