@@ -19,6 +19,7 @@ export default {
           commit('removeCard', {collection, card})
           commit('walls/cards/removeCard', null, {root: true})
           commit('resetUserState', null, {root: true})
+          eventBus.$emit('cardRemoved')
         })
     },
     createCardInCollection ({commit}, {collection, title}) {
@@ -26,13 +27,14 @@ export default {
         .then(response => {
           commit('walls/cards/setCard', response.data, {root: true})
           commit('addCard', {collection, card: response.data})
+          eventBus.$emit('cardCreated')
         })
     },
     createCollection ({commit, rootGetters}, wall) {
       kedjaAPI.post('walls/' + wall.rid + '/collections', {title: 'Ny samling'})
         .then(response => {
           // Order is important - rid must be in collections first
-          commit('addCollection', response.data)
+          commit('setCollection', response.data)
           commit('walls/addCollectionToWall', {wall, collection: response.data}, {root: true})
           eventBus.$emit('collectionCreated')
         })
@@ -66,14 +68,12 @@ export default {
         // Update only data if already exists
         Vue.set(state.collections[collection.rid], 'data', collection.data)
       } else {
+        collection.cardList = collection.cardList || []
         Vue.set(state.collections, collection.rid, collection)
       }
     },
     setCollectionIdCardList (state, {collectionId, cardList}) {
       Vue.set(state.collections[collectionId], 'cardList', cardList)
-    },
-    addCollection (state, collection) {
-      Vue.set(state.collections, collection.rid, collection)
     },
     removeCollection (state, collection) {
       delete state.collections[collection.rid]

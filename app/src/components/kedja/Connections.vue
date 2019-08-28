@@ -161,9 +161,11 @@ export default {
   },
   created () {
     // this.$store.commit('initConnection',this.connection);
-    eventBus.$on('relationsUpdated', () => {
-      console.log('relations updated')
-      this.$nextTick(this.redraw)
+    eventBus.$on(['cardRemoved', 'relationsUpdated'], () => {
+      console.log('cards changed in way that might need redraw')
+      // This needs to wait for transition... (Not the best solution)
+      // this.$nextTick(this.redraw)
+      setTimeout(this.redraw, 600)
     })
   },
   mounted () {
