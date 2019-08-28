@@ -92,10 +92,17 @@ const getters = {
 
 // actions
 const actions = {
-  getWalls ({commit}) {
+  fetchWalls ({commit}) {
     kedjaAPI.get('walls')
       .then(response => {
         commit('setWalls', response.data)
+      })
+  },
+
+  createWall ({commit}) {
+    kedjaAPI.post('walls', {title: 'Ny vägg'})
+      .then(response => {
+        commit('setWall', response.data)
       })
   },
 
@@ -155,24 +162,10 @@ const mutations = {
 
   setWall (state, wall) {
     Vue.set(state.walls, wall.rid, wall)
+    if (!state.wallList.includes(wall.rid)) {
+      state.wallList.push(wall.rid)
+    }
   },
-
-  /*
-  setCollectionsData (state, {wall, collections}) {
-    collections.forEach(collection => {
-      Vue.set(state.collections, collection.rid, collection)
-    })
-    Vue.set(state.walls[wall.rid], 'collectionList', collections.map(coll => coll.rid))
-    // Vue.set(state.wallData[wall.rid], 'collections', collections)
-  },
-
-  setCardsData (state, {collection, cards}) {
-    cards.forEach(card => {
-      Vue.set(state.cards, card.rid, card)
-    })
-    Vue.set(state.collections[collection.rid], 'cardList', cards.map(card => card.rid))
-  },
-  */
 
   removeCardRelations (state, card) {
     Object.values(state.walls).forEach(wall => {

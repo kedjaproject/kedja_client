@@ -12,7 +12,7 @@
     <h3>Mina väggar</h3>
 
     <div class="wallBoxes">
-      <router-link-box :to="{ name: 'ViewWall', params: {wallId: wall.rid} }" color="lightsteelblue" v-for="wall in walls" :key="wall.rid" class="wallBox">
+      <router-link-box :to="{ name: 'ViewWall', params: {wallId: wall.rid} }" color="lightsteelblue" v-for="wall in all" :key="wall.rid" class="wallBox">
         <h3>
           {{wall.data.title}}
         </h3>
@@ -23,10 +23,9 @@
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex'
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
-import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewWallList',
@@ -34,45 +33,14 @@ export default {
     KedjaHeader,
     RouterLinkBox
   },
-  data () {
-    return {
-      // walls: ""
-    }
-  },
-  props: {
-  },
   computed: {
-    walls: function () {
-      return this.$store.getters['walls/all']
-    }
+    ...mapGetters('walls', ['all'])
   },
   methods: {
-    getWalls () {
-      kedjaAPI.get('walls')
-        .then(response => {
-          this.walls = response.data
-        })
-    },
-    getWallsStore () {
-      this.$store.dispatch('walls/getWalls')
-    },
-    createWall () {
-      // this.$store.commit('createCollectionInWall',{wall: this.wall});
-      kedjaAPI.post('walls', {title: 'Ny vägg'})
-        .then(response => {
-          console.log(response)
-          this.walls.push(response.data)
-        })
-        .catch(() => {
-          console.log('Du är inte inloggad. Logga in för att fortsätta.')
-        })
-    }
-  },
-  created () {
-
+    ...mapActions('walls', ['fetchWalls', 'createWall'])
   },
   mounted () {
-    this.getWallsStore()
+    this.fetchWalls()
   }
 }
 </script>
