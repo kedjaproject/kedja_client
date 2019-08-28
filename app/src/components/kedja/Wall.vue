@@ -7,6 +7,11 @@
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
+      <label @click.stop>
+        <input type="checkbox" v-model="filterCards" />
+        Filtrera kort i vald kedja
+      </label>
+
     </div>
 
     <div class="wallContent" ref="wallContent">
@@ -59,6 +64,14 @@ export default {
     },
     relations () {
       return this.wall.relations
+    },
+    filterCards: {
+      get () {
+        return this.$store.state.filterCards
+      },
+      set (value) {
+        this.$store.commit('setFilterCards', value)
+      }
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState']),
@@ -224,7 +237,7 @@ export default {
 .wallHeader{
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   padding: 1em 0 1em 0;
 }
 
