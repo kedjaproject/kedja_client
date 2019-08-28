@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" v-if="filtered" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard" :class="{
+  <div class="Card" v-if="filtered" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard(card)" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
