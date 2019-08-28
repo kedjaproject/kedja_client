@@ -204,6 +204,7 @@ export const store = new Vuex.Store({
 
     setFilterCards: (state, value) => {
       Vue.set(state, 'filterCards', value)
+      store.commit('setDirtyDraw')
     },
 
     setDeepConnectionsByCardId: (state, {id}) => {

@@ -17,9 +17,9 @@
 
     <div class="collectionContent" ref="collectionContent">
 
-      <!--transition-group name="fade" mode="out-in" class="cards"-->
+      <transition-group name="fade" mode="out-in" class="cards">
         <card v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
-      <!--/transition-group-->
+      </transition-group>
 
       <transition name="fade"  mode="out-in">
         <card-seed @create="createCard" @cancel="cancelCardSeed" ref="cardSeed" tabindex="0" v-if="showCardSeed"></card-seed>
