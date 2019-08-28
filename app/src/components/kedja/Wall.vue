@@ -7,10 +7,11 @@
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
-      <label @click.stop>
+      <!--label @click.stop>
         <input type="checkbox" v-model="filterCards" />
         Filtrera kort i vald kedja
-      </label>
+      </label-->
+      <card-filter @click.native.stop></card-filter>
 
     </div>
 
@@ -41,6 +42,7 @@ import { kedjaAPI, eventBus } from '@/utils'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import DropDown from '@/components/DropDown'
+import CardFilter from '@/components/kedja/widgets/CardFilter'
 import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
@@ -50,6 +52,7 @@ export default {
   components: {
     KedjaHeader,
     DropDown,
+    CardFilter,
     Collections,
     Connections,
     EditableInput
@@ -239,6 +242,10 @@ export default {
   flex-direction: row;
   align-items: center;
   padding: 1em 0 1em 0;
+}
+
+.wallHeader > *{
+  margin-right: 50px;
 }
 
 .wallContent{
