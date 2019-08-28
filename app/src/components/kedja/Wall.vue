@@ -232,6 +232,10 @@ export default {
   padding: 1em 0 1em 0;
 }
 
+.wallHeader .users {
+    margin-left: 24px;
+}
+
 .wallContent{
   /* LAYOUT */
   display: flex;
