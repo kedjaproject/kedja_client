@@ -178,7 +178,12 @@ export default {
   created () {
     eventBus.$on('collectionCreated', () => {
       this.$nextTick(() => {
-        document.activeElement.scrollIntoView({behavior: "smooth", inline: "start"})
+        document.activeElement.scrollIntoView({behavior: 'smooth', inline: 'start'})
+      })
+    })
+    eventBus.$on('collectionRemoved', () => {
+      this.$nextTick(() => {
+        document.querySelector('#collections .horisontal-scroll-wrapper').scrollIntoView({behavior: 'smooth', inline: 'end'})
       })
     })
   },
