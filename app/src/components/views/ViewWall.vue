@@ -1,9 +1,7 @@
 <template>
   <div class="ViewWall" @click="resetUserState">
 
-    <kedja-header>
-      <h3></h3>
-    </kedja-header>
+    <kedja-header></kedja-header>
 
     <div class="content">
       <wall v-if="rid" :rid="rid" :wall="wall" class="mywall"></wall>

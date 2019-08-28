@@ -6,6 +6,9 @@
       <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
+      <div class="users">
+        <user-button :user="currentUser" small />
+      </div>
 
     </div>
 
@@ -34,7 +37,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { kedjaAPI, eventBus } from '@/utils'
 
-import KedjaHeader from '@/components/layout/KedjaHeader'
+import UserButton from '@/components/kedja/widgets/UserButton'
 import DropDown from '@/components/DropDown'
 import Collections from './Collections'
 import Connections from './Connections'
@@ -43,7 +46,7 @@ import EditableInput from '@/components/general/EditableInput'
 export default {
   name: 'Wall',
   components: {
-    KedjaHeader,
+    UserButton,
     DropDown,
     Collections,
     Connections,
@@ -62,6 +65,7 @@ export default {
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState']),
+    ...mapGetters('users', ['currentUser']),
     ...mapGetters('walls', ['getWallCollections'])
   },
   watch: {
@@ -224,7 +228,7 @@ export default {
 .wallHeader{
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: flex-end;
   padding: 1em 0 1em 0;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="KedjaHeader">
 
-    <kedja-logo></kedja-logo>
+    <kedja-logo />
 
     <div class="slot">
 
@@ -16,8 +16,7 @@
       <div v-if="isAuthenticated">
         <drop-down :items="[{label: 'Min profil', f: goToProfile},{label: 'Mina väggar', f: goToWalls},{label: 'Logga ut', f: logout}]">
           <div class="right">
-            <span v-if="currentUser.shortName">{{ currentUser.shortName }}</span>
-            <span v-else>Inloggad användare</span>
+            <user-button :user="currentUser" />
           </div>
         </drop-down>
       </div>
@@ -31,6 +30,7 @@
 
 import KedjaLogo from '@/components/KedjaLogo'
 import DropDown from '@/components/DropDown'
+import UserButton from '@/components/kedja/widgets/UserButton'
 import { kedjaAPI } from '@/utils'
 import { mapGetters, mapState } from 'vuex'
 
@@ -38,7 +38,8 @@ export default {
   name: 'KedjaHeader',
   components: {
     KedjaLogo,
-    DropDown
+    DropDown,
+    UserButton
   },
   data () {
     return {
