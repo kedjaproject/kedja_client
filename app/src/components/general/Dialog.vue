@@ -1,10 +1,10 @@
 <template>
     <div :class="classes" id="dialog-backdrop" @click.self="dismiss">
         <div class="dialog-window" role="dialog">
-            <h2>{{ title }}</h2>
-            <span class="message">{{ message }}</span>
+            <h2>{{ params.title }}</h2>
+            <span class="message">{{ params.message }}</span>
             <div class="buttons">
-                <button v-for="(button, i) in buttons" :key="i" @click="buttonClick(button)" :class="button.classes">{{ button.text }}</button>
+                <button v-for="(button, i) in params.buttons" :key="i" @click="buttonClick(button)" :class="button.classes">{{ button.text }}</button>
             </div>
         </div>
     </div>
@@ -12,14 +12,17 @@
 <script>
 import { eventBus } from '@/utils'
 
-const defaultButtons = [
-  {
-    text: 'OK',
-    classes: 'btn-primary'
-  }
-]
-const defaultTitle = 'Något gick fel'
-const defaultMessage = 'Okänt fel. Kontrollera din nätverksuppkoppling.'
+const defaults = {
+  buttons: [
+    {
+      text: 'OK',
+      classes: 'btn-primary'
+    }
+  ],
+  title: 'Något gick fel',
+  message: 'Okänt fel. Kontrollera din nätverksuppkoppling.',
+  dismissable: true
+}
 
 export default {
   name: 'Dialog',
@@ -27,10 +30,7 @@ export default {
     return {
       isActive: false,
       isOpen: false,
-      dismissable: true,
-      title: '',
-      message: '',
-      buttons: []
+      params: {}
     }
   },
   computed: {
@@ -39,6 +39,9 @@ export default {
         active: this.isActive,
         open: this.isOpen
       }
+    },
+    dismissable () {
+      return this.params.dismissable
     }
   },
   methods: {
@@ -49,11 +52,9 @@ export default {
       this.close()
     },
     open (params) {
-      params = params || {}
-      this.dismissable = params.dismissable || true
-      this.title = params.title || defaultTitle
-      this.message = params.message || defaultMessage
-      this.buttons = params.buttons || defaultButtons
+      this.params = {}
+      Object.assign(this.params, defaults)
+      Object.assign(this.params, params)
       this.isActive = true
       this.$nextTick(() => {
         this.isOpen = true
