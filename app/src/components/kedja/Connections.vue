@@ -160,9 +160,8 @@ export default {
     }
   },
   created () {
-    // this.$store.commit('initConnection',this.connection);
-    eventBus.$on(['cardRemoved', 'relationsUpdated'], () => {
-      console.log('cards changed in way that might require redraw')
+    eventBus.$on('relationsUpdated', this.redraw)
+    eventBus.$on('cardRemoved', () => {
       // Similar to $nextTick, but waits for css transitions to end.
       this.$nextTransitionEnd(this.redraw, this.$parent.$el)
     })
