@@ -38,6 +38,13 @@ function setAuthToken (authToken) {
   kedjaAPI.defaults.headers['Authorization'] = authToken
 }
 
+if (process.env.NODE_ENV === 'development') {
+  window.APIget = path => {
+    kedjaAPI.get(path)
+      .then(reponse => console.log(reponse))
+  }
+}
+
 export {
   setAuthToken,
   kedjaAPI,

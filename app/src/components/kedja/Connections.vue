@@ -162,10 +162,9 @@ export default {
   created () {
     // this.$store.commit('initConnection',this.connection);
     eventBus.$on(['cardRemoved', 'relationsUpdated'], () => {
-      console.log('cards changed in way that might need redraw')
-      // This needs to wait for transition... (Not the best solution)
-      // this.$nextTick(this.redraw)
-      setTimeout(this.redraw, 600)
+      console.log('cards changed in way that might require redraw')
+      // Similar to $nextTick, but waits for css transitions to end.
+      this.$nextTransitionEnd(this.redraw, this.$parent.$el)
     })
   },
   mounted () {

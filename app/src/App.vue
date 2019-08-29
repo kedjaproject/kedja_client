@@ -10,11 +10,46 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Vue from 'vue'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import KedjaFooter from '@/components/layout/KedjaFooter'
 import Modal from '@/components/general/Modal'
 import Dialog from '@/components/general/Dialog'
+
+const TransitionEndPlugin = {
+  install (Vue, options) {
+    const el = document.createElement('fakeelement')
+    const transitions = {
+      'transition': 'transitionend',
+      'OTransition': 'oTransitionEnd',
+      'MozTransition': 'transitionend',
+      'WebkitTransition': 'webkitTransitionEnd'
+    }
+    // Find correct transitionend event name for browser
+    const transitionName = Object.keys(transitions).find(key => el.style[key] !== undefined)
+    const transitionEndName = transitions[transitionName]
+
+    Vue.prototype.$nextTransitionEnd = function (callback, element) {
+      const el = element || this.$el
+      const eventListener = event => {
+        // Only run once.
+        // This is slightly risky, in case child elements have transitions that end
+        // before the one you want.
+        el.removeEventListener(transitionEndName, eventListener)
+        callback(event)
+      }
+      el.addEventListener(transitionEndName, eventListener)
+    }
+
+    Vue.prototype.$onTransitionEnd = function (callback, element) {
+      const el = element || this.$el
+      el.addEventListener(transitionEndName, callback)
+    }
+  }
+}
+
+Vue.use(TransitionEndPlugin)
 
 export default {
   name: 'App',
