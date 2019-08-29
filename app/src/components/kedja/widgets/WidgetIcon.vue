@@ -11,22 +11,17 @@
 
 export default {
   name: 'WidgetIcon',
-  /*
-  components: {
-    Component
-  },
-  */
   data () {
     return {
       hovering: false
     }
   },
   props: {
-    active: false,
-    path: '',
-    img: '',
-    imgHover: '',
-    imgActive: ''
+    active: Boolean,
+    path: String,
+    img: String,
+    imgHover: String,
+    imgActive: String
   },
   computed: {
     image () {

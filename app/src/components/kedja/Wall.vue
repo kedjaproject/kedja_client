@@ -9,6 +9,7 @@
       <div class="users">
         <user-button :user="currentUser" class="self" small @click="openUserModal(currentUser)" />
         <user-button v-for='(user, i) in fakeUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
+        <button class="add-user-button" @click="openUserAdminModal">+</button>
       </div>
 
     </div>
@@ -36,28 +37,23 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import { kedjaAPI, eventBus } from '@/utils'
+import { kedjaAPI, eventBus, getUserColor } from '@/utils'
 
 import UserButton from '@/components/kedja/widgets/UserButton'
+import WallUserAdmin from './modals/WallUserAdmin'
+import WallUserInfo from './modals/WallUserInfo'
 import DropDown from '@/components/DropDown'
 import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
-
-const userColors = [
-  '#85B96D',
-  '#27CBFF',
-  '#517480',
-  '#FF2741',
-  '#00D6A2'
-]
 
 const fakeUsers = [
   { fullName: 'Fanny Lindh', shortName: 'FL', rid: 1 },
   { fullName: 'Anders Hultman', shortName: 'AH', rid: 2 },
   { fullName: 'Jenny Berggren', shortName: 'JB', rid: 3 },
   { fullName: 'Martin Törnros', shortName: 'MT', rid: 4 },
-  { fullName: 'Maja Fjällbäck', shortName: 'MF', rid: 5 }
+  { fullName: 'Maja Fjällbäck', shortName: 'MF', rid: 5 },
+  { fullName: 'Johan Schiff', shortName: 'JS', rid: 6 }
 ]
 
 export default {
@@ -68,11 +64,6 @@ export default {
     Collections,
     Connections,
     EditableInput
-  },
-  data () {
-    return {
-      fakeUsers
-    }
   },
   props: {
     rid: Number,
@@ -85,28 +76,23 @@ export default {
     relations () {
       return this.wall.relations
     },
+    fakeUsers () {
+      return fakeUsers.filter(user => user.fullName !== this.currentUser.fullName)
+    },
     ...mapState('walls', ['walls']),
     ...mapState(['userState']),
     ...mapGetters('users', ['currentUser']),
     ...mapGetters('walls', ['getWallCollections'])
   },
-  watch: {
-    /*
-    wall () {
-      this.$store.commit('initWall', this.wall)
-      this.getCollectionsFromAPI()
-      this.getConnectionsFromAPI()
-    },
-    collections: function () {
-    }
-    */
-  },
   methods: {
     userColor (index) {
-      return userColors[index % userColors.length]
+      return getUserColor(index)
     },
     openUserModal (user) {
-      eventBus.$emit('modalOpen', {headline: user.fullName})
+      eventBus.$emit('modalOpen', {component: WallUserInfo, data: {user, wall: this.wall}})
+    },
+    openUserAdminModal (user) {
+      eventBus.$emit('modalOpen', {component: WallUserAdmin, data: {fakeUsers: fakeUsers, wall: this.wall}})
     },
     getCollectionsFromAPI () {
       let wallId = this.$route.params['wallId']
@@ -129,19 +115,6 @@ export default {
     getWallLocal () {
       this.wall = this.$store.getters.getActiveWall()
     },
-    // FIXME: Activate scrollIntoView
-    /*
-    createCollection () {
-      // this.$store.commit('createCollectionInWall',{wall: this.wall})
-      kedjaAPI.post('walls/' + this.rid + '/collections', {title: 'Ny samling'})
-        .then(response => {
-          this.collections.push(response.data)
-          this.$nextTick(() => {
-            document.activeElement.scrollIntoView({behavior: "smooth", inline: "start"})
-          })
-        })
-    },
-    */
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })
       kedjaAPI.delete('walls/' + this.rid)
@@ -149,20 +122,6 @@ export default {
           this.$router.push({name: 'Walls'})
         })
     },
-    /*
-    removeCollection (collection) {
-      // this.$store.commit('removeCollectionFromWall',{wall: this.wall, collection: collection})
-      kedjaAPI.delete('walls/' + this.rid + '/collections/' + collection.rid)
-        .then(response => {
-          console.log(response)
-
-          let index = this.wall.collections.indexOf(collection)
-          if (index !== -1) {
-            this.wall.collections.splice(index, 1)
-          }
-        })
-    },
-    */
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
     },
@@ -296,4 +255,14 @@ export default {
   height: 100%;
 }
 
+</style>
+<style lang="sass">
+.add-user-button
+    width: 20px
+    height: 20px
+    font-size: 12px
+    font-weight: 700
+    text-align: center
+    color: #000
+    padding: 0
 </style>

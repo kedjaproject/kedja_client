@@ -1,6 +1,18 @@
 import axios from 'axios'
 import Vue from 'vue'
 
+const userColors = [
+  '#85B96D',
+  '#27CBFF',
+  '#517480',
+  '#FF2741',
+  '#00D6A2'
+]
+
+function getUserColor (index) {
+  return userColors[index % userColors.length]
+}
+
 const eventBus = new Vue()
 
 const kedjaAPI = axios.create({
@@ -29,5 +41,6 @@ function setAuthToken (authToken) {
 export {
   setAuthToken,
   kedjaAPI,
-  eventBus
+  eventBus,
+  getUserColor
 }
