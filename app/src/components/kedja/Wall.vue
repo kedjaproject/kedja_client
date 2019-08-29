@@ -7,7 +7,8 @@
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
       <div class="users">
-        <user-button :user="currentUser" small />
+        <user-button :user="currentUser" class="self" small @click="openUserModal(currentUser)" />
+        <user-button v-for='(user, i) in fakeUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
       </div>
 
     </div>
@@ -43,6 +44,22 @@ import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
+const userColors = [
+  '#85B96D',
+  '#27CBFF',
+  '#517480',
+  '#FF2741',
+  '#00D6A2'
+]
+
+const fakeUsers = [
+  { fullName: 'Fanny Lindh', shortName: 'FL', rid: 1 },
+  { fullName: 'Anders Hultman', shortName: 'AH', rid: 2 },
+  { fullName: 'Jenny Berggren', shortName: 'JB', rid: 3 },
+  { fullName: 'Martin Törnros', shortName: 'MT', rid: 4 },
+  { fullName: 'Maja Fjällbäck', shortName: 'MF', rid: 5 }
+]
+
 export default {
   name: 'Wall',
   components: {
@@ -51,6 +68,11 @@ export default {
     Collections,
     Connections,
     EditableInput
+  },
+  data () {
+    return {
+      fakeUsers
+    }
   },
   props: {
     rid: Number,
@@ -80,6 +102,12 @@ export default {
     */
   },
   methods: {
+    userColor (index) {
+      return userColors[index % userColors.length]
+    },
+    openUserModal (user) {
+      eventBus.$emit('modalOpen', {headline: user.fullName})
+    },
     getCollectionsFromAPI () {
       let wallId = this.$route.params['wallId']
       if (wallId) {

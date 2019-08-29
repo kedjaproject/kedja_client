@@ -14,6 +14,9 @@ const kedjaAPI = axios.create({
 kedjaAPI.interceptors.response.use(response => response, error => {
   if (process.env.NODE_ENV === 'development') {
     console.log(error)
+    eventBus.$emit('dialogOpen', {title: 'Dev message', message: error.stack})
+  } else {
+    eventBus.$emit('dialogOpen')
   }
   return Promise.reject(error)
 })

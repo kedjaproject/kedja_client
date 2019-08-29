@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <!--kedja-header id="header"></kedja-header-->
-    <router-view id="router"/>
-    <kedja-footer id="footer"></kedja-footer>
+    <router-view id="router" />
+    <kedja-footer id="footer" />
+    <modal />
+    <dialogz />
   </div>
 </template>
 
@@ -11,20 +13,19 @@ import { mapActions } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import KedjaFooter from '@/components/layout/KedjaFooter'
+import Modal from '@/components/general/Modal'
+import Dialog from '@/components/general/Dialog'
 
 export default {
   name: 'App',
   components: {
     KedjaHeader,
-    KedjaFooter
-  },
-  data () {
-    return {
-      env: process.env
-    }
+    KedjaFooter,
+    Modal,
+    Dialogz: Dialog // Name 'Dialog' seems to be reserved... (?)
   },
   created () {
-    this.$store.commit('init', {env: this.env})
+    this.$store.commit('init', {env: process.env})
     this.$store.commit('resetUserState')
     this.authenticate()
   },
