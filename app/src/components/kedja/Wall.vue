@@ -53,7 +53,9 @@ const fakeUsers = [
   { fullName: 'Jenny Berggren', shortName: 'JB', rid: 3 },
   { fullName: 'Martin Törnros', shortName: 'MT', rid: 4 },
   { fullName: 'Maja Fjällbäck', shortName: 'MF', rid: 5 },
-  { fullName: 'Johan Schiff', shortName: 'JS', rid: 6 }
+  { fullName: 'Johan Schiff', shortName: 'JS', rid: 6 },
+  { fullName: 'Robin Harms Oredsson', shortName: 'RH', rid: 7 },
+  { fullName: 'Ronja Brandt', shortName: 'RB', rid: 8 }
 ]
 
 export default {
