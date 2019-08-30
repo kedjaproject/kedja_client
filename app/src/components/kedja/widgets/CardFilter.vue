@@ -29,11 +29,11 @@ export default {
       set (value) {
         this.$store.commit('setFilterCards', value)
       }
-    },
+    }
   },
   methods: {
     setActive (value) {
-      this.filterCards = value;
+      this.filterCards = value
     }
   },
   mounted: function () {
