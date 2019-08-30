@@ -6,6 +6,13 @@
       <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
+
+      <!--label @click.stop>
+        <input type="checkbox" v-model="filterCards" />
+        Filtrera kort i vald kedja
+      </label-->
+      <card-filter @click.native.stop></card-filter>
+
       <div class="users">
         <user-button :user="currentUser" class="self" small @click="openUserModal(currentUser)" />
         <user-button v-for='(user, i) in fakeUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
@@ -43,6 +50,7 @@ import UserButton from '@/components/kedja/widgets/UserButton'
 import WallUserAdmin from './modals/WallUserAdmin'
 import WallUserInfo from './modals/WallUserInfo'
 import DropDown from '@/components/DropDown'
+import CardFilter from '@/components/kedja/widgets/CardFilter'
 import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
@@ -63,6 +71,7 @@ export default {
   components: {
     UserButton,
     DropDown,
+    CardFilter,
     Collections,
     Connections,
     EditableInput
@@ -80,6 +89,14 @@ export default {
     },
     fakeUsers () {
       return fakeUsers.filter(user => user.fullName !== this.currentUser.fullName)
+    },
+    filterCards: {
+      get () {
+        return this.$store.state.filterCards
+      },
+      set (value) {
+        this.$store.commit('setFilterCards', value)
+      }
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState']),
@@ -217,12 +234,16 @@ export default {
 .wallHeader{
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   padding: 1em 0 1em 0;
 }
 
 .wallHeader .users {
     margin-left: 24px;
+}
+
+.wallHeader > *{
+  margin-right: 50px;
 }
 
 .wallContent{

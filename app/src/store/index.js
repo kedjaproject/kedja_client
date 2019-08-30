@@ -26,7 +26,8 @@ export const store = new Vuex.Store({
     auth: '',
     userid: '',
     userData: {},
-    dirtyDraw: true
+    dirtyDraw: true,
+    filterCards: false
     // schema: Schema
   },
   mutations: {
@@ -98,8 +99,7 @@ export const store = new Vuex.Store({
 
     setUserState: (state, {name, data}) => {
       store.commit('setDirtyDraw')
-      state.userState = {name: name, data: data || {}, rand: Math.random()}
-      // console.log(state.userState)
+      Vue.set(state, 'userState', {name: name, data: data || {}, rand: Math.random()})
     },
 
     forceUserStateUpdate: (state) => {
@@ -200,6 +200,11 @@ export const store = new Vuex.Store({
       Vue.nextTick().then(function () {
         Vue.set(state, 'dirtyDraw', false)
       })
+    },
+
+    setFilterCards: (state, value) => {
+      Vue.set(state, 'filterCards', value)
+      store.commit('setDirtyDraw')
     },
 
     setDeepConnectionsByCardId: (state, {id}) => {

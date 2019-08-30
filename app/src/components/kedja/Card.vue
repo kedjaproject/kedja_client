@@ -1,5 +1,5 @@
 <template>
-  <div class="Card" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard" :class="{
+  <div class="Card" v-if="filtered" @click.stop="clicked(); scrollIntoView();" @keyup.self.delete="removeCard(card)" :class="{
     'selected': card.states.selected,
     'selectingConnected': card.states.selectingConnected,
     'selectingNotConnected': card.states.selectingNotConnected,
@@ -13,7 +13,8 @@
     }">
 
     <div class="top">
-      <card-button :placeholder="true"></card-button>
+
+      <!--card-button :placeholder="true"></card-button-->
 
       <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.stop></indicator>
 
@@ -128,9 +129,18 @@ export default {
     titleLocked () {
       return this.userState.name === 'connectCard'
     },
+    filtered () {
+      if (!this.filterCards || this.userState.name === 'default') {
+        return true
+      } else if (this.userState.name === 'selectCard') {
+        return this.card.states.selected || this.card.states.selectingConnected
+      }
+      return true
+    },
     ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
     ...mapState('walls/cards', ['cards']),
-    ...mapState(['userState'])
+    ...mapState(['userState']),
+    ...mapState(['filterCards'])
   },
   watch: {
     userState: {
@@ -180,13 +190,25 @@ export default {
   },
   methods: {
     setState (name, flag) {
-      this.card.states[name] = flag
+      let payload = {
+        rid: this.card.rid,
+        stateName: name,
+        stateFlag: flag
+      }
+      this.$store.commit('walls/cards/setCardState', payload)
     },
     resetStates () {
-      this.card.states = {}
+      let payload = {
+        rid: this.card.rid
+      }
+      this.$store.commit('walls/cards/resetCardStates', payload)
     },
     resetState (name) {
-      this.card.states[name] = undefined
+      let payload = {
+        rid: this.card.rid,
+        stateName: name
+      }
+      this.$store.commit('walls/cards/setCardState', payload)
     },
     clicked () {
       if (this.userState.name !== 'connectCard') {

@@ -32,17 +32,12 @@
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 // import Component from '@/components/Component'
+import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewRegister',
   components: {
     KedjaHeader
-  },
-  data () {
-    return {
-    }
-  },
-  props: {
   },
   computed: {
     registerToken: function () {
@@ -51,24 +46,13 @@ export default {
   },
   methods: {
     register: function () {
-      let params = {
-        endpoint: 'auth/register/' + this.registerToken,
-        method: 'post',
-        successCallback: (response) => {
+      kedjaAPI.post('auth/register/' + this.registerToken)
+        .then(response => {
           console.log(response)
-          this.$store.dispatch('login', {auth: response.data.Authorization, userid: response.data.userid, first_name: response.data.user.data.first_name, last_name: response.data.user.data.last_name})
-          // this.$store.dispatch('setUserData', {field: "auth", value: response.data.Authorization});
-          // this.$store.dispatch('setUserData', {field: "userid", value: response.data.userid});
+          this.$store.dispatch('login', response.data)
           this.$router.push({name: 'Home'})
-        }
-      }
-
-      this.$store.commit('makeAPICall', params)
+        })
     }
-  },
-  created () {
-  },
-  mounted () {
   }
 }
 </script>

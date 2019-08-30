@@ -59,7 +59,6 @@ export default {
     return {
       hovering: false,
       showCardSeed: false
-      // cards: ''
     }
   },
   computed: {
@@ -67,13 +66,21 @@ export default {
       return this.getList(this.collection.cardList)
     },
     cardsFiltered () {
-      return this.cards // .filter(card => card.states.selected != false || card.states.selectedConnected != false)
+      if (this.userState.name === 'default') {
+        return this.cards
+      } else if (this.userState.name === 'selectCard') {
+        // return this.cards.filter(card => card.states.selected || card.states.selectingConnected)
+      }
+      return this.cards
     },
     newDisabled () {
       return this.userState.name === 'connectCard'
     },
     ...mapGetters('walls/cards', ['getList']),
-    ...mapState(['userState'])
+    ...mapGetters('walls/cards', ['getCardsByState']),
+    ...mapState(['userState']),
+    ...mapState(['filterCards'])
+
   },
   props: {
     collection: Object,
@@ -95,7 +102,7 @@ export default {
           */
           if (els.length > 0) {
             this.$refs.collectionContent.scrollTo({
-              top: els[0].offsetTop,
+              top: els[0].offsetTop - 10,
               behavior: 'smooth'
             })
             // els[0].scrollIntoView({behavior: "smooth", block: "center"})
@@ -209,6 +216,7 @@ export default {
   flex: 1;
   overflow-y: auto;
   scroll-behavior: smooth;
+  position: relative;
 }
 
 .collectionFooter{
