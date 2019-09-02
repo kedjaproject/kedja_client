@@ -1,6 +1,6 @@
 import collections from './collections'
 import cards from './cards'
-import { kedjaAPI } from '@/utils'
+import { kedjaAPI, fakeUsers } from '@/utils'
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -106,7 +106,7 @@ const actions = {
       })
   },
 
-  fetchWall ({commit, state}, rid) {
+  fetchWall ({commit, rootState, rootGetters}, rid) {
     // Handle requests for wall and collections before relations.
     axios.all([
       kedjaAPI.get('walls/' + rid),
@@ -115,6 +115,14 @@ const actions = {
     ])
       .then(axios.spread((wallResponse, collectionsResponse, relationsResponse) => {
         wallResponse.data.collectionList = collectionsResponse.data.map(coll => coll.rid)
+        // FIXME: Should not be fake, ofc
+        const currentUser = rootGetters['users/currentUser']
+        const otherFakeUsers = fakeUsers.filter(user => user.data.first_name !== currentUser.data.first_name || user.data.last_name !== currentUser.data.last_name)
+        commit('users/setUserData', otherFakeUsers, {root: true})
+        // Just add some ramdom users
+        wallResponse.data.userList = otherFakeUsers.filter(user => Math.round(Math.random())).map(user => user.rid)
+        wallResponse.data.userList.push(currentUser.rid)
+        // End FIXME
         commit('setWall', wallResponse.data)
         commit('collections/setCollections', collectionsResponse.data)
         // Get all cards before handling relations.
@@ -191,6 +199,14 @@ const mutations = {
 
   removeCollectionFromWall (state, {wall, collection}) {
     wall.collectionList.splice(wall.collectionList.indexOf(collection.rid), 1)
+  },
+
+  addUser (state, {wall, user}) {
+    wall.userList.push(user.rid)
+  },
+
+  removeUser (state, {wall, user}) {
+    wall.userList.splice(wall.userList.indexOf(user.rid), 1)
   }
 }
 

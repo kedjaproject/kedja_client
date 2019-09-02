@@ -15,7 +15,7 @@
 
       <div class="users">
         <user-button :user="currentUser" class="self" small @click="openUserModal(currentUser)" />
-        <user-button v-for='(user, i) in fakeUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
+        <user-button v-for='(user, i) in otherUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
         <button class="add-user-button" @click="openUserAdminModal">+</button>
       </div>
 
@@ -55,17 +55,6 @@ import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
-const fakeUsers = [
-  { fullName: 'Fanny Lindh', shortName: 'FL', rid: 1 },
-  { fullName: 'Anders Hultman', shortName: 'AH', rid: 2 },
-  { fullName: 'Jenny Berggren', shortName: 'JB', rid: 3 },
-  { fullName: 'Martin Törnros', shortName: 'MT', rid: 4 },
-  { fullName: 'Maja Fjällbäck', shortName: 'MF', rid: 5 },
-  { fullName: 'Johan Schiff', shortName: 'JS', rid: 6 },
-  { fullName: 'Robin Harms Oredsson', shortName: 'RH', rid: 7 },
-  { fullName: 'Ronja Brandt', shortName: 'RB', rid: 8 }
-]
-
 export default {
   name: 'Wall',
   components: {
@@ -87,8 +76,11 @@ export default {
     relations () {
       return this.wall.relations
     },
-    fakeUsers () {
-      return fakeUsers.filter(user => user.fullName !== this.currentUser.fullName)
+    users () {
+      return this.getUsers(this.wall.userList)
+    },
+    otherUsers () {
+      return this.users.filter(user => user.rid !== this.currentUser.rid)
     },
     filterCards: {
       get () {
@@ -100,7 +92,7 @@ export default {
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState']),
-    ...mapGetters('users', ['currentUser']),
+    ...mapGetters('users', ['currentUser', 'getUsers']),
     ...mapGetters('walls', ['getWallCollections'])
   },
   methods: {
@@ -111,7 +103,7 @@ export default {
       eventBus.$emit('modalOpen', {component: WallUserInfo, data: {user, wall: this.wall}})
     },
     openUserAdminModal (user) {
-      eventBus.$emit('modalOpen', {component: WallUserAdmin, data: {fakeUsers: fakeUsers, wall: this.wall}})
+      eventBus.$emit('modalOpen', {component: WallUserAdmin, data: {users: this.getUsers().filter(user => user.rid !== this.currentUser.rid), wall: this.wall}})
     },
     getCollectionsFromAPI () {
       let wallId = this.$route.params['wallId']
@@ -280,12 +272,13 @@ export default {
 
 </style>
 <style lang="sass">
-.add-user-button
-    width: 20px
-    height: 20px
-    font-size: 12px
-    font-weight: 700
-    text-align: center
-    color: #000
-    padding: 0
+.Wall
+  .add-user-button
+      width: 20px
+      height: 20px
+      font-size: 12px
+      font-weight: 700
+      text-align: center
+      color: #000
+      padding: 0
 </style>

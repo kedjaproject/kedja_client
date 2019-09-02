@@ -1,6 +1,17 @@
 import axios from 'axios'
 import Vue from 'vue'
 
+const fakeUsers = [
+  { data: { first_name: 'Fanny', last_name: 'Lindh' }, rid: 1 },
+  { data: { first_name: 'Anders', last_name: 'Hultman' }, rid: 2 },
+  { data: { first_name: 'Fanny', last_name: 'Berggren' }, rid: 3 },
+  { data: { first_name: 'Martin', last_name: 'Törnros' }, rid: 4 },
+  { data: { first_name: 'Maja', last_name: 'Fjällbäck' }, rid: 5 },
+  { data: { first_name: 'Johan', last_name: 'Schiff' }, rid: 6 },
+  { data: { first_name: 'Robin', last_name: 'Harms Oredsson' }, rid: 7 },
+  { data: { first_name: 'Ronja', last_name: 'Brandt' }, rid: 8 }
+]
+
 const userColors = [
   '#85B96D',
   '#27CBFF',
@@ -49,5 +60,6 @@ export {
   setAuthToken,
   kedjaAPI,
   eventBus,
-  getUserColor
+  getUserColor,
+  fakeUsers
 }

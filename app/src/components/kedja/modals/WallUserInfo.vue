@@ -1,7 +1,7 @@
 <template>
   <div id="wall-user-modal">
     <header>
-      <h1>{{ user.fullName }}</h1>
+      <h1>{{ user.data.fullName }}</h1>
       <p v-if="isCurrentUser">Det är du.</p>
       <p v-else>Användare på väggen <em>{{ wall.data.title }}</em>.</p>
     </header>

@@ -1,6 +1,6 @@
 <template>
     <button class="user-button" :class="classes" :style="style" @click="click">
-        {{ user.shortName || '??' }}
+        {{ user.data.shortName || '??' }}
     </button>
 </template>
 <script>

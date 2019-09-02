@@ -8,7 +8,7 @@
       Du är inloggad som
 
       <h2>
-        {{currentUser.fullName}}
+        {{currentUser.data.fullName}}
       </h2>
 
       <h3>Uppdatera profil</h3>
@@ -70,7 +70,7 @@ export default {
   },
   created () {
     // This does not work from data() for some reason...
-    this.setDataEditable(this.currentUser)
+    this.setDataEditable(this.currentUser.data)
   },
   mounted () {
     // API does not work, currently
