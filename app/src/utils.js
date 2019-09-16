@@ -33,13 +33,36 @@ const kedjaAPI = axios.create({
   }
 })
 
+function openDialog (params) {
+  eventBus.$emit('dialogOpen', params)
+}
+
+function openDeleteDialog ({message, action}) {
+  openDialog({
+    title: '',
+    message,
+    buttons: [
+      {
+        text: 'Radera',
+        classes: 'btn-warning',
+        action
+      },
+      {
+        text: 'Avbryt',
+        classes: 'btn-primary'
+      }
+    ]
+  })
+}
+
 // Default error handler here.
+// FIXME: This should be only for dev, so callers get to handle errors.
 kedjaAPI.interceptors.response.use(response => response, error => {
   if (process.env.NODE_ENV === 'development') {
     console.log(error)
-    eventBus.$emit('dialogOpen', {title: 'Dev message', message: error.stack})
+    openDialog({title: 'Dev message', message: error.stack})
   } else {
-    eventBus.$emit('dialogOpen')
+    openDialog()
   }
   return Promise.reject(error)
 })
@@ -61,5 +84,7 @@ export {
   kedjaAPI,
   eventBus,
   getUserColor,
-  fakeUsers
+  fakeUsers,
+  openDialog,
+  openDeleteDialog
 }

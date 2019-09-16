@@ -23,7 +23,7 @@ export default {
     boundsElementId: String
   },
   computed: {
-    connectionCards: function () {
+    connectionCards () {
       return this.connections.map(conn => {
         return {
           members: [

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { eventBus, kedjaAPI } from '@/utils'
+import { eventBus, kedjaAPI, openDeleteDialog } from '@/utils'
 
 export default {
   namespaced: true,
@@ -10,17 +10,29 @@ export default {
     getCollectionByCard: state => card => Object.values(state.collections).find(coll => coll.cardList.includes(card.rid))
   },
   actions: {
-    removeCard ({commit, getters}, card) {
+    removeCard ({commit, getters, rootGetters}, card) {
       const collection = getters.getCollectionByCard(card)
-      kedjaAPI.delete('collections/' + collection.rid + '/cards/' + card.rid)
-        .then(response => {
-          commit('walls/removeCardRelations', card, {root: true})
-          eventBus.$emit('relationsUpdated')
-          commit('removeCard', {collection, card})
-          commit('walls/cards/removeCard', null, {root: true})
-          commit('resetUserState', null, {root: true})
-          eventBus.$emit('cardRemoved')
+      const action = () => {
+        kedjaAPI.delete('collections/' + collection.rid + '/cards/' + card.rid)
+          .then(response => {
+            commit('walls/removeCardRelations', card, {root: true})
+            eventBus.$emit('relationsUpdated')
+            commit('removeCard', {collection, card})
+            commit('walls/cards/removeCard', null, {root: true})
+            commit('resetUserState', null, {root: true})
+            eventBus.$emit('cardRemoved')
+          })
+      }
+      const wall = rootGetters['walls/activeWall']
+      const hasRelations = wall.relations.find(relation => relation.members.includes(card.rid))
+      if (hasRelations) {
+        openDeleteDialog({
+          message: 'Om du raderar detta kort tas även kopplingar till andra kort bort.',
+          action
         })
+      } else {
+        action()
+      }
     },
     createCardInCollection ({commit}, {collection, title}) {
       kedjaAPI.post('collections/' + collection.rid + '/cards', {title})
@@ -40,13 +52,23 @@ export default {
         })
     },
     removeCollection ({commit}, {wall, collection}) {
-      kedjaAPI.delete('walls/' + wall.rid + '/collections/' + collection.rid)
-        .then(response => {
-          // Order is important - rid must be removed from collections last
-          commit('walls/removeCollectionFromWall', {wall, collection}, {root: true})
-          commit('removeCollection', collection)
-          eventBus.$emit('collectionRemoved')
+      const action = () => {
+        kedjaAPI.delete('walls/' + wall.rid + '/collections/' + collection.rid)
+          .then(response => {
+            // Order is important - rid must be removed from collections last
+            commit('walls/removeCollectionFromWall', {wall, collection}, {root: true})
+            commit('removeCollection', collection)
+            eventBus.$emit('collectionRemoved')
+          })
+      }
+      if (collection.cardList.length) {
+        openDeleteDialog({
+          message: 'Om du raderar denna samling raderas även samlingens kort och deras kopplingar.',
+          action
         })
+      } else {
+        action()
+      }
     }
   },
   mutations: {

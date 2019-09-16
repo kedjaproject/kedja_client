@@ -1,7 +1,7 @@
 <template>
     <div :class="classes" id="dialog-backdrop" @click.self="dismiss">
         <div class="dialog-window" role="dialog">
-            <h2>{{ params.title }}</h2>
+            <h2 v-if="params.title">{{ params.title }}</h2>
             <span class="message">{{ params.message }}</span>
             <div class="buttons">
                 <button v-for="(button, i) in params.buttons" :key="i" @click="buttonClick(button)" :class="button.classes">{{ button.text }}</button>
@@ -46,8 +46,8 @@ export default {
   },
   methods: {
     buttonClick (button) {
-      if (button.callback) {
-        button.callback()
+      if (button.action) {
+        button.action()
       }
       this.close()
     },
@@ -100,14 +100,30 @@ export default {
     background-color: #fff
     width: 60vw
     min-width: 300px
+    max-width: 600px
     margin: 80px auto
-    padding: 20px
+    padding: 40px 50px
 
   .message
     font-size: 20px
+    color: #666
 
   .buttons
-    text-align: right
+    text-align: center
+    margin-top: 20px
+    button
+      background-color: #bbb
+      border: none
+      margin-right: 20px
+      text-transform: uppercase
+      font-size: 20px
+      font-weight: 500
+      color: #000
+      padding: 8px 16px
+      &:last-child
+        margin-right: 0
+      &.btn-warning
+        background-color: #999
 
   .closer
     color: #999

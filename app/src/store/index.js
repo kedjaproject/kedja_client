@@ -315,6 +315,7 @@ export const store = new Vuex.Store({
       return state.activeWall
     },
     */
+    /*
     getCardById: state => (id) => {
       let cardFound // = undefined
       let wall = store.getters.getActiveWall()
@@ -328,7 +329,7 @@ export const store = new Vuex.Store({
       })
       return cardFound
     },
-
+    */
     getCardsByIds: state => (ids) => {
       let wall = store.getters.getActiveWall()
       let cards = []

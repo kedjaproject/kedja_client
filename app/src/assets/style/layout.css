@@ -1,11 +1,13 @@
 html{
   height: 100%;
 }
+* {
+  box-sizing: border-box;
+}
 
 body{
   /* LAYOUT */
   height: 100%;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   padding: 0;

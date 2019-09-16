@@ -44,7 +44,7 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import { kedjaAPI, eventBus, getUserColor } from '@/utils'
+import { kedjaAPI, eventBus, getUserColor, openDeleteDialog } from '@/utils'
 
 import UserButton from '@/components/kedja/widgets/UserButton'
 import WallUserAdmin from './modals/WallUserAdmin'
@@ -128,10 +128,15 @@ export default {
     },
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })
-      kedjaAPI.delete('walls/' + this.rid)
-        .then(response => {
-          this.$router.push({name: 'Walls'})
-        })
+      openDeleteDialog({
+        message: 'Är du säker på att du vill radera väggen och dess innehåll?',
+        action: () => {
+          kedjaAPI.delete('walls/' + this.rid)
+            .then(response => {
+              this.$router.push({name: 'Walls'})
+            })
+        }
+      })
     },
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
