@@ -60,7 +60,7 @@ function openDeleteDialog ({message, action}) {
 kedjaAPI.interceptors.response.use(response => response, error => {
   if (process.env.NODE_ENV === 'development') {
     console.log(error)
-    openDialog({title: 'Dev message', message: error.stack})
+    openDialog({title: 'Dev message', message: error})
   } else {
     openDialog()
   }

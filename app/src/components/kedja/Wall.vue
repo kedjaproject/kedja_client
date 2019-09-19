@@ -13,7 +13,7 @@
       </label-->
       <card-filter @click.native.stop></card-filter>
 
-      <div class="users">
+      <div class="users" v-show="false"><!-- DISABLED FOR NOW -->
         <user-button :user="currentUser" class="self" small @click="openUserModal(currentUser)" />
         <user-button v-for='(user, i) in otherUsers' :key="user.rid" :color="userColor(i)" :user="user" small @click="openUserModal(user)" />
         <button class="add-user-button" @click="openUserAdminModal">+</button>
