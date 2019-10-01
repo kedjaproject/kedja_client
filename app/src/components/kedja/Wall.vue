@@ -7,6 +7,11 @@
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
+      <!-- FIXME: This should be read from acl instead + handled properly. It's only a stub. -->
+      <drop-down :items="[{label: 'Publik', f: setWallACL, args: ['public_wall']}, {label: 'Privat', f: setWallACL, args: ['private_wall']}]">
+        {{wall.data.acl_name}} &#9663;
+      </drop-down>
+
       <!--label @click.stop>
         <input type="checkbox" v-model="filterCards" />
         Filtrera kort i vald kedja
@@ -137,6 +142,14 @@ export default {
             })
         }
       })
+    },
+    setWallACL (acl_name) {
+      kedjaAPI.put('walls/' + this.rid + '/acl', {'acl_name': acl_name})
+        .then(response => {
+          // FIXME: Store acl_name properly
+          //this.wall.acl_name = response.data.acl_name
+          // FIXME: Update title
+        })
     },
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
