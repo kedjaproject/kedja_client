@@ -8,7 +8,7 @@
 
     <div class="listContainer z2" tabindex="0">
       <div class="list" :class="{'open': open}" tabindex="0">
-        <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f)" tabindex="0">
+        <div v-for="(item,k) in items" :key="k" class="listItem" @click="performFunction(item.f, item.args)" tabindex="0">
           {{item.label}}
         </div>
       </div>
@@ -51,9 +51,9 @@ export default {
         this.close()
       }
     },
-    performFunction (f) {
+    performFunction (f, args = []) {
       if (f) {
-        f()
+        f(...args)
       }
     }
   },
