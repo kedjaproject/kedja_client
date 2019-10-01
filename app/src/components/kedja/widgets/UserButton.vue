@@ -1,7 +1,8 @@
 <template>
-    <button class="user-button" :class="classes" :style="style" @click="click">
-        {{ user.data.shortName || '??' }}
-    </button>
+  <a class="user-button" :class="classes" :style="style" @click="click">
+    <img :src="user.data.picture" :title="user.data.fullName" height="100%" width="100%" />
+
+  </a>
 </template>
 <script>
 export default {
@@ -40,8 +41,8 @@ $color-default: #ffdc27
 .user-button
   display: inline-block
   background-color: $color-default
-  width: 34px
-  height: 34px
+  width: 43px
+  height: 43px
   font-size: 20px
   font-weight: 700
   text-align: center
