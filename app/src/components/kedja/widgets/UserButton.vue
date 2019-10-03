@@ -36,25 +36,25 @@ export default {
 }
 </script>
 <style lang="sass">
-$color-default: #ffdc27
+// $color-default: #ffdc27
 
 .user-button
   display: inline-block
-  background-color: $color-default
+  // background-color: $color-default
   width: 43px
   height: 43px
-  font-size: 20px
-  font-weight: 700
-  text-align: center
-  color: #fff
+  // font-size: 20px
+  // font-weight: 700
+  // text-align: center
+  // color: #fff
   padding: 0
   border: none
   &.small
     width: 20px
     height: 20px
-    font-size: 12px
+    // font-size: 12px
   &.no-click
     cursor: auto
   &:hover:not(:disabled)
-    background-color: $color-default
+    // background-color: $color-default
 </style>
