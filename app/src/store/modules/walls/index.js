@@ -1,6 +1,6 @@
 import collections from './collections'
 import cards from './cards'
-import { kedjaAPI, fakeUsers } from '@/utils'
+import { kedjaAPI } from '@/utils'
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -116,12 +116,14 @@ const actions = {
       .then(axios.spread((wallResponse, collectionsResponse, relationsResponse) => {
         wallResponse.data.collectionList = collectionsResponse.data.map(coll => coll.rid)
         // FIXME: Should not be fake, ofc
+        /* yet another FIXME: Breaks when unauthenticated
         const currentUser = rootGetters['users/currentUser']
         const otherFakeUsers = fakeUsers.filter(user => user.data.first_name !== currentUser.data.first_name || user.data.last_name !== currentUser.data.last_name)
         commit('users/setUserData', otherFakeUsers, {root: true})
         // Just add some ramdom users
         wallResponse.data.userList = otherFakeUsers.filter(user => Math.round(Math.random())).map(user => user.rid)
         wallResponse.data.userList.push(currentUser.rid)
+        */
         // End FIXME
         commit('setWall', wallResponse.data)
         commit('collections/setCollections', collectionsResponse.data)
