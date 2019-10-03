@@ -143,11 +143,11 @@ export default {
         }
       })
     },
-    setWallACL (acl_name) {
-      kedjaAPI.put('walls/' + this.rid + '/acl', {'acl_name': acl_name})
+    setWallACL (aclName) {
+      kedjaAPI.put('walls/' + this.rid + '/acl', {'acl_name': aclName})
         .then(response => {
           // FIXME: Store acl_name properly
-          //this.wall.acl_name = response.data.acl_name
+          // this.wall.acl_name = response.data.acl_name
           // FIXME: Update title
         })
     },
