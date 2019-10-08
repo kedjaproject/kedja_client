@@ -17,6 +17,7 @@ import KedjaFooter from '@/components/layout/KedjaFooter'
 import Modal from '@/components/general/Modal'
 import Dialog from '@/components/general/Dialog'
 import TransitionEndPlugin from 'transitionend-plugin-vue'
+import { INIT, RESET_USER_STATE } from '@/store/mutation-types'
 
 Vue.use(TransitionEndPlugin)
 
@@ -29,8 +30,8 @@ export default {
     Dialogz: Dialog // Name 'Dialog' seems to be reserved... (?)
   },
   created () {
-    this.$store.commit('init', {env: process.env})
-    this.$store.commit('resetUserState')
+    this.$store.commit(INIT, {env: process.env})
+    this.$store.commit(RESET_USER_STATE)
     this.authenticate()
   },
   mounted () {

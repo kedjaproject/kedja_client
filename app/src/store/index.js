@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import walls from './modules/walls'
 import users from './modules/users'
 import { kedjaAPI, setAuthToken } from '../utils'
+import * as types from './mutation-types'
+
 // import { walls } from '@/assets/walls.json'
 
 Vue.use(Vuex)
@@ -37,7 +39,7 @@ export const store = new Vuex.Store({
     },
     */
 
-    init: (state, {env}) => {
+    [types.INIT]: (state, {env}) => {
       Vue.set(state, 'env', env)
       // state.walls = walls.slice()
       // store.commit('initWallsFromAPI',{})
@@ -93,47 +95,48 @@ export const store = new Vuex.Store({
       }
     },
     */
-    resetUserState: (state) => {
+
+    [types.RESET_USER_STATE]: (state) => {
       store.commit('setUserState', {name: 'default'})
     },
 
-    setUserState: (state, {name, data}) => {
+    [types.SET_USER_STATE]: (state, {name, data}) => {
       store.commit('setDirtyDraw')
       Vue.set(state, 'userState', {name: name, data: data || {}, rand: Math.random()})
     },
 
-    forceUserStateUpdate: (state) => {
+    [types.FORCE_USER_STATE_UPDATE]: (state) => {
       store.commit('setDirtyDraw')
       state.userState.rand = Math.random()
     },
 
-    setActiveWall: (state, {wall}) => {
+    [types.SET_ACTIVE_WALL]: (state, {wall}) => {
       state.activeWall = wall
     },
 
-    setWallCollections: (state, {wall, collections}) => {
+    [types.SET_WALL_COLLECTIONS]: (state, {wall, collections}) => {
       Vue.set(wall, 'collections', collections)
     },
 
-    setWallConnections: (state, {wall, connections}) => {
+    [types.SET_WALL_CONNECTIONS]: (state, {wall, connections}) => {
       Vue.set(wall, 'connections', connections)
     },
 
-    setCollectionCards: (state, {collection, cards}) => {
+    [types.SET_COLLECTION_CARDS]: (state, {collection, cards}) => {
       Vue.set(collection, 'cards', cards)
     },
 
-    setConnections: (state, {connections}) => {
+    [types.SET_CONNECTIONS]: (state, {connections}) => {
       state.connections = connections
     },
 
-    initWall: (state, wall) => {
+    [types.INIT_WALL]: (state, wall) => {
       Vue.set(wall, 'collections', [])
       Vue.set(wall, 'connections', [])
       Vue.set(wall, 'dirtyDraw', false)
     },
 
-    initCollection: (state, collection) => {
+    [types.INIT_COLLECTION]: (state, collection) => {
       Vue.set(collection, 'cards', [])
     },
     /*
@@ -141,7 +144,7 @@ export const store = new Vuex.Store({
       Vue.set(card, 'states', {})
     },
     */
-    initConnection: (state, connection) => {
+    [types.INIT_CONNECTION]: (state, connection) => {
       Vue.set(connection, 'dirtyDraw', false)
     },
 
