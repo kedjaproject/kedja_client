@@ -159,6 +159,13 @@ export default {
         .then(response => {
           commit('addRelation', { wallId: state.activeWallId, relation: response.data })
         })
+    },
+
+    setWallACL ({commit, state}, {wall, aclName}) {
+      kedjaAPI.put('walls/' + wall.rid + '/acl', {'acl_name': aclName})
+        .then(response => {
+          commit('setWallACL', {wall, aclName: response.data.acl_name})
+        })
     }
   },
 
@@ -186,6 +193,11 @@ export default {
       if (!state.wallList.includes(wall.rid)) {
         state.wallList.push(wall.rid)
       }
+    },
+
+    setWallACL (state, {wall, aclName}) {
+      Vue.set(wall.data, 'acl_name', aclName)
+      // console.log(state, wall, aclName)
     },
 
     removeCardRelations (state, card) {

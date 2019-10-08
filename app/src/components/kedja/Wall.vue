@@ -8,8 +8,8 @@
       </drop-down>
 
       <!-- FIXME: This should be read from acl instead + handled properly. It's only a stub. -->
-      <drop-down :items="[{label: 'Publik', f: setWallACL, args: ['public_wall']}, {label: 'Privat', f: setWallACL, args: ['private_wall']}]">
-        {{wall.data.acl_name}} &#9663;
+      <drop-down :items="aclOptions">
+        {{aclNames[wall.data.acl_name]}} &#9663;
       </drop-down>
 
       <!--label @click.stop>
@@ -48,7 +48,7 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { kedjaAPI, eventBus, getUserColor, openDeleteDialog } from '@/utils'
 
 import UserButton from '@/components/kedja/widgets/UserButton'
@@ -60,6 +60,11 @@ import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
+const aclNames = {
+  private_wall: 'Privat vägg',
+  public_wall: 'Publik vägg'
+}
+
 export default {
   name: 'Wall',
   components: {
@@ -69,6 +74,11 @@ export default {
     Collections,
     Connections,
     EditableInput
+  },
+  data () {
+    return {
+      aclNames
+    }
   },
   props: {
     rid: Number,
@@ -86,6 +96,17 @@ export default {
     },
     otherUsers () {
       return this.users.filter(user => user.rid !== this.currentUser.rid)
+    },
+    aclOptions () {
+      return Object.keys(aclNames)
+        .filter(key => this.wall.data.acl_name !== key)
+        .map(aclName => {
+          return {
+            label: aclNames[aclName],
+            f: this.setWallACL,
+            args: {wall: this.wall, aclName}
+          }
+        })
     },
     filterCards: {
       get () {
@@ -143,14 +164,6 @@ export default {
         }
       })
     },
-    setWallACL (aclName) {
-      kedjaAPI.put('walls/' + this.rid + '/acl', {'acl_name': aclName})
-        .then(response => {
-          // FIXME: Store acl_name properly
-          // this.wall.acl_name = response.data.acl_name
-          // FIXME: Update title
-        })
-    },
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
     },
@@ -193,7 +206,8 @@ export default {
     collectionsMounted () {
       // document.getElementById('collections').addEventListener('scroll', this.handleScroll)
       this.$refs.colls.addEventListener('scroll', this.handleScroll)
-    }
+    },
+    ...mapActions('walls', ['setWallACL'])
   },
   created () {
     eventBus.$on('collectionCreated', () => {

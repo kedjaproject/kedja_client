@@ -51,10 +51,11 @@ export default {
         this.close()
       }
     },
-    performFunction (f, args = []) {
+    performFunction (f, args = {}) {
       if (f) {
-        f(...args)
+        f(args)
       }
+      this.close()
     }
   },
   mounted: function () {
