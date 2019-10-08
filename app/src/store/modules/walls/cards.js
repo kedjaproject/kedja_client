@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { eventBus } from '../../../utils'
 
 export default {
   namespaced: true,
@@ -26,12 +27,15 @@ export default {
     },
     setCardState (state, {rid, stateName, stateFlag}) {
       Vue.set(state.cards[rid].states, stateName, stateFlag)
+      eventBus.$emit('relationsUpdated')
     },
     resetCardState (state, {rid, stateName}) {
       Vue.set(state.cards[rid].states, stateName, undefined)
+      eventBus.$emit('relationsUpdated')
     },
     resetCardStates (state, {rid}) {
       Vue.set(state.cards[rid], 'states', {})
+      eventBus.$emit('relationsUpdated')
     }
   }
 }

@@ -24,13 +24,6 @@ export default {
     prid: Number,
     wall: Object
   },
-  computed: {
-    dirtyDraw: function () {
-      return this.$store.state.dirtyDraw
-    }
-  },
-  watch: {
-  },
   methods: {
     connect: function (p) {
       this.$emit('connect', p)
@@ -38,14 +31,7 @@ export default {
     unconnect: function (p) {
       this.$emit('unconnect', p)
     },
-    /*
-    handleScroll: function () {
-      this.$store.commit('setDirtyDraw');
-    }
-    */
     ...mapActions('walls/collections', ['createCollection', 'removeCollection'])
-  },
-  created: function () {
   },
   mounted: function () {
     // this.$refs.collections.addEventListener('scroll', this.handleScroll);

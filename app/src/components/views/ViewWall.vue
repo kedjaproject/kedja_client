@@ -16,7 +16,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
-import Wall from '@/components/kedja/Wall'
+import Wall from '@/components/kedja/Wall.vue'
 import ContextMenu from '@/components/contextMenu/ContextMenu'
 import { kedjaAPI } from '@/utils'
 
@@ -33,17 +33,10 @@ export default {
       // menuOpen: '' //Used for right side context-menu, which is (temporaily?) removed
     }
   },
-  props: {
-  },
   computed: {
     wall () {
       return this.rid && this.walls[this.rid]
     },
-    /*
-    sidebarFlex () {
-
-    }
-    */
     ...mapState('walls', ['walls'])
   },
   methods: {

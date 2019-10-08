@@ -3,10 +3,8 @@ import Vuex from 'vuex'
 // import axios from 'axios'
 import walls from './modules/walls'
 import users from './modules/users'
-import { kedjaAPI, setAuthToken } from '../utils'
+import { kedjaAPI, setAuthToken, eventBus } from '../utils'
 import * as types from './mutation-types'
-
-// import { walls } from '@/assets/walls.json'
 
 Vue.use(Vuex)
 
@@ -17,10 +15,6 @@ export const store = new Vuex.Store({
     users
   },
   state: {
-    env: {},
-    walls: [],
-    activeWallId: 0,
-    activeWall: '',
     connections: [],
     tabIndexCounter: 0,
     connectionBounds: '',
@@ -28,85 +22,25 @@ export const store = new Vuex.Store({
     auth: '',
     userid: '',
     userData: {},
-    dirtyDraw: true,
     filterCards: false
-    // schema: Schema
   },
   mutations: {
 
-    /*
-    myMutation: (state, {param}) => {
-    },
-    */
-
-    [types.INIT]: (state, {env}) => {
-      Vue.set(state, 'env', env)
-      // state.walls = walls.slice()
-      // store.commit('initWallsFromAPI',{})
-      // store.commit('prepareData',{})
-      // store.commit('resetUserState')
-      // store.commit('setAuthFromLocalStorage')
-      // store.commit('setUserIdFromLocalStorage')
+    [types.INIT]: (state) => {
       store.commit('users/loadUserFromLocalStorage')
-      store.commit('setDirtyDraw')
     },
-
-    /*
-    initWallsFromAPI: (state, {}) => {
-
-      let params = {
-        endpoint: "walls",
-        successCallback: (data) => {
-          state.walls = data.data;
-        },
-      }
-
-      store.commit('makeAPICall',params);
-
-    },
-    */
-
-    /*
-    setAuthFromLocalStorage: (state) => {
-      if (typeof(Storage) !== "undefined") {
-        state.auth = localStorage.getItem("auth");
-      } else {
-        console.log("No local storage support")
-      }
-    },
-
-    setUserIdFromLocalStorage: (state) => {
-      if (typeof(Storage) !== "undefined") {
-        state.userData.userid = localStorage.getItem("userid");
-      } else {
-        console.log("No local storage support")
-      }
-    },
-    */
-    /* Moving this to 'users' store
-    setUserDataFromLocalStorage (state) {
-      if (typeof (Storage) !== 'undefined') {
-        Vue.set(state.userData, 'auth', localStorage.getItem('auth'))
-        Vue.set(state.userData, 'userid', localStorage.getItem('userid'))
-        Vue.set(state.userData, 'first_name', localStorage.getItem('first_name'))
-        Vue.set(state.userData, 'last_name', localStorage.getItem('last_name'))
-      } else {
-        console.log('No local storage support')
-      }
-    },
-    */
 
     [types.RESET_USER_STATE]: (state) => {
       store.commit('setUserState', {name: 'default'})
     },
 
     [types.SET_USER_STATE]: (state, {name, data}) => {
-      store.commit('setDirtyDraw')
+      eventBus.$emit('relationsUpdated')
       Vue.set(state, 'userState', {name: name, data: data || {}, rand: Math.random()})
     },
 
     [types.FORCE_USER_STATE_UPDATE]: (state) => {
-      store.commit('setDirtyDraw')
+      eventBus.$emit('relationsUpdated')
       state.userState.rand = Math.random()
     },
 
@@ -133,94 +67,24 @@ export const store = new Vuex.Store({
     [types.INIT_WALL]: (state, wall) => {
       Vue.set(wall, 'collections', [])
       Vue.set(wall, 'connections', [])
-      Vue.set(wall, 'dirtyDraw', false)
     },
 
     [types.INIT_COLLECTION]: (state, collection) => {
       Vue.set(collection, 'cards', [])
     },
-    /*
-    initCard: (state, card) => {
-      Vue.set(card, 'states', {})
-    },
-    */
+
     [types.INIT_CONNECTION]: (state, connection) => {
-      Vue.set(connection, 'dirtyDraw', false)
-    },
-
-    /*
-    setCardsState: (state, {cards, cardIds, stateName, stateFlag, invertCollection}) => {
-
-      console.log("Set cards state: " + stateName);
-      console.log(cardIds);
-
-      if(cards){
-        cards = !invertCollection ? cards : store.getters.getCardsInverted(cards)
-      }
-      else{
-        let wall = store.getters.getActiveWall();
-        cards = !invertCollection ? store.getters.getCardsByIds(cardIds) : store.getters.getCardsByIdsInverted(cardIds);
-      }
-
-      cards.forEach((card, iCard) => {
-        store.commit('setCardState',{card: card, stateName: stateName, stateFlag: stateFlag});
-      })
-
-    },
-
-    resetCardState: (state, {card}) => {
-
-      let wall = store.getters.getActiveWall();
-
-      wall.collections.forEach((collection, iCollection) => {
-        collection.cards.forEach((card, iCard) => {
-          store.commit('setCardState',{card: card, stateName: stateName, stateFlag: undefined});
-        })
-      })
-
-    },
-
-    resetCardsState: (state, {cardIds, stateName}) => {
-
-      let wall = store.getters.getActiveWall();
-
-      wall.collections.forEach((collection, iCollection) => {
-        collection.cards.forEach((card, iCard) => {
-          store.commit('setCardState',{card: card, stateName: stateName, stateFlag: undefined});
-        })
-      })
-
-    },
-
-    setCardState: (state, {card, stateName, stateFlag}) => {
-      Vue.set(card.states, stateName, stateFlag)
-    },
-    */
-
-    setDirtyDraw: (state) => {
-      Vue.set(state, 'dirtyDraw', true)
-
-      Vue.nextTick().then(function () {
-        Vue.set(state, 'dirtyDraw', false)
-      })
     },
 
     setFilterCards: (state, value) => {
       Vue.set(state, 'filterCards', value)
-      store.commit('setDirtyDraw')
-    },
-
-    setDeepConnectionsByCardId: (state, {id}) => {
-      console.log('Set deep connections')
-      // state.connections = []
-      state.connections = store.getters.getDeepConnectionsByCardId(id)
+      eventBus.$emit('relationsUpdated')
     },
 
     resetConnections: (state) => {
       console.log('Reset connections')
       state.connections = []
 
-      // state.connections = store.getters.getActiveWall().connections.slice()
       console.log(state.connections.length)
     },
 
@@ -247,42 +111,9 @@ export const store = new Vuex.Store({
       console.log(wall.relations)
       store.commit('forceUserStateUpdate')
     }
-
-    // API
-    /*
-    makeAPICall: (state, payload) => {
-      let method = payload.method || 'get'
-
-      let errorCallback = payload.errorCallback || function (response) {
-        console.log(response)
-      }
-
-      axios({
-        method: method,
-        url: state.env.API_SERVER + state.env.API_PATH + payload.endpoint,
-        headers: {
-          Authorization: store.getters.getUserData.auth
-        },
-        params: payload.params,
-        data: payload.data
-      })
-        .then(
-          payload.successCallback,
-          errorCallback
-        )
-        .catch(error => {
-          console.log(error)
-        })
-    },
-
-    errorCallback: (state, data) => {
-      console.log('Error')
-      console.log(data)
-    }
-    */
   },
-  actions: {
 
+  actions: {
     authenticate ({dispatch, getters}) {
       if (!getters.isAuthenticated) return
       kedjaAPI.get('auth/valid')
@@ -310,181 +141,6 @@ export const store = new Vuex.Store({
 
     userData: state => {
       return state.users.data[state.users.currentUserId]
-    },
-
-    /*
-    getActiveWall: state => () => {
-      // return state.walls[state.activeWallId]
-      return state.activeWall
-    },
-    */
-    /*
-    getCardById: state => (id) => {
-      let cardFound // = undefined
-      let wall = store.getters.getActiveWall()
-      wall.collections.forEach((collection, iCollection) => {
-        if (collection.cards) {
-          let card = collection.cards.find(c => c.rid === id)
-          if (card) {
-            cardFound = card
-          }
-        }
-      })
-      return cardFound
-    },
-    */
-    getCardsByIds: state => (ids) => {
-      let wall = store.getters.getActiveWall()
-      let cards = []
-      wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) !== -1))
-      })
-      return cards
-    },
-
-    getCardsByIdsInverted: state => (ids) => {
-      let wall = store.getters.getActiveWall()
-      let cards = []
-      wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => ids.indexOf(card.rid) === -1))
-      })
-      return cards
-    },
-
-    getCardsInverted: state => (cardsInput) => {
-      let wall = store.getters.getActiveWall()
-      let cards = []
-      wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => cardsInput.indexOf(card) === -1))
-      })
-      return cards
-    },
-
-    getClosestCardCousins: state => (card) => {
-      let collection = store.getters.getCollectionByCard(card)
-      let wall = store.getters.getActiveWall()
-      let siblings = store.getters.getClosestArraySiblings(wall.collections, collection)
-
-      let cousins = []
-
-      siblings.forEach((sibling, iSibling) => {
-        if (sibling) {
-          cousins = cousins.concat(sibling.cards)
-        }
-      })
-
-      return cousins
-    },
-
-    getCollectionByCard: state => (card) => {
-      let wall = store.getters.getActiveWall()
-      return wall.collections.find(collection => collection.cards.indexOf(card) !== -1)
-    },
-
-    getCollectionArrayIdByCardId: state => (id) => {
-      let wall = store.getters.getActiveWall()
-      return wall.collections.findIndex(collection => collection.cards.find(card => card.rid === id))
-    },
-
-    getCardsByState: state => (stateName) => {
-      let wall = store.getters.getActiveWall()
-      let cards = []
-      wall.collections.forEach((collection, iCollection) => {
-        cards = cards.concat(collection.cards.filter(card => card.states[stateName]))
-      })
-      return cards
-    },
-
-    getDirectConnectionsByCardId: state => (id) => {
-      let wall = store.getters.getActiveWall()
-      return wall.connections ? wall.connections.filter(c => c.members.indexOf(id) !== -1) : []
-    },
-
-    getDeepConnectionsByCardId: state => (id) => {
-      let allConnections = store.getters.getActiveWall().connections
-      let connections = store.getters.getRecursiveConnectionsByCardId(allConnections, id, true)
-      connections = connections.concat(store.getters.getRecursiveConnectionsByCardId(allConnections, id, false))
-      // connections = [...new Set(connections)] // remove duplicates
-      return connections
-    },
-
-    // Not optimized: might go down the same connections multiple times and create duplicates
-    getRecursiveConnectionsByCardId: state => (allConnections, id, forward) => {
-      if (!allConnections) {
-        return []
-      }
-
-      // let connections = allConnections.filter(c => c.members[+!forward] == id)
-      let connectionsBothDirections = allConnections.filter(c => c.members.indexOf(id) !== -1)
-
-      let nextCardIds = []
-      let connectionsRightDirection = []
-      connectionsBothDirections.forEach((c) => {
-        let col0 = store.getters.getCollectionArrayIdByCardId(c.members[0])
-        let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
-        let indexForward = col1 > col0 ? 1 : 0
-        let indexSelf = c.members.indexOf(id)
-        let indexOther = +!indexSelf // turns 1 to 0, and 0 to 1
-        if (forward === (indexForward === indexOther)) {
-          nextCardIds.push(c.members[indexOther])
-          connectionsRightDirection.push(c)
-        }
-      })
-
-      let cc = []
-      nextCardIds.forEach((cardId) => {
-        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections, cardId, forward))
-      })
-      connectionsRightDirection = connectionsRightDirection.concat(cc)
-
-      /*
-      connections = connections.filter(c => {
-        let col0 = store.getters.getCollectionArrayIdByCardId(c.members[0])
-        let col1 = store.getters.getCollectionArrayIdByCardId(c.members[1])
-        let indexForward = col1 > col0 ? 1 : 0
-        let indexSelf = c.members.indexOf(id)
-        console.log(indexSelf)
-        let retVal = forward == (indexForward != indexSelf)
-        console.log(retVal)
-        return false
-      })
-      */
-
-      /*
-      let cc = [];
-      connections.forEach((connection, iConnection) => {
-        cc = cc.concat(store.getters.getRecursiveConnectionsByCardId(allConnections,connection.members[+forward],forward));
-      })
-      connections = connections.concat(cc);
-      */
-
-      return connectionsRightDirection
-    },
-
-    getClosestArraySiblings: state => (array, item) => {
-      if (!array) {
-        return []
-      }
-
-      let siblings = [undefined, undefined]
-      let i = array.indexOf(item)
-      if (i > 0) {
-        siblings[0] = array[i - 1]
-      }
-      if (i < array.length - 1) {
-        siblings[1] = array[i + 1]
-      }
-      return siblings
-    },
-
-    getTreeById: state => (id) => {
-    },
-
-    // API
-
-    getWalls: state => () => {
-      return state.walls
     }
-
   }
 })

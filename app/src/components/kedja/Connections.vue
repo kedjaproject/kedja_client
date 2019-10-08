@@ -20,7 +20,8 @@ export default {
   },
   props: {
     connections: Array,
-    boundsElementId: String
+    wall: Object,
+    collectionsElement: undefined
   },
   computed: {
     connectionCards () {
@@ -34,52 +35,29 @@ export default {
       })
     },
     ...mapState('walls/cards', ['cards']),
-    ...mapState(['userState', 'dirtyDraw'])
-  },
-  watch: {
-    /*
-    from: {
-      handler () {
-        this.setBounds();
-      },
-      deep: false
-    }
-    */
-    dirtyDraw (val) {
-      // if(val){
-      this.redraw()
-      // }
-    }
+    ...mapState(['userState'])
   },
   methods: {
-    firstDraw: function () {
-      // let el0 = document.getElementById(this.from)
-      // let el1 = document.getElementById(this.to)
-
-      if (document.getElementById(this.boundsElementId)) {
-        this.$store.commit('setDirtyDraw')
-      } else {
-        this.$nextTick(this.firstDraw)
-      }
-    },
     redraw () {
-      this.setBounds()
-      this.drawCanvas()
+      this.$nextTick(() => {
+        this.setBounds()
+        this.drawCanvas()
+      })
     },
-    setBounds: function () {
-      var c = this.$el.getElementsByTagName('canvas')[0]
+    setBounds () {
+      const c = this.$el.querySelector('canvas')
       c.width = this.$el.clientWidth
       c.height = this.$el.clientHeight
-      this.bounds = document.getElementById(this.boundsElementId).getBoundingClientRect()
+      this.bounds = this.collectionsElement.getBoundingClientRect()
       this.scroll = {
-        left: document.getElementById(this.boundsElementId).scrollLeft,
-        top: document.getElementById(this.boundsElementId).scrollTop
+        left: this.collectionsElement.scrollLeft,
+        top: this.collectionsElement.scrollTop
       }
     },
     drawCanvas: function () {
-      var c = this.$el.getElementsByTagName('canvas')[0]
-      var ctx = c.getContext('2d')
-      ctx.clearRect(0, 0, c.width, c.height)
+      const canvas = this.$el.querySelector('canvas')
+      const ctx = canvas.getContext('2d')
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Diagonal line across canvas
       /*
@@ -93,13 +71,11 @@ export default {
       })
     },
     drawConnection: function (ctx, conn) {
-      let el0 = document.getElementById(conn.members[0].rid)
-      let el1 = document.getElementById(conn.members[1].rid)
-
+      const c0 = conn.members[0]
+      const c1 = conn.members[1]
+      const el0 = document.getElementById(c0.rid)
+      const el1 = document.getElementById(c1.rid)
       if (el0 && el1) {
-        let c0 = conn.members[0]
-        let c1 = conn.members[1]
-
         let elLeft, elRight, inSelectedChainLeft, inSelectedChainRight
 
         if (el0.getBoundingClientRect().x < el1.getBoundingClientRect().x) {
@@ -167,12 +143,14 @@ export default {
     })
   },
   mounted () {
-    // this.setBounds();
-    this.$nextTick(this.firstDraw)
-    // this.drawCanvas();
-  },
-  updated () {
-    // this.redraw();
+    // this.setBounds()
+    // this.drawCanvas()
+    // this.$nextTick(this.firstDraw)
+    if (this.collectionsElement) {
+      this.$nextTick(() => {
+        this.redraw()
+      })
+    }
   }
 }
 </script>

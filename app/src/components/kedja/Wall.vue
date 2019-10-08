@@ -30,8 +30,8 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-          <collections :collections="collections" :wall="wall" :prid="rid" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
-          <connections v-if="relations" :connections="relations" boundsElementId="collections" class="connections"></connections>
+          <collections ref="collections" :collections="collections" :wall="wall" :prid="rid" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+          <connections ref="connections" :collectionsElement="collectionsElement" :wall="wall" v-if="relations" :connections="relations" class="connections"></connections>
         </div>
 
       </div>
@@ -77,7 +77,8 @@ export default {
   },
   data () {
     return {
-      aclNames
+      aclNames,
+      collectionsElement: undefined
     }
   },
   props: {
@@ -193,19 +194,22 @@ export default {
           console.log(this.wall.relations)
           if (index !== -1) {
             this.wall.relations.splice(index, 1)
-            // this.$store.commit('setDirtyDraw');
             this.$store.commit('forceUserStateUpdate')
           }
           console.log(this.wall.relations)
         })
     },
-
+    redrawConnections () {
+      if (this.$refs.connections) {
+        this.$refs.connections.redraw()
+      }
+    },
     handleScroll () {
-      this.$store.commit('setDirtyDraw')
+      this.redrawConnections()
     },
     collectionsMounted () {
-      // document.getElementById('collections').addEventListener('scroll', this.handleScroll)
       this.$refs.colls.addEventListener('scroll', this.handleScroll)
+      this.collectionsElement = this.$refs.collections.$el
     },
     ...mapActions('walls', ['setWallACL'])
   },
@@ -220,23 +224,6 @@ export default {
         document.querySelector('#collections .horisontal-scroll-wrapper').scrollIntoView({behavior: 'smooth', inline: 'end'})
       })
     })
-  },
-  mounted () {
-    // this.getCollectionsFromAPI();
-    // this.getConnectionsFromParam();
-    // this.getWallLocal();
-    /*
-      this.$nextTick(function() {
-      console.log(this.$refs)
-      console.log(this.$refs.collections)
-      console.log(this.$refs.wallContent)
-    })
-    */
-
-    // this.$refs.collections.addEventListener('scroll', this.handleScroll);
-
-  },
-  updated () {
   }
 }
 </script>

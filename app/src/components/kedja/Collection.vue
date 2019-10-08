@@ -38,7 +38,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 
-import { kedjaAPI } from '@/utils'
+import { kedjaAPI, eventBus } from '@/utils'
 import DropDown from '@/components/DropDown'
 import Card from './Card'
 import CardSeed from './CardSeed'
@@ -77,8 +77,7 @@ export default {
     newDisabled () {
       return this.userState.name === 'connectCard'
     },
-    ...mapGetters('walls/cards', ['getList']),
-    ...mapGetters('walls/cards', ['getCardsByState']),
+    ...mapGetters('walls/cards', ['getList', 'getCardsByState']),
     ...mapState(['userState']),
     ...mapState(['filterCards'])
 
@@ -132,17 +131,6 @@ export default {
         this.$refs.cardSeed.setFocus() // $el.getElementsByTagName('input')[0].focus()
       })
     },
-    /*
-    createCard (title) {
-      // this.$store.commit('createCardInCollection',{collection: this.collection})
-      kedjaAPI.post('collections/' + this.collection.rid + '/cards', {title})
-        .then(response => {
-          this.addCard({collection: this.collection, card: response.data}) // Walls/collections
-          document.activeElement.blur()
-          this.initCreateCard()
-        })
-    },
-    */
     createCard (title) {
       this.createCardInCollection({collection: this.collection, title})
         .then(() => {
@@ -166,7 +154,7 @@ export default {
       this.$emit('unconnect', params)
     },
     handleScroll () {
-      this.$store.commit('setDirtyDraw')
+      eventBus.$emit('relationsUpdated')
     },
     ...mapActions('walls/collections', ['createCardInCollection'])
   },
