@@ -155,12 +155,12 @@ export default {
         if (s.name === 'selectCard') {
           // this.$store.commit('setCardState',{card: this.card, stateName: "selected", stateFlag: true})
           if (s.data.rid === this.card.rid) { // If this is the card the user is interacting with
-            this.setState('selected', true)
+            this.setState('selected')
           } else { // Unless this is the card the user is interacting with
             if (this.deepConnectedCardIds.indexOf(s.data.rid) !== -1) { // if card is connected
-              this.setState('selectingConnected', true)
+              this.setState('selectingConnected')
             } else { // if card is not connected
-              this.setState('selectingNotConnected', true)
+              this.setState('selectingNotConnected')
             }
           }
         }
@@ -169,17 +169,17 @@ export default {
         if (s.name === 'connectCard') {
           // this.$store.commit('setCardState',{card: this.card, stateName: "selected", stateFlag: true})
           if (s.data.rid === this.card.rid) { // If this is the card the user is interacting with
-            this.setState('selected', true)
-            this.setState('connecting', true)
+            this.setState('selected')
+            this.setState('connecting')
           } else { // Unless this is the card the user is interacting with
             if (this.directConnectedCardIds.includes(s.data.rid)) { // if card is connected
-              this.setState('connectingConnected', true)
+              this.setState('connectingConnected')
             } else { // if card is not connected
               let cousins = this.getClosestCardCousins(this.card)
               if (cousins.find(c => c.rid === s.data.rid)) { // If not connected and the cards are closest cousins
-                this.setState('connectingNotConnected', true)
+                this.setState('connectingNotConnected')
               } else {
-                this.setState('connectingCantConnect', true)
+                this.setState('connectingCantConnect')
               }
             }
           }
@@ -188,7 +188,7 @@ export default {
     }
   },
   methods: {
-    setState (name, flag) {
+    setState (name, flag = true) {
       this.setCardState({
         rid: this.card.rid,
         stateName: name,
@@ -216,7 +216,6 @@ export default {
       } else if (this.card.states.connectingConnected) {
         this.disconnect()
       }
-      // this.$store.commit('forceUserStateUpdate')
     },
     scrollIntoView () {
       // this.$el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
@@ -237,7 +236,7 @@ export default {
     },
     connect: function () {
       this.resetStates()
-      this.setState('connectingConnected', true)
+      this.setState('connectingConnected')
       this.createRelation({
         wall: this.activeWall,
         cards: [this.card, this.cards[this.userState.data.rid]]
@@ -245,7 +244,7 @@ export default {
     },
     disconnect () {
       this.resetStates()
-      this.setState('connectingNotConnected', true)
+      this.setState('connectingNotConnected')
       const cards = [this.card, this.cards[this.userState.data.rid]]
       const relation = this.activeWall.relations.find(r => {
         return (r.members[0] === cards[0].rid && r.members[1] === cards[1].rid) ||

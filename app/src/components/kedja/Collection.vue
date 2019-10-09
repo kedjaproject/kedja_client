@@ -76,6 +76,9 @@ export default {
     cards () {
       return this.getList(this.collection.cardList)
     },
+    dndPrevented () {
+      return this.filterCards && this.userState.data.rid
+    },
     cardsFiltered () {
       if (this.userState.name === 'default') {
         return this.cards
@@ -88,8 +91,7 @@ export default {
       return this.userState.name === 'connectCard'
     },
     ...mapGetters('walls/cards', ['getList', 'getCardsByState']),
-    ...mapState(['userState']),
-    ...mapState(['filterCards'])
+    ...mapState(['userState', 'filterCards'])
 
   },
   props: {
@@ -123,6 +125,9 @@ export default {
   },
   methods: {
     reordered (event) {
+      if (this.dndPrevented) {
+        return
+      }
       const cardId = Number(event.detail.ids[0])
       let order = [...this.collection.cardList]
       const oldIndex = order.indexOf(cardId)
