@@ -123,7 +123,6 @@ export default {
   },
   methods: {
     reordered (event) {
-      console.log(event)
       const cardId = Number(event.detail.ids[0])
       let order = [...this.collection.cardList]
       const oldIndex = order.indexOf(cardId)
