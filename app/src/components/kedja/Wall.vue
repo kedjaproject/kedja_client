@@ -30,7 +30,7 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-          <collections ref="collections" :collections="collections" :wall="wall" :prid="rid" @connect="connect" @unconnect="unconnect" @mounted="collectionsMounted"></collections>
+          <collections ref="collections" :collections="collections" :wall="wall" :prid="rid" @mounted="collectionsMounted"></collections>
           <connections ref="connections" :collectionsElement="collectionsElement" :wall="wall" v-if="relations" :connections="relations" class="connections"></connections>
         </div>
 
@@ -168,47 +168,13 @@ export default {
     updateTitle (title) {
       kedjaAPI.put('walls/' + this.rid, {title})
     },
-    connect (p) {
-      // this.$store.commit('createConnection',params);
-      console.log(p.members, this.wall)
-
-      kedjaAPI.post('walls/' + this.rid + '/relations', p)
-        .then(response => {
-          console.log(response)
-          // this.$store.commit('addConnectionToWall',{wall: this.wall, connection: data.data})
-          this.wall.relations.push(response.data)
-          this.$store.commit('forceUserStateUpdate')
-        })
-    },
-
-    unconnect (p) {
-      // this.$store.commit('createConnection',params)
-      console.log(p.members)
-      let relation = this.wall.relations.find(c => c.members.includes(p.members[0]) && c.members.includes(p.members[1]))
-
-      kedjaAPI.delete('walls/' + this.rid + '/relations/' + relation.relation_id)
-        .then(response => {
-          let index = this.wall.relations.indexOf(relation)
-          console.log(index)
-          console.log(relation.relation_id)
-          console.log(this.wall.relations)
-          if (index !== -1) {
-            this.wall.relations.splice(index, 1)
-            this.$store.commit('forceUserStateUpdate')
-          }
-          console.log(this.wall.relations)
-        })
-    },
     redrawConnections () {
       if (this.$refs.connections) {
         this.$refs.connections.redraw()
       }
     },
-    handleScroll () {
-      this.redrawConnections()
-    },
     collectionsMounted () {
-      this.$refs.colls.addEventListener('scroll', this.handleScroll)
+      this.$refs.colls.addEventListener('scroll', this.redrawConnections)
       this.collectionsElement = this.$refs.collections.$el
     },
     ...mapActions('walls', ['setWallACL'])

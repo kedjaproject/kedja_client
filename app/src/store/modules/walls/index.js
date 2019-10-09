@@ -3,6 +3,7 @@ import cards from './cards'
 import { kedjaAPI } from '@/utils'
 import axios from 'axios'
 import Vue from 'vue'
+import { eventBus } from '../../../utils'
 
 const helpers = {
   getCollectionByCard (collections, card) {
@@ -157,7 +158,15 @@ export default {
     createRelation ({commit, state}, {wall, cards}) {
       kedjaAPI.post('walls/' + state.activeWallId + '/relations', {members: cards.map(card => card.rid)})
         .then(response => {
-          commit('addRelation', { wallId: state.activeWallId, relation: response.data })
+          commit('addRelation', { wall, relation: response.data })
+        })
+    },
+
+    // Maybe use actions, like this, to modify content?
+    deleteRelation ({commit, state}, {wall, relation}) {
+      kedjaAPI.delete('walls/' + state.activeWallId + '/relations/' + relation.relation_id)
+        .then(response => {
+          commit('removeRelation', { wall, relationId: response.data.removed })
         })
     },
 
@@ -197,7 +206,6 @@ export default {
 
     setWallACL (state, {wall, aclName}) {
       Vue.set(wall.data, 'acl_name', aclName)
-      // console.log(state, wall, aclName)
     },
 
     removeCardRelations (state, card) {
@@ -206,16 +214,23 @@ export default {
           Vue.set(wall, 'relations', wall.relations.filter(rel => !rel.members.includes(card.rid)))
         }
       })
+      eventBus.$emit('relationsUpdated')
     },
 
-    // Use this instead?
     addRelation (state, {wall, relation}) {
       wall.relations.push(relation)
+      eventBus.$emit('relationsUpdated')
+    },
+
+    removeRelation (state, {wall, relationId}) {
+      Vue.set(wall, 'relations', wall.relations.filter(r => r.relation_id !== relationId))
+      eventBus.$emit('relationsUpdated')
     },
 
     // And this...
     setRelationsData (state, {wall, relations}) {
       Vue.set(wall, 'relations', relations)
+      eventBus.$emit('relationsUpdated')
     },
 
     addCollectionToWall (state, {wall, collection}) {

@@ -19,7 +19,7 @@
 
       <!-- FIXME: This breaks sometimes, so don't readd transitions untill they really work. -->
       <!--<transition-group name="fade" mode="out-in" class="cards">-->
-        <card :data-id="card.rid" v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
+        <card :data-id="card.rid" v-for="card in cards" :card="card" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
       <!--</transition-group>-->
 
       <transition name="fade"  mode="out-in">
@@ -140,15 +140,6 @@ export default {
     removeCollection () {
       this.$store.dispatch('walls/collections/removeCollection', {wall: this.wall, collection: this.collection})
     },
-    /*
-    getCardsFromAPI () {
-      kedjaAPI.get('collections/' + this.collection.rid + '/cards')
-        .then(response => {
-          // this.cards = response.data;
-          this.$store.commit('setCollectionCards', {collection: this.collection, cards: response.data})
-        })
-    },
-    */
     initCreateCard () {
       this.showCardSeed = true
       // Next tick: needs to be performed after re-rendering, due to hidden element
@@ -172,23 +163,12 @@ export default {
           console.log(response)
         })
     },
-    connect (params) {
-      this.$emit('connect', params)
-    },
-    unconnect (params) {
-      this.$emit('unconnect', params)
-    },
     handleScroll () {
       eventBus.$emit('relationsUpdated')
     },
     ...mapActions('walls/collections', ['createCardInCollection', 'setCardOrder'])
   },
-  created () {
-    this.$store.commit('initCollection', this.collection)
-  },
   mounted () {
-    // this.getCardsFromAPI()
-
     this.$refs.collectionContent.addEventListener('scroll', this.handleScroll)
   }
 }

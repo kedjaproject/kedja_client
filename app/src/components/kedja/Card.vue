@@ -53,7 +53,7 @@
 
 <script>
 
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { kedjaAPI } from '@/utils'
 
@@ -137,10 +137,9 @@ export default {
       }
       return true
     },
-    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins']),
+    ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins', 'activeWall']),
     ...mapState('walls/cards', ['cards']),
-    ...mapState(['userState']),
-    ...mapState(['filterCards'])
+    ...mapState(['userState', 'filterCards'])
   },
   watch: {
     userState: {
@@ -190,25 +189,20 @@ export default {
   },
   methods: {
     setState (name, flag) {
-      let payload = {
+      this.setCardState({
         rid: this.card.rid,
         stateName: name,
         stateFlag: flag
-      }
-      this.$store.commit('walls/cards/setCardState', payload)
+      })
     },
     resetStates () {
-      let payload = {
-        rid: this.card.rid
-      }
-      this.$store.commit('walls/cards/resetCardStates', payload)
+      this.resetCardStates({ rid: this.card.rid })
     },
     resetState (name) {
-      let payload = {
+      this.setCardState({
         rid: this.card.rid,
         stateName: name
-      }
-      this.$store.commit('walls/cards/setCardState', payload)
+      })
     },
     clicked () {
       if (this.userState.name !== 'connectCard') {
@@ -219,9 +213,8 @@ export default {
       }
       if (this.card.states.connectingNotConnected) {
         this.connect()
-      }
-      if (this.card.states.connectingConnected) {
-        this.unconnect()
+      } else if (this.card.states.connectingConnected) {
+        this.disconnect()
       }
       // this.$store.commit('forceUserStateUpdate')
     },
@@ -230,31 +223,46 @@ export default {
     },
     setSelected (e) {
       if (!(this.userState.name === 'selectCard' && this.userState.data.rid === this.card.rid)) {
-        this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
+        this.setUserState({name: 'selectCard', data: {rid: this.card.rid}})
       } else {
-        this.$store.commit('resetUserState')
+        this.resetUserState()
       }
     },
     toggleConnecting () {
       if (!this.card.states.connecting) {
-        this.$store.commit('setUserState', {name: 'connectCard', data: {rid: this.card.rid}})
+        this.setUserState({name: 'connectCard', data: {rid: this.card.rid}})
       } else {
-        this.$store.commit('setUserState', {name: 'selectCard', data: {rid: this.card.rid}})
+        this.setUserState({name: 'selectCard', data: {rid: this.card.rid}})
       }
     },
     connect: function () {
-      let cardOther = this.cards[this.userState.data.rid]
-      console.log('Connect', cardOther)
-      this.$emit('connect', {members: [cardOther.rid, this.card.rid]})
+      this.resetStates()
+      this.setState('connectingConnected', true)
+      this.createRelation({
+        wall: this.activeWall,
+        cards: [this.card, this.cards[this.userState.data.rid]]
+      })
     },
-    unconnect () {
-      let cardOther = this.cards[this.userState.data.rid]
-      console.log('Unconnect', cardOther)
-      this.$emit('unconnect', {members: [cardOther.rid, this.card.rid]})
+    disconnect () {
+      this.resetStates()
+      this.setState('connectingNotConnected', true)
+      const cards = [this.card, this.cards[this.userState.data.rid]]
+      const relation = this.activeWall.relations.find(r => {
+        return (r.members[0] === cards[0].rid && r.members[1] === cards[1].rid) ||
+               (r.members[0] === cards[1].rid && r.members[1] === cards[0].rid)
+      })
+      if (relation) {
+        this.deleteRelation({
+          wall: this.activeWall,
+          relation
+        })
+      } else {
+        console.log('no relation found for cards', cards)
+      }
     },
     initUpdateTitle () {
       console.log('Börja byt namn på kort')
-      this.$store.commit('setUserState', {name: 'renameCard', data: {rid: this.card.rid}})
+      this.setUserState({name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
       kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {title})
@@ -270,14 +278,10 @@ export default {
     setFocus () {
       this.$el.focus()
     },
-    ...mapActions('walls/collections', ['removeCard'])
-  },
-  created: function () {
-    // Do when loading data instead.
-    // this.$store.commit('initCard', this.card)
-  },
-  mounted: function () {
-    // this.setFocus()
+    ...mapActions('walls', ['createRelation', 'deleteRelation']),
+    ...mapActions('walls/collections', ['removeCard']),
+    ...mapMutations('walls/cards', ['setCardState', 'resetCardStates']),
+    ...mapMutations(['setUserState', 'resetUserState'])
   }
 }
 </script>

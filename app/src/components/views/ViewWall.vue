@@ -17,15 +17,13 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import Wall from '@/components/kedja/Wall.vue'
-import ContextMenu from '@/components/contextMenu/ContextMenu'
 import { kedjaAPI } from '@/utils'
 
 export default {
   name: 'ViewWall',
   components: {
     KedjaHeader,
-    Wall,
-    ContextMenu
+    Wall
   },
   data () {
     return {
@@ -40,19 +38,11 @@ export default {
     ...mapState('walls', ['walls'])
   },
   methods: {
-    getWallFromParam: function () {
+    getWallFromParam () {
       this.rid = Number(this.$route.params['wallId'])
       if (this.rid) {
-        // Test
         this.fetchWall(this.rid)
         this.setActiveWallId(this.rid)
-        // End test
-        /*
-        kedjaAPI.get('walls/' + wallId)
-          .then(response => {
-            this.$store.commit('setActiveWall', {wall: response.data})
-          })
-        */
       }
     },
     createCollection () {

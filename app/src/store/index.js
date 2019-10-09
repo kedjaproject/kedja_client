@@ -40,12 +40,9 @@ export const store = new Vuex.Store({
     },
 
     [types.FORCE_USER_STATE_UPDATE]: (state) => {
+      console.log('force user state update')
       eventBus.$emit('relationsUpdated')
       state.userState.rand = Math.random()
-    },
-
-    [types.SET_ACTIVE_WALL]: (state, {wall}) => {
-      state.activeWall = wall
     },
 
     [types.SET_WALL_COLLECTIONS]: (state, {wall, collections}) => {
@@ -67,13 +64,6 @@ export const store = new Vuex.Store({
     [types.INIT_WALL]: (state, wall) => {
       Vue.set(wall, 'collections', [])
       Vue.set(wall, 'connections', [])
-    },
-
-    [types.INIT_COLLECTION]: (state, collection) => {
-      Vue.set(collection, 'cards', [])
-    },
-
-    [types.INIT_CONNECTION]: (state, connection) => {
     },
 
     setFilterCards: (state, value) => {
@@ -139,7 +129,7 @@ export const store = new Vuex.Store({
       return !!state.users.currentUserId
     },
 
-    userData: state => {
+    userData (state) {
       return state.users.data[state.users.currentUserId]
     }
   }

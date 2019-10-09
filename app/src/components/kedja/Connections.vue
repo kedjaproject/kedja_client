@@ -146,13 +146,8 @@ export default {
     */
   },
   mounted () {
-    // this.setBounds()
-    // this.drawCanvas()
-    // this.$nextTick(this.firstDraw)
     if (this.collectionsElement) {
-      this.$nextTick(() => {
-        this.redraw()
-      })
+      this.$nextTick(this.redraw)
     }
   }
 }

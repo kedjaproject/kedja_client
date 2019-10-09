@@ -1,7 +1,7 @@
 <template>
   <div class="Collections" ref="collections">
 
-    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection" @connect="connect" @unconnect="unconnect" :prid="prid"></collection>
+    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection" :prid="prid"></collection>
 
     <div class="newCollection" @click="createCollection(wall)" tabindex="0">
       <button title="Lägg till ny samling" class="new">+</button>
@@ -25,12 +25,6 @@ export default {
     wall: Object
   },
   methods: {
-    connect: function (p) {
-      this.$emit('connect', p)
-    },
-    unconnect: function (p) {
-      this.$emit('unconnect', p)
-    },
     ...mapActions('walls/collections', ['createCollection', 'removeCollection'])
   },
   mounted: function () {
