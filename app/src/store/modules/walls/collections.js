@@ -69,6 +69,26 @@ export default {
       } else {
         action()
       }
+    },
+    setCardOrder ({ commit }, {collection, order}) {
+      // Set preliminary order for speed.
+      commit('setCollectionIdCardList', {
+        collectionId: collection.rid,
+        cardList: order
+      })
+      eventBus.$emit('relationsUpdated')
+      kedjaAPI.put('collections/' + collection.rid + '/order', {order})
+        .then(response => {
+          // API sends full card data for collection, so update all
+          commit('walls/cards/setCards', response.data, {root: true})
+          // Use order from API, could be changed from elsewhere.
+          const cardList = response.data.map(card => card.rid)
+          commit('setCollectionIdCardList', {
+            collectionId: collection.rid,
+            cardList
+          })
+          eventBus.$emit('relationsUpdated')
+        })
     }
   },
   mutations: {

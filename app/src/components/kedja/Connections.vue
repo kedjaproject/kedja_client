@@ -137,10 +137,13 @@ export default {
   },
   created () {
     eventBus.$on('relationsUpdated', this.redraw)
+    eventBus.$on('cardRemoved', this.redraw)
+    /*  TODO: Enable if using card css transitions. Or just remove.
     eventBus.$on('cardRemoved', () => {
       // Similar to $nextTick, but waits for css transitions to end.
       this.$nextTransitionEnd(this.redraw, this.$parent.$el)
     })
+    */
   },
   mounted () {
     // this.setBounds()

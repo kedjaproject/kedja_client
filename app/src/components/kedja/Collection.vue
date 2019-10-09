@@ -1,5 +1,5 @@
 <template>
-  <div class="Collection">
+  <div class="Collection" v-drag-and-drop:options="dndOptions">
 
     <div class="collectionHeader z1">
 
@@ -15,11 +15,11 @@
 
     </div>
 
-    <div class="collectionContent" ref="collectionContent">
+    <div class="collectionContent" ref="collectionContent" @reordered="reordered">
 
       <!-- FIXME: This breaks sometimes, so don't readd transitions untill they really work. -->
       <!--<transition-group name="fade" mode="out-in" class="cards">-->
-        <card v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
+        <card :data-id="card.rid" v-for="card in cards" :card="card" @connect="connect" @unconnect="unconnect" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
       <!--</transition-group>-->
 
       <transition name="fade"  mode="out-in">
@@ -59,7 +59,17 @@ export default {
   data () {
     return {
       hovering: false,
-      showCardSeed: false
+      showCardSeed: false,
+      dndOptions: {
+        dropzoneSelector: '.collectionContent',
+        draggableSelector: '.Card'
+        /*
+        multipleDropzonesItemsDraggingEnabled: true,
+        showDropzoneAreas: true,
+        reactivityEnabled: true,
+        handlerSelector: null,
+        */
+      }
     }
   },
   computed: {
@@ -112,6 +122,22 @@ export default {
     }
   },
   methods: {
+    reordered (event) {
+      console.log(event)
+      const cardId = Number(event.detail.ids[0])
+      let order = [...this.collection.cardList]
+      const oldIndex = order.indexOf(cardId)
+      // Do not allow card index higher than last index
+      const index = Math.min(event.detail.index, order.length - 1)
+      if (index !== oldIndex) {
+        order.splice(oldIndex, 1)
+        order.splice(index, 0, cardId)
+        this.setCardOrder({
+          collection: this.collection,
+          order
+        })
+      }
+    },
     removeCollection () {
       this.$store.dispatch('walls/collections/removeCollection', {wall: this.wall, collection: this.collection})
     },
@@ -156,7 +182,7 @@ export default {
     handleScroll () {
       eventBus.$emit('relationsUpdated')
     },
-    ...mapActions('walls/collections', ['createCardInCollection'])
+    ...mapActions('walls/collections', ['createCardInCollection', 'setCardOrder'])
   },
   created () {
     this.$store.commit('initCollection', this.collection)

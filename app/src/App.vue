@@ -10,16 +10,12 @@
 
 <script>
 import { mapActions } from 'vuex'
-import Vue from 'vue'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import KedjaFooter from '@/components/layout/KedjaFooter'
 import Modal from '@/components/general/Modal'
 import Dialog from '@/components/general/Dialog'
-import TransitionEndPlugin from 'transitionend-plugin-vue'
 import { INIT, RESET_USER_STATE } from '@/store/mutation-types'
-
-Vue.use(TransitionEndPlugin)
 
 export default {
   name: 'App',
