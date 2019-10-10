@@ -264,7 +264,7 @@ export default {
       this.setUserState({name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
-      kedjaAPI.put('collections/' + this.collections.rid + '/cards/' + this.card.rid, {title})
+      kedjaAPI.put('collections/' + this.collection.rid + '/cards/' + this.card.rid, {title})
         .then(response => console.log(response))
     },
     updateIndicatorValue (value) {

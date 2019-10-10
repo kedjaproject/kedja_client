@@ -33,12 +33,12 @@ export default {
     WrapperComponent
   },
   props: {
-    value: '',
-    tag: '',
+    value: String,
+    tag: String,
     placeholder: {default: 'Ange text'},
     type: {default: 'textarea'},
-    focus: false,
-    locked: false
+    focus: Boolean,
+    locked: Boolean
   },
   data () {
     return {
@@ -53,8 +53,6 @@ export default {
       return this.editing || this.value === ''
       // return this.$refs.input.hasFocus();
     }
-  },
-  watch: {
   },
   methods: {
     openEdit () {
