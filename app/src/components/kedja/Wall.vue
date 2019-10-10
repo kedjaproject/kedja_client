@@ -30,7 +30,7 @@
       <div id="collections" ref="colls">
 
         <div class="horisontal-scroll-wrapper">
-          <collections ref="collections" :collections="collections" :wall="wall" :prid="rid" @mounted="collectionsMounted"></collections>
+          <collections ref="collections" :collections="collections" :wall="wall" @mounted="collectionsMounted"></collections>
           <connections ref="connections" :collectionsElement="collectionsElement" :wall="wall" v-if="relations" :connections="relations" class="connections"></connections>
         </div>
 
