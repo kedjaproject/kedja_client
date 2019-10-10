@@ -5,6 +5,11 @@
       <button @click="openNewWallModal">
         + Ny vägg
       </button>
+
+      <!-- FIXME: Only show with correct permissions -->
+      <button @click="openUsersModal">
+        Användare
+      </button>
     </kedja-header>
 
     <h3>Mina väggar</h3>
@@ -26,6 +31,7 @@ import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
 import { openModal } from '@/utils'
 import NewWall from '@/components/kedja/modals/NewWall'
+import UsersList from '@/components/kedja/modals/UsersList'
 
 export default {
   name: 'ViewWallList',
@@ -43,6 +49,9 @@ export default {
     ...mapActions('walls', ['fetchWalls']),
     openNewWallModal () {
       openModal(NewWall)
+    },
+    openUsersModal () {
+      openModal(UsersList)
     }
   },
   mounted () {

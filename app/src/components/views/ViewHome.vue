@@ -15,7 +15,6 @@
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import { mapGetters } from 'vuex'
-// import Component from '@/components/Component'
 
 export default {
   name: 'ViewHome',
