@@ -55,6 +55,14 @@ function openDeleteDialog ({message, action}) {
   })
 }
 
+function openModal (component, data) {
+  eventBus.$emit('modalOpen', {component, data})
+}
+
+function closeModal () {
+  eventBus.$emit('modalClose')
+}
+
 // Default error handler here.
 // FIXME: This should be only for dev, so callers get to handle errors.
 kedjaAPI.interceptors.response.use(response => response, error => {
@@ -86,5 +94,7 @@ export {
   getUserColor,
   fakeUsers,
   openDialog,
-  openDeleteDialog
+  openDeleteDialog,
+  openModal,
+  closeModal
 }

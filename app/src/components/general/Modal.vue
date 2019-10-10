@@ -54,6 +54,7 @@ export default {
   },
   created () {
     eventBus.$on('modalOpen', this.open)
+    eventBus.$on('modalClose', this.close)
     document.addEventListener('keyup', event => {
       if (this.open && event.key === 'Escape') this.dismiss()
     })
