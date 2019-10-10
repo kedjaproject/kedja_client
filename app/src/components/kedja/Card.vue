@@ -72,11 +72,6 @@ export default {
     WidgetIcon,
     DropDown
   },
-  data () {
-    return {
-      initiated: false
-    }
-  },
   props: {
     card: Object,
     collection: Object

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 // import axios from 'axios'
 import walls from './modules/walls'
 import users from './modules/users'
+import permissions from './modules/permissions'
 import { kedjaAPI, setAuthToken, eventBus } from '../utils'
 import * as types from './mutation-types'
 
@@ -12,7 +13,8 @@ export const store = new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   modules: {
     walls,
-    users
+    users,
+    permissions
   },
   state: {
     connections: [],

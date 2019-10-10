@@ -49,11 +49,12 @@
 <script>
 
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { kedjaAPI, eventBus, getUserColor, openDeleteDialog } from '@/utils'
+import { kedjaAPI, eventBus, getUserColor, openDeleteDialog, openModal } from '@/utils'
 
 import UserButton from '@/components/kedja/widgets/UserButton'
 import WallUserAdmin from './modals/WallUserAdmin'
 import WallUserInfo from './modals/WallUserInfo'
+import CreateTemplate from './modals/CreateTemplate'
 import DropDown from '@/components/DropDown'
 import CardFilter from '@/components/kedja/widgets/CardFilter'
 import Collections from './Collections'
@@ -98,8 +99,11 @@ export default {
     otherUsers () {
       return this.users.filter(user => user.rid !== this.currentUser.rid)
     },
+    templatePermission () {
+      return this.checkPermission(this.wall.rid, 'Root:ManageTemplates')
+    },
     aclOptions () {
-      return Object.keys(aclNames)
+      let options = Object.keys(aclNames)
         .filter(key => this.wall.data.acl_name !== key)
         .map(aclName => {
           return {
@@ -108,11 +112,21 @@ export default {
             args: {wall: this.wall, aclName}
           }
         })
+      if (this.templatePermission) {
+        options.push({
+          label: 'Skapa mall',
+          f: () => {
+            openModal(CreateTemplate, this.wall)
+          }
+        })
+      }
+      return options
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState', 'filterCards']),
     ...mapGetters('users', ['currentUser', 'getUsers']),
-    ...mapGetters('walls', ['getWallCollections'])
+    ...mapGetters('walls', ['getWallCollections']),
+    ...mapGetters('permissions', ['checkPermission'])
   },
   methods: {
     userColor (index) {
