@@ -28,12 +28,14 @@ export default {
     this.loadUserFromLocalStorage()
     this.authenticate()
     this.resetUserState()
+    this.fetchPermissions(1)
   },
   mounted () {
     document.activeElement.blur()
   },
   methods: {
     ...mapActions(['authenticate']),
+    ...mapActions('permissions', ['fetchPermissions']),
     ...mapMutations(['resetUserState']),
     ...mapMutations('users', ['loadUserFromLocalStorage'])
   }

@@ -86,6 +86,8 @@ export default {
     margin: 80px auto
     padding: 20px
     min-height: calc(100vh - 240px)
+    max-height: calc(100vh - 160px)
+    overflow-y: auto
 
   .closer
     color: #999

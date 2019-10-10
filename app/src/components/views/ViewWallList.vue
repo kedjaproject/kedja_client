@@ -7,7 +7,7 @@
       </button>
 
       <!-- FIXME: Only show with correct permissions -->
-      <button @click="openUsersModal">
+      <button @click="openUsersModal" v-if="checkPermission(1, 'Root:Admin')">
         Användare
       </button>
     </kedja-header>
@@ -40,7 +40,8 @@ export default {
     RouterLinkBox
   },
   computed: {
-    ...mapGetters('walls', ['all'])
+    ...mapGetters('walls', ['all']),
+    ...mapGetters('permissions', ['checkPermission'])
   },
   methods: {
     getColor (wall) {
