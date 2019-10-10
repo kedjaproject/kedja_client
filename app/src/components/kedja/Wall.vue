@@ -3,7 +3,7 @@
 
     <div class="wallHeader">
 
-      <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
+      <drop-down :items="wallOptions">
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
@@ -49,11 +49,12 @@
 <script>
 
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { kedjaAPI, eventBus, getUserColor, openDeleteDialog } from '@/utils'
+import { kedjaAPI, eventBus, getUserColor, openDeleteDialog, openModal } from '@/utils'
 
 import UserButton from '@/components/kedja/widgets/UserButton'
 import WallUserAdmin from './modals/WallUserAdmin'
 import WallUserInfo from './modals/WallUserInfo'
+import CreateTemplate from './modals/CreateTemplate'
 import DropDown from '@/components/DropDown'
 import CardFilter from '@/components/kedja/widgets/CardFilter'
 import Collections from './Collections'
@@ -98,6 +99,21 @@ export default {
     otherUsers () {
       return this.users.filter(user => user.rid !== this.currentUser.rid)
     },
+    wallOptions () {
+      let options = [{
+        label: 'Radera vägg',
+        f: this.removeWall
+      }]
+      if (this.checkPermission(this.wall.rid, 'Root:ManageTemplates')) {
+        options.push({
+          label: 'Skapa mall',
+          f: () => {
+            openModal(CreateTemplate, this.wall)
+          }
+        })
+      }
+      return options
+    },
     aclOptions () {
       return Object.keys(aclNames)
         .filter(key => this.wall.data.acl_name !== key)
@@ -112,7 +128,8 @@ export default {
     ...mapState('walls', ['walls']),
     ...mapState(['userState', 'filterCards']),
     ...mapGetters('users', ['currentUser', 'getUsers']),
-    ...mapGetters('walls', ['getWallCollections'])
+    ...mapGetters('walls', ['getWallCollections']),
+    ...mapGetters('permissions', ['checkPermission'])
   },
   methods: {
     userColor (index) {

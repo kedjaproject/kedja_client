@@ -43,6 +43,7 @@ export default {
       if (this.rid) {
         this.fetchWall(this.rid)
         this.setActiveWallId(this.rid)
+        this.fetchPermissions(this.rid)
       }
     },
     createCollection () {
@@ -57,7 +58,8 @@ export default {
       this.$store.commit('resetUserState')
     },
     ...mapMutations('walls', ['setActiveWallId']),
-    ...mapActions('walls', ['fetchWall'])
+    ...mapActions('walls', ['fetchWall']),
+    ...mapActions('permissions', ['fetchPermissions'])
   },
   mounted () {
     this.getWallFromParam()
