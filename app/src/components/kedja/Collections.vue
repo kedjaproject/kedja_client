@@ -1,7 +1,7 @@
 <template>
   <div class="Collections" ref="collections">
 
-    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection" :prid="prid"></collection>
+    <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection"></collection>
 
     <div class="newCollection" @click="createCollection(wall)" tabindex="0">
       <button title="Lägg till ny samling" class="new">+</button>
@@ -21,7 +21,6 @@ export default {
   },
   props: {
     collections: Array,
-    prid: Number,
     wall: Object
   },
   methods: {

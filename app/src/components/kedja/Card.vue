@@ -79,7 +79,7 @@ export default {
   },
   props: {
     card: Object,
-    prid: Number
+    collection: Object
   },
   computed: {
     connectionsDirect () {
@@ -264,11 +264,11 @@ export default {
       this.setUserState({name: 'renameCard', data: {rid: this.card.rid}})
     },
     updateTitle (title) {
-      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {title})
+      kedjaAPI.put('collections/' + this.collections.rid + '/cards/' + this.card.rid, {title})
         .then(response => console.log(response))
     },
     updateIndicatorValue (value) {
-      kedjaAPI.put('collections/' + this.prid + '/cards/' + this.card.rid, {int_indicator: value})
+      kedjaAPI.put('collections/' + this.collection.rid + '/cards/' + this.card.rid, {int_indicator: value})
         .then(response => {
           // this.card.data.int_indicator = value
         })

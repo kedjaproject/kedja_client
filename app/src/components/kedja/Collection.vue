@@ -15,12 +15,16 @@
 
     </div>
 
-    <div class="collectionContent" ref="collectionContent" @reordered="reordered">
+    <div class="collectionContent" ref="collectionContent">
 
-      <!-- FIXME: This breaks sometimes, so don't readd transitions untill they really work. -->
+      <ul @reordered="reordered">
+      <!-- FIXME: This breaks sometimes, so don't read transitions until they really work. -->
       <!--<transition-group name="fade" mode="out-in" class="cards">-->
-        <card :data-id="card.rid" v-for="card in cards" :card="card" :key="card.rid" :id="card.rid" :prid="collection.rid" tabindex="0"></card>
+        <li :data-id="card.rid" v-for="card in cards" :key="card.rid">
+          <card :card="card" :id="card.rid" :collection="collection" tabindex="0"></card>
+        </li>
       <!--</transition-group>-->
+      </ul>
 
       <transition name="fade"  mode="out-in">
         <card-seed @create="createCard" @cancel="cancelCardSeed" ref="cardSeed" tabindex="0" v-if="showCardSeed"></card-seed>
@@ -61,14 +65,13 @@ export default {
       hovering: false,
       showCardSeed: false,
       dndOptions: {
-        dropzoneSelector: '.collectionContent',
-        draggableSelector: '.Card'
-        /*
-        multipleDropzonesItemsDraggingEnabled: true,
         showDropzoneAreas: true,
-        reactivityEnabled: true,
-        handlerSelector: null,
-        */
+        multipleDropzonesItemsDraggingEnabled: false,
+        onDragstart: event => {
+          if (this.dndPrevented) {
+            event.stop()
+          }
+        }
       }
     }
   },
@@ -96,7 +99,6 @@ export default {
   },
   props: {
     collection: Object,
-    prid: Number,
     wall: Object
   },
   watch: {
@@ -180,59 +182,53 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="sass">
 
-.Collection{
-
+.Collection
   /* LAYOUT */
-  display: flex;
-  flex-direction: column;
+  display: flex
+  flex-direction: column
 
-  border: 0px solid #EAEAEA;
-  background: #CADBDA;
-  /*position: relative;*/
-}
+  border: 0px solid #EAEAEA
+  background: #CADBDA
 
-.collectionHeader{
-  padding: 20px 20px 10px 20px;
-  border-bottom: 1px solid white;
-  background: #CADBDA;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+.collectionHeader
+  padding: 20px 20px 10px 20px
+  border-bottom: 1px solid white
+  background: #CADBDA
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
 
 .Collection:nth-child(even),
 .Collection:nth-child(even) .collectionHeader,
 .Collection:nth-child(even) .collectionFooter
-{
-  background: #ACCECC;
-}
+  background: #ACCECC
 
-.collectionContent{
-  padding: 40px;
-  flex: 1;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  position: relative;
-}
+.collectionContent
+  padding: 40px
+  flex: 1
+  overflow-y: auto
+  scroll-behavior: smooth
+  position: relative
+  ul
+    padding: 0
+    list-style: none
+    margin: 0
 
-.collectionFooter{
-  padding: 20px;
-  border-top: 1px solid white;
-  background: #CADBDA;
-}
+.collectionFooter
+  padding: 20px
+  border-top: 1px solid white
+  background: #CADBDA
 
-.cards{
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
+.cards
+  display: flex
+  flex-direction: column
+  position: relative
 
-.remove{
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
+.remove
+  position: absolute
+  top: 5px
+  right: 5px
 </style>
