@@ -22,12 +22,6 @@ export default {
   components: {
     KedjaHeader
   },
-  data () {
-    return {
-    }
-  },
-  props: {
-  },
   computed: {
     ...mapGetters(['isAuthenticated'])
   },
@@ -42,8 +36,6 @@ export default {
   },
   created () {
     this.loggedIn()
-  },
-  mounted () {
   }
 }
 </script>

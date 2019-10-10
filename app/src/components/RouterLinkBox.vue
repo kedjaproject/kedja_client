@@ -16,25 +16,10 @@
 
 export default {
   name: 'RouterLinkBox',
-  /*
-  components: {
-    Component
-  },
-  */
-  data () {
-    return {
-    }
-  },
   props: {
-    text: '',
-    color: '',
-    to: ''
-  },
-  computed: {
-  },
-  methods: {
-  },
-  mounted () {
+    text: String,
+    color: String,
+    to: Object
   }
 }
 </script>

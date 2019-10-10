@@ -41,33 +41,29 @@ export default {
     DropDown,
     UserButton
   },
-  data () {
-    return {
-    }
-  },
-  props: {
-  },
   computed: {
     ...mapGetters(['isAuthenticated']),
     ...mapGetters('users', ['currentUser']),
     ...mapState(['userState'])
   },
   methods: {
-    goToProfile (e) {
-      this.$router.push({name: 'Profile'})
+    goToProfile () {
+      if (this.$route.name !== 'Profile') {
+        this.$router.push({name: 'Profile'})
+      }
     },
-    goToWalls (e) {
-      this.$router.push({name: 'Walls'})
+    goToWalls () {
+      if (this.$route.name !== 'Walls') {
+        this.$router.push({name: 'Walls'})
+      }
     },
-    logout (e) {
+    logout () {
       kedjaAPI.post('auth/logout')
         .then(response => {
           this.$store.dispatch('logout')
           this.$router.push({name: 'Login'})
         })
     }
-  },
-  mounted () {
   }
 }
 </script>

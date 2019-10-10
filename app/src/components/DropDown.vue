@@ -19,25 +19,15 @@
 
 <script>
 
-// import { store } from '@/store'
-// import Component from '@/components/Component'
-
 export default {
   name: 'DropDown',
-  /*
-  components: {
-    Component
-  },
-  */
   data () {
     return {
       open: false
     }
   },
   props: {
-    items: ''
-  },
-  computed: {
+    items: Array
   },
   methods: {
     toggleList () {
@@ -57,8 +47,6 @@ export default {
       }
       this.close()
     }
-  },
-  mounted: function () {
   }
 }
 </script>
