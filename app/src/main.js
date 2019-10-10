@@ -5,10 +5,10 @@ import App from './App'
 import router from './router'
 import { store } from '@/store'
 // import TransitionEndPlugin from 'transitionend-plugin-vue'
-import VueDraggable from 'vue-draggable'
-import 'vue-draggable/polyfills'
+// import VueDraggable from 'vue-draggable'
+// import 'vue-draggable/polyfills'
 
-Vue.use(VueDraggable)
+// Vue.use(VueDraggable)
 // Activate if using transitions for cards.
 // Vue.use(TransitionEndPlugin)
 
