@@ -3,7 +3,7 @@
 
     <div class="wallHeader">
 
-      <drop-down :items="[{label: 'Radera vägg', f: removeWall }]">
+      <drop-down :items="wallOptions">
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
 
@@ -99,20 +99,12 @@ export default {
     otherUsers () {
       return this.users.filter(user => user.rid !== this.currentUser.rid)
     },
-    templatePermission () {
-      return this.checkPermission(this.wall.rid, 'Root:ManageTemplates')
-    },
-    aclOptions () {
-      let options = Object.keys(aclNames)
-        .filter(key => this.wall.data.acl_name !== key)
-        .map(aclName => {
-          return {
-            label: aclNames[aclName],
-            f: this.setWallACL,
-            args: {wall: this.wall, aclName}
-          }
-        })
-      if (this.templatePermission) {
+    wallOptions () {
+      let options = [{
+        label: 'Radera vägg',
+        f: this.removeWall
+      }]
+      if (this.checkPermission(this.wall.rid, 'Root:ManageTemplates')) {
         options.push({
           label: 'Skapa mall',
           f: () => {
@@ -121,6 +113,17 @@ export default {
         })
       }
       return options
+    },
+    aclOptions () {
+      return Object.keys(aclNames)
+        .filter(key => this.wall.data.acl_name !== key)
+        .map(aclName => {
+          return {
+            label: aclNames[aclName],
+            f: this.setWallACL,
+            args: {wall: this.wall, aclName}
+          }
+        })
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState', 'filterCards']),
