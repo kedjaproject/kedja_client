@@ -2,11 +2,9 @@
   <div class="ViewWallList">
 
     <kedja-header>
-
-      <button @click="createWall">
+      <button @click="openNewWallModal">
         + Ny vägg
       </button>
-
     </kedja-header>
 
     <h3>Mina väggar</h3>
@@ -26,6 +24,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import RouterLinkBox from '@/components/RouterLinkBox'
+import { openModal } from '@/utils'
+import NewWall from '@/components/kedja/modals/NewWall'
 
 export default {
   name: 'ViewWallList',
@@ -40,7 +40,10 @@ export default {
     getColor (wall) {
       return wall.data.acl_name === 'private_wall' ? 'lightsteelblue' : '#c2c8e6'
     },
-    ...mapActions('walls', ['fetchWalls', 'createWall'])
+    ...mapActions('walls', ['fetchWalls']),
+    openNewWallModal () {
+      openModal(NewWall)
+    }
   },
   mounted () {
     this.fetchWalls()
