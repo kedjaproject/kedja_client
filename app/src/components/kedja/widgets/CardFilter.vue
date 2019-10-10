@@ -1,7 +1,7 @@
 <template>
   <div class="CardFilter">
-    <widget-icon path="/static/graphics/icons/filter/" img="KEDJA_Filter off.png" imgHover="KEDJA_Filter off hover.png" imgActive="KEDJA_Filter off aktiv.png" :active="!filterCards" @click.native="setActive(false)" title="Visa samtliga kort" alt="Visa samtliga kort"></widget-icon>
-    <widget-icon path="/static/graphics/icons/filter/" img="KEDJA_Filter on.png" imgHover="KEDJA_Filter on hover.png" imgActive="KEDJA_Filter on aktiv.png" :active="filterCards" @click.native="setActive(true)" title="Visa endast kort i vald kedja" alt="Visa endast kort i vald kedja"></widget-icon>
+    <widget-icon path="/static/graphics/icons/filter/" img="KEDJA_Filter off.png" imgHover="KEDJA_Filter off hover.png" imgActive="KEDJA_Filter off aktiv.png" :active="!filterCards" @click.native="setFilterCards(false)" title="Visa samtliga kort" alt="Visa samtliga kort"></widget-icon>
+    <widget-icon path="/static/graphics/icons/filter/" img="KEDJA_Filter on.png" imgHover="KEDJA_Filter on hover.png" imgActive="KEDJA_Filter on aktiv.png" :active="filterCards" @click.native="setFilterCards(true)" title="Visa endast kort i vald kedja" alt="Visa endast kort i vald kedja"></widget-icon>
   </div>
 </template>
 
@@ -9,34 +9,18 @@
 
 // import { store } from '@/store';
 import WidgetIcon from './WidgetIcon'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'CardFilter',
   components: {
     WidgetIcon
   },
-  data () {
-    return {
-    }
-  },
-  props: {
-  },
   computed: {
-    filterCards: {
-      get () {
-        return this.$store.state.filterCards
-      },
-      set (value) {
-        this.$store.commit('setFilterCards', value)
-      }
-    }
+    ...mapState(['filterCards'])
   },
   methods: {
-    setActive (value) {
-      this.filterCards = value
-    }
-  },
-  mounted: function () {
+    ...mapMutations(['setFilterCards'])
   }
 }
 </script>

@@ -109,16 +109,8 @@ export default {
           }
         })
     },
-    filterCards: {
-      get () {
-        return this.$store.state.filterCards
-      },
-      set (value) {
-        this.$store.commit('setFilterCards', value)
-      }
-    },
     ...mapState('walls', ['walls']),
-    ...mapState(['userState']),
+    ...mapState(['userState', 'filterCards']),
     ...mapGetters('users', ['currentUser', 'getUsers']),
     ...mapGetters('walls', ['getWallCollections'])
   },
@@ -131,27 +123,6 @@ export default {
     },
     openUserAdminModal (user) {
       eventBus.$emit('modalOpen', {component: WallUserAdmin, data: {users: this.getUsers().filter(user => user.rid !== this.currentUser.rid), wall: this.wall}})
-    },
-    getCollectionsFromAPI () {
-      let wallId = this.$route.params['wallId']
-      if (wallId) {
-        kedjaAPI.get('walls/' + wallId + '/collections')
-          .then(response => {
-            this.$store.commit('setWallCollections', {wall: this.wall, collections: response.data})
-          })
-      }
-    },
-    getConnectionsFromAPI () {
-      let wallId = this.$route.params['wallId']
-      if (wallId) {
-        kedjaAPI.get('walls/' + wallId + '/relations')
-          .then(response => {
-            this.$store.commit('setWallConnections', {wall: this.wall, connections: response.data})
-          })
-      }
-    },
-    getWallLocal () {
-      this.wall = this.$store.getters.getActiveWall()
     },
     removeWall () {
       // this.$router.push({ name: 'ViewWallList', params: {}  })

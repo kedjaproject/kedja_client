@@ -12,19 +12,18 @@ export default {
   actions: {
     removeCard ({commit, getters, rootGetters}, card) {
       const collection = getters.getCollectionByCard(card)
+      const wall = rootGetters['walls/activeWall']
+      const hasRelations = wall.relations.find(relation => relation.members.includes(card.rid))
       const action = () => {
         kedjaAPI.delete('collections/' + collection.rid + '/cards/' + card.rid)
           .then(response => {
-            commit('walls/removeCardRelations', card, {root: true})
-            eventBus.$emit('relationsUpdated')
+            commit('walls/removeCardRelations', {wall, card}, {root: true})
             commit('removeCard', {collection, card})
-            commit('walls/cards/removeCard', null, {root: true})
+            commit('walls/cards/removeCard', card, {root: true})
             commit('resetUserState', null, {root: true})
             eventBus.$emit('cardRemoved')
           })
       }
-      const wall = rootGetters['walls/activeWall']
-      const hasRelations = wall.relations.find(relation => relation.members.includes(card.rid))
       if (hasRelations) {
         openDeleteDialog({
           message: 'Om du raderar detta kort tas även kopplingar till andra kort bort.',

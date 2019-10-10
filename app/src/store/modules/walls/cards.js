@@ -22,8 +22,8 @@ export default {
         Vue.set(state.cards, card.rid, card)
       })
     },
-    removeCard (state, rid) {
-      delete state.cards[rid]
+    removeCard (state, card) {
+      delete state.cards[card.rid]
     },
     setCardState (state, {rid, stateName, stateFlag}) {
       Vue.set(state.cards[rid].states, stateName, stateFlag)

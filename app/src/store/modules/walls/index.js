@@ -208,12 +208,8 @@ export default {
       Vue.set(wall.data, 'acl_name', aclName)
     },
 
-    removeCardRelations (state, card) {
-      Object.values(state.walls).forEach(wall => {
-        if (wall.relations.find(rel => rel.members.includes(card.rid))) {
-          Vue.set(wall, 'relations', wall.relations.filter(rel => !rel.members.includes(card.rid)))
-        }
-      })
+    removeCardRelations (state, {wall, card}) {
+      Vue.set(wall, 'relations', wall.relations.filter(rel => !rel.members.includes(card.rid)))
       eventBus.$emit('relationsUpdated')
     },
 

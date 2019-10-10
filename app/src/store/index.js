@@ -25,11 +25,6 @@ export const store = new Vuex.Store({
     filterCards: false
   },
   mutations: {
-
-    [types.INIT]: (state) => {
-      store.commit('users/loadUserFromLocalStorage')
-    },
-
     [types.RESET_USER_STATE]: (state) => {
       store.commit('setUserState', {name: 'default'})
     },
@@ -38,68 +33,9 @@ export const store = new Vuex.Store({
       eventBus.$emit('relationsUpdated')
       Vue.set(state, 'userState', {name: name, data: data || {}, rand: Math.random()})
     },
-
-    [types.FORCE_USER_STATE_UPDATE]: (state) => {
-      console.log('force user state update')
-      eventBus.$emit('relationsUpdated')
-      state.userState.rand = Math.random()
-    },
-
-    [types.SET_WALL_COLLECTIONS]: (state, {wall, collections}) => {
-      Vue.set(wall, 'collections', collections)
-    },
-
-    [types.SET_WALL_CONNECTIONS]: (state, {wall, connections}) => {
-      Vue.set(wall, 'connections', connections)
-    },
-
-    [types.SET_COLLECTION_CARDS]: (state, {collection, cards}) => {
-      Vue.set(collection, 'cards', cards)
-    },
-
-    [types.SET_CONNECTIONS]: (state, {connections}) => {
-      state.connections = connections
-    },
-
-    [types.INIT_WALL]: (state, wall) => {
-      Vue.set(wall, 'collections', [])
-      Vue.set(wall, 'connections', [])
-    },
-
-    setFilterCards: (state, value) => {
+    [types.SET_FILTER_CARDS]: (state, value) => {
       Vue.set(state, 'filterCards', value)
       eventBus.$emit('relationsUpdated')
-    },
-
-    resetConnections: (state) => {
-      console.log('Reset connections')
-      state.connections = []
-
-      console.log(state.connections.length)
-    },
-
-    setCanConnectByCardId: (state, {id}) => {
-      let collection = store.getters.getCollectionByCardId(id)
-      console.log(collection)
-      let wall = store.getters.getActiveWall()
-      let siblings = store.getters.getClosestArraySiblings(wall.collections, collection)
-      console.log(siblings)
-
-      siblings.forEach((sibling, iSibling) => {
-        if (sibling) {
-          sibling.cards.forEach((card, iCard) => {
-            store.commit('setCardState', {card: card, stateName: 'connectingCanConnect', stateFlag: true})
-          })
-        }
-      })
-    },
-
-    removeConnectionsByCardId: (state, cardId) => {
-      let wall = store.getters['walls/activeWall']
-      console.log(wall.relations)
-      Vue.set(wall, 'relations', wall.relations.filter(c => !c.members.includes(cardId)))
-      console.log(wall.relations)
-      store.commit('forceUserStateUpdate')
     }
   },
 

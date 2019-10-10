@@ -9,13 +9,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 import KedjaHeader from '@/components/layout/KedjaHeader'
 import KedjaFooter from '@/components/layout/KedjaFooter'
 import Modal from '@/components/general/Modal'
 import Dialog from '@/components/general/Dialog'
-import { INIT, RESET_USER_STATE } from '@/store/mutation-types'
 
 export default {
   name: 'App',
@@ -26,15 +25,17 @@ export default {
     Dialogz: Dialog // Name 'Dialog' seems to be reserved... (?)
   },
   created () {
-    this.$store.commit(INIT, {env: process.env})
-    this.$store.commit(RESET_USER_STATE)
+    this.loadUserFromLocalStorage()
     this.authenticate()
+    this.resetUserState()
   },
   mounted () {
     document.activeElement.blur()
   },
   methods: {
-    ...mapActions(['authenticate'])
+    ...mapActions(['authenticate']),
+    ...mapMutations(['resetUserState']),
+    ...mapMutations('users', ['loadUserFromLocalStorage'])
   }
 }
 </script>
