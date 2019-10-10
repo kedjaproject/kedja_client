@@ -12,13 +12,15 @@ export default {
   mutations: {
     setCard (state, card) {
       // Allow card states internally (Should probably be in component)
-      card.states = card.states || {}
+      const existingCard = state.cards[card.rid] || card
+      card.states = existingCard.states || {}
       Vue.set(state.cards, card.rid, card)
     },
     setCards (state, cards) {
       cards.forEach(card => {
         // Allow card states internally (See above)
-        card.states = card.states || {}
+        const existingCard = state.cards[card.rid] || card
+        card.states = existingCard.states || {}
         Vue.set(state.cards, card.rid, card)
       })
     },

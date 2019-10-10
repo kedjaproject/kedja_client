@@ -120,9 +120,6 @@ export default {
       })
       return arr
     },
-    indicatorValue () {
-      return this.card.data.int_indicator
-    },
     removeVisible () {
       return this.card.states.selected
     },
@@ -270,16 +267,15 @@ export default {
     updateIndicatorValue (value) {
       kedjaAPI.put('collections/' + this.collection.rid + '/cards/' + this.card.rid, {int_indicator: value})
         .then(response => {
-          // this.card.data.int_indicator = value
+          this.setCard(response.data)
         })
-      // console.log(value)
     },
     setFocus () {
       this.$el.focus()
     },
     ...mapActions('walls', ['createRelation', 'deleteRelation']),
     ...mapActions('walls/collections', ['removeCard']),
-    ...mapMutations('walls/cards', ['setCardState', 'resetCardStates']),
+    ...mapMutations('walls/cards', ['setCardState', 'resetCardStates', 'setCard']),
     ...mapMutations(['setUserState', 'resetUserState'])
   }
 }

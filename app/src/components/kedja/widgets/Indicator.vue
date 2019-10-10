@@ -11,42 +11,20 @@
 
 export default {
   name: 'Indicator',
-  /*
-  components: {
-    Component
-  },
-  */
-  data () {
-    return {
-    }
-  },
   props: {
-    value: '',
+    value: Number,
     min: {default: -1},
     max: {default: 2},
-    selected: false
+    selected: Boolean
   },
   computed: {
     image () {
-      let filename = ''
-      if (this.value === -1) {
-        filename += this.selected ? 'KEDJA_Indikator, steg 0, markerat kort' : 'KEDJA_Indikator, steg 0, ej markerat kort'
-      } else if (this.value === 0) {
-        filename += this.selected ? 'KEDJA_Indikator, steg 1, markerat kort' : 'KEDJA_Indikator, steg 1, ej markerat kort'
-      } else if (this.value === 1) {
-        filename += this.selected ? 'KEDJA_Indikator, steg 2, markerat kort' : 'KEDJA_Indikator, steg 2, ej markerat kort'
-      } else if (this.value === 2) {
-        filename += this.selected ? 'KEDJA_Indikator, steg 3, markerat kort' : 'KEDJA_Indikator, steg 3, ej markerat kort'
-      }
-      filename += '.png'
-
-      return '/static/graphics/icons/indicator/' + filename
+      return '/static/graphics/icons/indicator/' +
+        'KEDJA_Indikator, steg ' + (this.value + 1) +
+        (this.selected ? ', markerat' : ', ej markerat') + ' kort.png'
     }
   },
   methods: {
-    emitChangedValue (v) {
-      this.$emit('change', v)
-    },
     onclick (e) {
       if (this.selected) {
         e.stopPropagation()
@@ -58,11 +36,9 @@ export default {
       if (valueTemp > this.max) {
         valueTemp = this.min
       }
+      this.$emit('change', valueTemp)
       this.$emit('input', valueTemp)
-      this.emitChangedValue(valueTemp)
     }
-  },
-  mounted: function () {
   }
 }
 </script>
