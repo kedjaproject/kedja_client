@@ -7,7 +7,7 @@
       </button>
 
       <!-- FIXME: Only show with correct permissions -->
-      <button @click="openUsersModal" v-if="checkPermission(1, 'Root:Admin')">
+      <button @click="openUsersModal" v-if="checkPermission(1, 'Users:View')">
         Användare
       </button>
     </kedja-header>
