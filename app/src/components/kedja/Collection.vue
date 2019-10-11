@@ -202,10 +202,8 @@ export default {
   border: 0px solid #EAEAEA
   background: #CADBDA
 
-  ul.dropzone
-    height: 100%
-
   .dragging
+    min-height: 98%
     .item-dropzone-area
       height: 116px
       background-color: rgba(#fff, .4)

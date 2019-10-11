@@ -3,12 +3,13 @@
 
     <div class="wallHeader">
 
-      <drop-down :items="wallOptions">
+      <drop-down v-if="wallOptions.length" :items="wallOptions">
         <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
       </drop-down>
+      <h2 v-else>{{ wall.data.title }}</h2>
 
       <!-- FIXME: This should be read from acl instead + handled properly. It's only a stub. -->
-      <drop-down :items="aclOptions">
+      <drop-down v-if="aclOptions" :items="aclOptions">
         {{aclNames[wall.data.acl_name]}} &#9663;
       </drop-down>
 
@@ -100,11 +101,14 @@ export default {
       return this.users.filter(user => user.rid !== this.currentUser.rid)
     },
     wallOptions () {
-      let options = [{
-        label: 'Radera vägg',
-        f: this.removeWall
-      }]
-      if (this.checkPermission(this.wall.rid, 'Root:ManageTemplates')) {
+      let options = []
+      if (this.checkPermission(this.wall.rid, 'Wall:Delete')) {
+        options.push({
+          label: 'Radera vägg',
+          f: this.removeWall
+        })
+      }
+      if (this.checkPermission(1, 'Root:ManageTemplates')) {
         options.push({
           label: 'Skapa mall',
           f: () => {
@@ -115,6 +119,9 @@ export default {
       return options
     },
     aclOptions () {
+      if (!this.checkPermission(this.wall.rid, 'Wall:edit')) {
+        return
+      }
       return Object.keys(aclNames)
         .filter(key => this.wall.data.acl_name !== key)
         .map(aclName => {
@@ -254,4 +261,9 @@ export default {
       text-align: center
       color: #000
       padding: 0
+
+.wallHeader
+  h2
+    margin-top: 0
+    margin-bottom: 0
 </style>
