@@ -17,7 +17,7 @@
 
     <div class="collectionContent" ref="collectionContent">
 
-      <ul @reordered="reordered">
+      <ul @reordered="reordered" class="dropzone">
       <!-- FIXME: This breaks sometimes, so don't read transitions until they really work. -->
       <!--<transition-group name="fade" mode="out-in" class="cards">-->
         <li :data-id="card.rid" v-for="card in cards" :key="card.rid">
@@ -70,7 +70,15 @@ export default {
         onDragstart: event => {
           if (this.dndPrevented) {
             event.stop()
+          } else {
+            // Ugly. Delay to avoid css "display: none" on dragged card
+            setTimeout(() => {
+              event.owner.classList.add('dragging')
+            }, 100)
           }
+        },
+        onDragend: event => {
+          event.owner.classList.remove('dragging')
         }
       }
     }
@@ -132,12 +140,14 @@ export default {
       }
       const cardId = Number(event.detail.ids[0])
       let order = [...this.collection.cardList]
-      const oldIndex = order.indexOf(cardId)
-      // Do not allow card index higher than last index
-      const index = Math.min(event.detail.index, order.length - 1)
-      if (index !== oldIndex) {
-        order.splice(oldIndex, 1)
-        order.splice(index, 0, cardId)
+      const currentIndex = order.indexOf(cardId)
+      let newIndex = event.detail.index
+      if (newIndex > currentIndex) {
+        newIndex = newIndex - 1
+      }
+      if (newIndex !== currentIndex) {
+        order.splice(currentIndex, 1)
+        order.splice(newIndex, 0, cardId)
         this.setCardOrder({
           collection: this.collection,
           order
@@ -182,7 +192,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="sass">
+<style lang="sass">
 
 .Collection
   /* LAYOUT */
@@ -192,43 +202,55 @@ export default {
   border: 0px solid #EAEAEA
   background: #CADBDA
 
-.collectionHeader
-  padding: 20px 20px 10px 20px
-  border-bottom: 1px solid white
-  background: #CADBDA
-  display: flex
-  flex-direction: row
-  justify-content: space-between
-  align-items: center
+  ul.dropzone
+    height: 100%
 
-.Collection:nth-child(even),
-.Collection:nth-child(even) .collectionHeader,
-.Collection:nth-child(even) .collectionFooter
-  background: #ACCECC
+  .dragging
+    .item-dropzone-area
+      height: 116px
+      background-color: rgba(#fff, .4)
+      margin-bottom: 10px
 
-.collectionContent
-  padding: 40px
-  flex: 1
-  overflow-y: auto
-  scroll-behavior: smooth
-  position: relative
-  ul
-    padding: 0
-    list-style: none
-    margin: 0
+    [aria-grabbed="true"]
+      display: none
 
-.collectionFooter
-  padding: 20px
-  border-top: 1px solid white
-  background: #CADBDA
+  .collectionHeader
+    padding: 20px 20px 10px 20px
+    border-bottom: 1px solid white
+    background: #CADBDA
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
 
-.cards
-  display: flex
-  flex-direction: column
-  position: relative
+  .Collection:nth-child(even),
+  .Collection:nth-child(even) .collectionHeader,
+  .Collection:nth-child(even) .collectionFooter
+    background: #ACCECC
 
-.remove
-  position: absolute
-  top: 5px
-  right: 5px
+  .collectionContent
+    padding: 40px
+    flex: 1
+    overflow-y: auto
+    scroll-behavior: smooth
+    position: relative
+    ul
+      padding: 0
+      list-style: none
+      margin: 0
+
+  .collectionFooter
+    padding: 20px
+    border-top: 1px solid white
+    background: #CADBDA
+
+  .cards
+    display: flex
+    flex-direction: column
+    position: relative
+
+  .remove
+    position: absolute
+    top: 5px
+    right: 5px
 </style>
