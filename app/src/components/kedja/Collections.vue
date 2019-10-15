@@ -3,7 +3,7 @@
 
     <collection v-for="collection in collections" :key="collection.rid" :collection="collection" :wall="wall" class="collection"></collection>
 
-    <div class="newCollection" @click="createCollection(wall)" tabindex="0">
+    <div v-if="isEditor" class="newCollection" @click="createCollection(wall)" tabindex="0">
       <button title="Lägg till ny samling" class="new">+</button>
     </div>
 
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Collection from './Collection'
 
 export default {
@@ -22,6 +22,12 @@ export default {
   props: {
     collections: Array,
     wall: Object
+  },
+  computed: {
+    isEditor () {
+      return this.checkPermission(this.wall.rid, 'Wall:Edit')
+    },
+    ...mapGetters('permissions', ['checkPermission'])
   },
   methods: {
     ...mapActions('walls/collections', ['createCollection', 'removeCollection'])

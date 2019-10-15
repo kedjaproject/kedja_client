@@ -66,11 +66,48 @@ function closeModal () {
 // Default error handler here.
 // FIXME: This should be only for dev, so callers get to handle errors.
 kedjaAPI.interceptors.response.use(response => response, error => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log(error)
+  if (process.env.NODE_ENV === 'development_') {
+    console.log(error.response)
     openDialog({title: 'Dev message', message: error})
   } else {
-    openDialog()
+    switch (error.response.status) {
+      case 401:
+        openDialog({
+          message: '',
+          title: 'Sidan kräver inloggning',
+          dismissable: false,
+          buttons: [
+            {
+              text: 'Logga in',
+              classes: 'btn-primary',
+              routeTo: '/login'
+            }
+          ]
+        })
+        break
+      case 403:
+        openDialog({
+          title: 'Behörighet saknas',
+          message: 'Du saknar rättigheter till den här funktionen.'
+        })
+        break
+      case 404:
+        openDialog({
+          title: 'Sidan kunde inte hittas',
+          message: 'Kontrollera webbadressen.',
+          dismissable: false,
+          buttons: [
+            {
+              text: 'Till Kedja',
+              classes: 'btn-primary',
+              routeTo: '/'
+            }
+          ]
+        })
+        break
+      default:
+        openDialog()
+    }
   }
   return Promise.reject(error)
 })

@@ -70,7 +70,11 @@ export default {
   },
   created () {
     // This does not work from data() for some reason...
-    this.setDataEditable(this.currentUser.data)
+    if (this.currentUser) {
+      this.setDataEditable(this.currentUser.data)
+    } else {
+      this.$router.push('/login')
+    }
   },
   mounted () {
     // API does not work, currently

@@ -18,7 +18,7 @@
 
       <indicator v-model="card.data.int_indicator" @change="updateIndicatorValue" :selected="card.states.selected" @click.stop></indicator>
 
-      <card-button @click.native.stop="toggleConnecting(); scrollIntoView();">
+      <card-button v-if="isEditor" @click.native.stop="toggleConnecting(); scrollIntoView();">
         <widget-icon path="/static/graphics/icons/link/" img="KEDJA_Koppling.png" imgHover="KEDJA_Koppling, hover.png" imgActive="KEDJA_Koppling, igang.png" :active="card.states.connecting"></widget-icon>
       </card-button>
 
@@ -28,7 +28,8 @@
 
       <!--h4 v-if="!selected">{{card.data.title}}</h4-->
       <!--EditableInput v-model="card.data.title" tag="h3" ref="input-name" @change="updateTitle($event)"></EditableInput-->
-      <EditableInput v-model="card.data.title" tag="h3" :placeholder="'Namnge kort'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.stop class="indicator" :locked="titleLocked"></EditableInput>
+      <EditableInput v-if="isEditor" v-model="card.data.title" tag="h3" :placeholder="'Namnge kort'" @change="updateTitle($event)" @init-edit="initUpdateTitle" @click.stop class="indicator" :locked="titleLocked"></EditableInput>
+      <h3 v-else>{{ card.data.title }}</h3>
       <!--h3>
         {{card.data.title}}
       </h3-->
@@ -42,7 +43,7 @@
       </div-->
     </div>
 
-    <div class="bottom">
+    <div v-if="isEditor" class="bottom">
       <card-button v-if="removeVisible" @click.native.stop="removeCard(card)">
         <widget-icon path="/static/graphics/icons/bin/" img="KEDJA_Papperskorg.png" imgHover="KEDJA_Papperskorg, hover.png"></widget-icon>
       </card-button>
@@ -128,6 +129,9 @@ export default {
         return this.card.states.selected || this.card.states.selectingConnected
       }
       return true
+    },
+    isEditor () {
+      return this.$parent.isEditor
     },
     ...mapGetters('walls', ['getDeepConnectionsByCardId', 'getDirectConnectionsByCardId', 'getClosestCardCousins', 'activeWall']),
     ...mapState('walls/cards', ['cards']),

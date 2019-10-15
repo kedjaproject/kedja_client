@@ -3,15 +3,17 @@
 
     <div class="collectionHeader z1">
 
-      <span></span>
+      <span><!-- for spacing of objects --></span>
 
-      <EditableInput v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput>
+      <EditableInput v-if="isEditor" v-model="collection.data.title" tag="h2" @change="updateTitle($event)"></EditableInput>
+      <h2 v-else>{{ collection.data.title }}</h2>
 
-      <drop-down :items="[{label: 'Radera samling', f: removeCollection}]">
+      <drop-down v-if="isEditor" :items="[{label: 'Radera samling', f: removeCollection}]">
         <card-button>
           <widget-icon path="/static/graphics/icons/dropdown/" img="KEDJA-14.png" imgHover="KEDJA-15.png"></widget-icon>
         </card-button>
       </drop-down>
+      <span v-else></span>
 
     </div>
 
@@ -32,7 +34,7 @@
 
     </div>
 
-    <div class="collectionFooter z1">
+    <div v-if="isEditor" class="collectionFooter z1">
       <button class="fullWidth" @click="initCreateCard" title="Lägg till nytt kort" :disabled="newDisabled">+ Nytt kort</button>
     </div>
 
@@ -87,7 +89,13 @@ export default {
     cards () {
       return this.getList(this.collection.cardList)
     },
+    isEditor () {
+      return this.checkPermission(this.wall.rid, 'Wall:Edit')
+    },
     dndPrevented () {
+      if (!this.isEditor) {
+        return true
+      }
       return this.filterCards && this.userState.data.rid
     },
     cardsFiltered () {
@@ -102,8 +110,8 @@ export default {
       return this.userState.name === 'connectCard'
     },
     ...mapGetters('walls/cards', ['getList', 'getCardsByState']),
-    ...mapState(['userState', 'filterCards'])
-
+    ...mapState(['userState', 'filterCards']),
+    ...mapGetters('permissions', ['checkPermission'])
   },
   props: {
     collection: Object,
@@ -220,6 +228,8 @@ export default {
     flex-direction: row
     justify-content: space-between
     align-items: center
+    h2
+      margin: 0
 
   .Collection:nth-child(even),
   .Collection:nth-child(even) .collectionHeader,

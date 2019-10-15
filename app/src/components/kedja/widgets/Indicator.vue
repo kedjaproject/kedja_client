@@ -19,14 +19,15 @@ export default {
   },
   computed: {
     image () {
+      const selectedText = (this.selected && this.$parent.isEditor) ? ', markerat' : ', ej markerat'
       return '/static/graphics/icons/indicator/' +
         'KEDJA_Indikator, steg ' + (this.value + 1) +
-        (this.selected ? ', markerat' : ', ej markerat') + ' kort.png'
+        selectedText + ' kort.png'
     }
   },
   methods: {
     onclick (e) {
-      if (this.selected) {
+      if (this.selected && this.$parent.isEditor) {
         e.stopPropagation()
         this.increaseValue()
       }

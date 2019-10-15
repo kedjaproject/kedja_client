@@ -40,6 +40,7 @@ export default {
     RouterLinkBox
   },
   computed: {
+    ...mapGetters('users', ['currentUser']),
     ...mapGetters('walls', ['all']),
     ...mapGetters('permissions', ['checkPermission'])
   },
@@ -53,6 +54,11 @@ export default {
     },
     openUsersModal () {
       openModal(UsersList)
+    }
+  },
+  created () {
+    if (!this.currentUser) {
+      this.$router.push('/login')
     }
   },
   mounted () {

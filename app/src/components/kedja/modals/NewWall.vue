@@ -5,7 +5,7 @@
     </header>
 
       <button @click="createWallAndRedirect()">
-        Blank vägg
+        Tom vägg
       </button>
 
       <h2>Skapa från mall</h2>

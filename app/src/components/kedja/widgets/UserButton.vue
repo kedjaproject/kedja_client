@@ -1,7 +1,6 @@
 <template>
   <a class="user-button" :class="classes" :style="style" @click="click">
-    <img :src="user.data.picture" :title="user.data.fullName" height="100%" width="100%" />
-
+    <img v-if="user" :src="user.data.picture" :title="user.data.fullName" height="100%" width="100%" />
   </a>
 </template>
 <script>

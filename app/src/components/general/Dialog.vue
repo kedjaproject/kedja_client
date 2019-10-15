@@ -49,6 +49,9 @@ export default {
       if (button.action) {
         button.action()
       }
+      if (button.routeTo) {
+        this.$router.push(button.routeTo)
+      }
       this.close()
     },
     open (params) {
