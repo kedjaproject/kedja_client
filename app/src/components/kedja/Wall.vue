@@ -9,10 +9,10 @@
       <h2 v-else>{{ wall.data.title }}</h2>
 
       <!-- FIXME: This componentOnActiveshould be read from acl instead + handled properly. It's only a stub. -->
-      <big-drop-down v-componentOnActiveif="aclOptions" :options="aclOptions" caret />
-      <!--label @click.componentOnActivestop>
-        <input type="chcomponentOnActiveeckbox" v-model="filterCards" />
-        Filtrera kort icomponentOnActive vald kedja
+      <big-drop-down v-if="aclOptions" :options="aclOptions" caret />
+      <!--label @click.stop>
+        <input type="checkbox" v-model="filterCards" />
+        Filtrera kort i vald kedja
       </label-->
       <card-filter @click.native.stop></card-filter>
 

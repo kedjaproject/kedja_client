@@ -3,7 +3,7 @@
 
     <div class="toggle" @click="toggleList">
       <slot v-if="$slots.default" />
-      <span v-else>
+      <span v-else-if="currentOption">
         <img v-if="currentOption.img" class="option-image" :src="currentOption.img">
         {{ currentOption.label }}
       </span>
