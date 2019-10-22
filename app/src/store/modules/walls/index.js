@@ -170,7 +170,7 @@ export default {
         })
     },
 
-    setWallACL ({commit, state}, {wall, aclName}) {
+    setWallACL ({ commit }, { wall, aclName }) {
       kedjaAPI.put('walls/' + wall.rid + '/acl', {'acl_name': aclName})
         .then(response => {
           commit('setWallACL', {wall, aclName: response.data.acl_name})

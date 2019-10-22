@@ -1,9 +1,12 @@
 <template>
-  <div class="DropDown" tabindex="0" @blur="blur($event)">
+  <div class="DropDown" tabindex="0" :class="{open}" @blur="blur">
 
     <div class="toggle" @click="toggleList">
-      <slot class="slot">
-      </slot>
+      <slot class="slot"></slot>
+      <span class="caret" v-if="caret">
+        <img src="/static/graphics/icons/dropdown/KEDJA-14.png" alt="caret" />
+        <img class="hover" src="/static/graphics/icons/dropdown/KEDJA-15.png" alt="caret" />
+      </span>
     </div>
 
     <div class="listContainer z2" tabindex="0">
@@ -27,7 +30,8 @@ export default {
     }
   },
   props: {
-    items: Array
+    items: Array,
+    caret: Boolean
   },
   methods: {
     toggleList () {
@@ -51,43 +55,47 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="sass">
+.DropDown
+  outline: none
 
-.DropDown{
-  outline: none;
-}
+  &:hover .caret img
+    display: none
+    &.hover
+      display: inline
 
-.toggle{
-  cursor: pointer;
-}
+  .caret
+    img
+      width: 24px
+      &.hover
+        display: none
 
-.listContainer{
-  position: relative;
-}
+  .toggle
+    cursor: pointer
+    font-size: 30px
+    color: #777
+    padding: 10px 0
 
-.list{
-  display: none;
-  background: white;
-  position: absolute;
-  top: 0;
-  min-width: 100%;
-  border: 1px solid lightgray;
-  border-top: 0;
-  z-index: 1;
-}
+  .listContainer
+    position: relative
 
-.list.open{
-  display: inline;
-}
+  .list
+    display: none
+    background: white
+    position: absolute
+    top: 0
+    min-width: 100%
+    border: 1px solid lightgray
+    border-top: 0
+    z-index: 1
+    &.open
+      display: inline
 
-.listItem{
-  padding: 5px;
-  border-top: 1px solid lightgray;
-  cursor: pointer;
-}
-
-.listItem:hover{
-  background: #eee;
-}
+  .listItem
+    padding: 5px
+    border-top: 1px solid lightgray
+    cursor: pointer
+    &:hover
+      background: #eee
 
 </style>

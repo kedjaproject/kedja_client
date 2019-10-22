@@ -3,15 +3,13 @@
 
     <div class="wallHeader">
 
-      <drop-down v-if="wallOptions.length" :items="wallOptions">
-        <EditableInput v-model="wall.data.title" tag="h2" @change="updateTitle($event)"></EditableInput> &#9663;
+      <drop-down v-if="wallOptions.length" :options="wallOptions" caret>
+        <EditableInput v-model="wall.data.title" tag="span" @change="updateTitle($event)"></EditableInput>
       </drop-down>
       <h2 v-else>{{ wall.data.title }}</h2>
 
       <!-- FIXME: This should be read from acl instead + handled properly. It's only a stub. -->
-      <drop-down v-if="aclOptions" :items="aclOptions">
-        {{aclNames[wall.data.acl_name]}} &#9663;
-      </drop-down>
+      <big-drop-down v-if="aclOptions" :options="aclOptions" caret />
 
       <!--label @click.stop>
         <input type="checkbox" v-model="filterCards" />
@@ -56,22 +54,35 @@ import UserButton from '@/components/kedja/widgets/UserButton'
 import WallUserAdmin from './modals/WallUserAdmin'
 import WallUserInfo from './modals/WallUserInfo'
 import CreateTemplate from './modals/CreateTemplate'
+import BigDropDown from '@/components/kedja/widgets/BigDropDown'
+import CopyLocation from '@/components/kedja/widgets/CopyLocation'
 import DropDown from '@/components/DropDown'
 import CardFilter from '@/components/kedja/widgets/CardFilter'
 import Collections from './Collections'
 import Connections from './Connections'
 import EditableInput from '@/components/general/EditableInput'
 
-const aclNames = {
-  private_wall: 'Privat vägg',
-  public_wall: 'Publik vägg'
-}
+const aclOptions = [
+  {
+    name: 'private_wall',
+    label: 'Privat vägg',
+    description: 'Endast du har åtkomst till väggen.',
+    img: '/static/graphics/icons/eye-closed.svg'
+  },
+  {
+    name: 'public_wall',
+    label: 'Publik vägg',
+    description: 'Personer med tillgång till väggens länk kan se, men inte redigera, väggen.',
+    img: '/static/graphics/icons/eye-open.svg'
+  }
+]
 
 export default {
   name: 'Wall',
   components: {
     UserButton,
     DropDown,
+    BigDropDown,
     CardFilter,
     Collections,
     Connections,
@@ -79,7 +90,6 @@ export default {
   },
   data () {
     return {
-      aclNames,
       collectionsElement: undefined
     }
   },
@@ -122,15 +132,20 @@ export default {
       if (!this.checkPermission(this.wall.rid, 'Wall:edit')) {
         return
       }
-      return Object.keys(aclNames)
-        .filter(key => this.wall.data.acl_name !== key)
-        .map(aclName => {
-          return {
-            label: aclNames[aclName],
-            f: this.setWallACL,
-            args: {wall: this.wall, aclName}
-          }
+      return aclOptions.map(acl => {
+        let option = {}
+        Object.assign(option, acl)
+        Object.assign(option, {
+          f: this.setWallACL,
+          args: {wall: this.wall, aclName: acl.name},
+          active: this.wall.data.acl_name === acl.name
         })
+        if (option.name === 'public_wall') {
+          option.component = CopyLocation
+          option.componentOnActive = true
+        }
+        return option
+      })
     },
     ...mapState('walls', ['walls']),
     ...mapState(['userState', 'filterCards']),
@@ -203,21 +218,6 @@ export default {
 
 }
 
-.wallHeader{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 1em 0 1em 0;
-}
-
-.wallHeader .users {
-    margin-left: 24px;
-}
-
-.wallHeader > *{
-  margin-right: 50px;
-}
-
 .wallContent{
   /* LAYOUT */
   display: flex;
@@ -263,7 +263,17 @@ export default {
       padding: 0
 
 .wallHeader
+  display: flex
+  flex-direction: row
+  align-items: center
+  padding: 0
   h2
     margin-top: 0
     margin-bottom: 0
+
+  .users
+    margin-left: 24px
+
+  > *
+    margin-right: 50px
 </style>
