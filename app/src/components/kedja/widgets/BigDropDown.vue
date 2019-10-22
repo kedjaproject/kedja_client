@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     currentOption () {
-      return this.options.find(option => option.active)
+      return this.options && this.options.find(option => option.active)
     }
   },
   methods: {
